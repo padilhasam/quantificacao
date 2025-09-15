@@ -3,9 +3,6 @@
 <div class="container mt-4">
     <h2>Bem-vindo, <?= htmlspecialchars($usuario) ?>!</h2>
     <p>Você está logado no sistema.</p>
-    <a href="<?= BASE_URL ?>/login/logout" class="btn btn-danger btn-sm">
-        <i class="fas fa-sign-out-alt"></i> Sair
-    </a>
 
     <div class="row mt-4">
         <div class="col-md-4">
