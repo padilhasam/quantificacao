@@ -34,6 +34,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> Riscos Ocupacionais</h5>
+                    <p class="card-text">Gerencie os riscos ocupacionais por categoria.</p>
+                    <a href="<?= BASE_URL ?>/riscos" class="btn btn-light btn-sm">Acessar</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
