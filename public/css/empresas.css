@@ -1,0 +1,83 @@
+/* Título e botão "Nova Empresa" */
+.container h2 {
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 1rem;
+}
+
+.btn-nova-empresa {
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+}
+
+/* Estilo da Tabela */
+#tabelaEmpresas {
+    font-size: 0.9rem;
+}
+
+#tabelaEmpresas thead th {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tabelaEmpresas td {
+    vertical-align: middle;
+}
+
+/* Ícones de ação */
+.icone-acao {
+    margin: 0 4px;
+    font-size: 0.95rem;
+}
+
+/* Botões com hover */
+.btn-editar, .btn-excluir {
+    border: none;
+    background: none;
+    padding: 6px;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.btn-editar:hover {
+    color: #0d6efd;
+}
+
+.btn-excluir:hover {
+    color: #dc3545;
+}
+
+/* Botão voltar */
+.btn-voltar-dashboard {
+    margin-top: 1.5rem;
+    font-weight: 600;
+}
+form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+/* Botões do formulário */
+form .btn {
+    min-width: 120px;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+form .btn i {
+    margin-right: 6px;
+}
+
+form .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+form .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}

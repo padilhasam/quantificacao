@@ -31,13 +31,21 @@ $routes = [
     '/login/logout' => ['controller' => 'LoginController', 'method' => 'logout'],
     '/dashboard' => ['controller' => 'DashboardController', 'method' => 'index'],
 
-    // Rotas de riscos que você adicionou:
+    // Rotas de riscos
     '/riscos' => ['controller' => 'RiscosController', 'method' => 'index'],
     '/riscos/fisicos' => ['controller' => 'RiscosController', 'method' => 'fisicos'],
     '/riscos/quimicos' => ['controller' => 'RiscosController', 'method' => 'quimicos'],
     '/riscos/biologicos' => ['controller' => 'RiscosController', 'method' => 'biologicos'],
     '/riscos/ergonomicos' => ['controller' => 'RiscosController', 'method' => 'ergonomicos'],
     '/riscos/acidente' => ['controller' => 'RiscosController', 'method' => 'acidente'],
+
+    // Rotas para Empresas
+    '/empresas'                     => ['controller' => 'EmpresasController', 'method' => 'index'],
+    '/empresas/criar'              => ['controller' => 'EmpresasController', 'method' => 'criar'],
+    '/empresas/armazenar'          => ['controller' => 'EmpresasController', 'method' => 'armazenar'],
+    '/empresas/editar/{id}'        => ['controller' => 'EmpresasController', 'method' => 'editar'],
+    '/empresas/atualizar/{id}'     => ['controller' => 'EmpresasController', 'method' => 'atualizar'],
+    '/empresas/excluir/{id}'       => ['controller' => 'EmpresasController', 'method' => 'excluir'],
 
 ];
 
