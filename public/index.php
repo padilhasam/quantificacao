@@ -30,6 +30,15 @@ $routes = [
     '/login/autenticar' => ['controller' => 'LoginController', 'method' => 'autenticar'],
     '/login/logout' => ['controller' => 'LoginController', 'method' => 'logout'],
     '/dashboard' => ['controller' => 'DashboardController', 'method' => 'index'],
+
+    // Rotas de riscos que você adicionou:
+    '/riscos' => ['controller' => 'RiscosController', 'method' => 'index'],
+    '/riscos/fisicos' => ['controller' => 'RiscosController', 'method' => 'fisicos'],
+    '/riscos/quimicos' => ['controller' => 'RiscosController', 'method' => 'quimicos'],
+    '/riscos/biologicos' => ['controller' => 'RiscosController', 'method' => 'biologicos'],
+    '/riscos/ergonomicos' => ['controller' => 'RiscosController', 'method' => 'ergonomicos'],
+    '/riscos/acidente' => ['controller' => 'RiscosController', 'method' => 'acidente'],
+
 ];
 
 // Verifica rota

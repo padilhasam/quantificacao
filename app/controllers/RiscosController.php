@@ -2,26 +2,35 @@
 
 class RiscosController extends AuthController {
     public function index() {
-        $this->view('riscos/index');
+        $tipoAgenteModel = $this->model('TipoRisco');
+        $tipos = $tipoAgenteModel->listarTodos();
+
+        $this->view('riscos/index', ['tipos' => $tipos]);
     }
 
+
     public function fisicos() {
-        $this->view('riscos/fisicos');
+
+        $riscosModel = $this->model('Risco');
+        $riscos = $riscosModel->listarPorCategoria('fisico');
+
+        $this->view('riscos/fisicos/index', ['riscos' => $riscos]);
     }
 
     public function quimicos() {
-        $this->view('riscos/quimicos');
+        $this->view('riscos/quimicos/index');
     }
 
     public function biologicos() {
-        $this->view('riscos/biologicos');
+        $this->view('riscos/biologicos/index');
     }
 
     public function ergonomicos() {
-        $this->view('riscos/ergonomicos');
+        $this->view('riscos/ergonomicos/index');
     }
 
     public function acidente() {
-        $this->view('riscos/acidente');
+        $this->view('riscos/acidente/index');
     }
+    
 }
