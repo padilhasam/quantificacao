@@ -68,7 +68,26 @@
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white" style="background-color: #b87217ff;"> <!-- Azul mais escuro -->
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-hard-hat me-2"></i>EPIs</h5>
+                    <p class="card-text">Crie e consulte as fichas de EPI</p>
+                    <a href="<?= BASE_URL ?>/epis" class="btn btn-light btn-sm">Acessar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-white" style="background-color: #6f42c1;"> <!-- Roxo moderno (Bootstrap purple) -->
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-tools me-2"></i>PETs</h5>
+                    <p class="card-text">Crie e gerencie as Permissões de Trabalho.</p>
+                    <a href="<?= BASE_URL ?>/pets" class="btn btn-light btn-sm">Acessar</a>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

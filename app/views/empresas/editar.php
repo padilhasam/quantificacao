@@ -1,4 +1,5 @@
-<?php require_once dirname(__DIR__) . '/../templates/header.php'; ?>
+<?php require_once dirname(__DIR__) . '../templates/header.php'; ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/css/empresas.css">
 
 <div class="container mt-4">
     <h2>Editar Empresa</h2>
@@ -39,4 +40,4 @@
     </form>
 </div>
 
-<?php require_once dirname(__DIR__) . '/../templates/footer.php'; ?>
+<?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>

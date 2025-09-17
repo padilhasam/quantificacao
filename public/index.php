@@ -40,25 +40,44 @@ $routes = [
     '/riscos/acidente' => ['controller' => 'RiscosController', 'method' => 'acidente'],
 
     // Rotas para Empresas
-    '/empresas'                     => ['controller' => 'EmpresasController', 'method' => 'index'],
-    '/empresas/criar'              => ['controller' => 'EmpresasController', 'method' => 'criar'],
-    '/empresas/armazenar'          => ['controller' => 'EmpresasController', 'method' => 'armazenar'],
-    '/empresas/editar/{id}'        => ['controller' => 'EmpresasController', 'method' => 'editar'],
-    '/empresas/atualizar/{id}'     => ['controller' => 'EmpresasController', 'method' => 'atualizar'],
-    '/empresas/excluir/{id}'       => ['controller' => 'EmpresasController', 'method' => 'excluir'],
-
+    '/empresas'                 => ['controller' => 'EmpresasController', 'method' => 'index'],
+    '/empresas/criar'            => ['controller' => 'EmpresasController', 'method' => 'criar'],
+    '/empresas/armazenar'        => ['controller' => 'EmpresasController', 'method' => 'armazenar'],
+    '/empresas/editar/{id}'      => ['controller' => 'EmpresasController', 'method' => 'editar'],
+    '/empresas/atualizar/{id}'   => ['controller' => 'EmpresasController', 'method' => 'atualizar'],
+    '/empresas/excluir/{id}'     => ['controller' => 'EmpresasController', 'method' => 'excluir'],
 ];
 
-// Verifica rota
-if (!array_key_exists($route, $routes)) {
-    http_response_code(404);
-    echo "Rota $route não encontrada.";
-    exit;
+// Verifica rota exata
+if (array_key_exists($route, $routes)) {
+    $controllerName = $routes[$route]['controller'];
+    $method = $routes[$route]['method'];
+    $params = [];
+} else {
+    // Se não achou, tenta bater com rotas dinâmicas
+    $found = false;
+    foreach ($routes as $routePattern => $action) {
+        // Transforma {qualquerCoisa} em regex que aceita número ou texto
+        $pattern = preg_replace('#\{[a-zA-Z0-9_]+\}#', '([a-zA-Z0-9_-]+)', $routePattern);
+        $pattern = "#^" . $pattern . "$#";
+
+        if (preg_match($pattern, $route, $matches)) {
+            $controllerName = $action['controller'];
+            $method = $action['method'];
+            $params = array_slice($matches, 1); // captura parâmetros
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        http_response_code(404);
+        echo "Rota $route não encontrada.";
+        exit;
+    }
 }
 
-$controllerName = $routes[$route]['controller'];
-$method = $routes[$route]['method'];
-
+// Verifica controller
 $controllerFile = "../app/controllers/$controllerName.php";
 if (!file_exists($controllerFile)) {
     http_response_code(404);
@@ -79,4 +98,5 @@ if (!method_exists($controller, $method)) {
     die("Método $method não encontrado no controller $controllerName.");
 }
 
-$controller->$method();
+// Executa passando os parâmetros (se houver)
+$controller->$method(...$params);
