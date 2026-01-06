@@ -1,95 +1,193 @@
 <?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
 
-<div class="container mt-4">
-    <h2>Bem-vindo, <?= htmlspecialchars($usuario) ?>!</h2>
-    <p>Você está logado no sistema.</p>
+<!-- TÍTULO DA PÁGINA -->
+<div class="mb-4">
+    <h3 class="fw-bold mb-1">
+        <span class="text-accent">Painel Técnico</span>
+    </h3>
 
-    <!-- Linha 1: Funcionalidades principais -->
-    <div class="row mt-4">
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-primary h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-building me-2"></i>Empresas</h5>
-                    <p class="card-text">Gerencie as empresas cadastradas.</p>
-                    <a href="<?= BASE_URL ?>/empresas" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
+    <p class="text-muted mb-0">
+        Planejamento, quantificação e gestão de riscos ocupacionais
+    </p>
+</div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-secondary h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-users me-2"></i>Usuários</h5>
-                    <p class="card-text">Controle de acesso ao sistema.</p>
-                    <a href="<?= BASE_URL ?>/usuarios" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
+<!-- ========================= -->
+<!-- INDICADORES TÉCNICOS -->
+<!-- ========================= -->
+<div class="row g-4">
 
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-warning h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-file-alt me-2"></i>Relatórios</h5>
-                    <p class="card-text">Visualize e emita relatórios técnicos.</p>
-                    <a href="<?= BASE_URL ?>/relatorios" class="btn btn-light btn-sm">Acessar</a>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-project-diagram fa-2x text-primary me-3"></i>
+                    <div>
+                        <h6 class="mb-0">Planejamentos Ativos</h6>
+                        <span class="fs-4 fw-bold">12</span>
+                    </div>
                 </div>
+                <small class="text-muted">
+                    Avaliações em execução
+                </small>
             </div>
         </div>
     </div>
 
-    <!-- Linha 2: Riscos e Documentos -->
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-danger h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-exclamation-triangle me-2"></i>Riscos Ocupacionais</h5>
-                    <p class="card-text">Gerencie os riscos ocupacionais por categoria.</p>
-                    <a href="<?= BASE_URL ?>/riscos" class="btn btn-light btn-sm">Acessar</a>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-exclamation-circle fa-2x text-warning me-3"></i>
+                    <div>
+                        <h6 class="mb-0">Quantificação Crítica</h6>
+                        <span class="fs-4 fw-bold">5</span>
+                    </div>
                 </div>
+                <small class="text-muted">
+                    Alta variabilidade ou risco elevado
+                </small>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-success h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-chalkboard-teacher me-2"></i>Treinamentos</h5>
-                    <p class="card-text">Gerencie treinamentos obrigatórios por função ou colaborador.</p>
-                    <a href="<?= BASE_URL ?>/treinamentos" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-white bg-info h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-file-medical-alt me-2"></i>Laudos</h5>
-                    <p class="card-text">Cadastre e consulte laudos técnicos como LTCAT, PCMSO, PPP etc.</p>
-                    <a href="<?= BASE_URL ?>/laudos" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-white" style="background-color: #b87217ff;"> <!-- Azul mais escuro -->
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-hard-hat me-2"></i>EPIs</h5>
-                    <p class="card-text">Crie e consulte as fichas de EPI</p>
-                    <a href="<?= BASE_URL ?>/epis" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-white" style="background-color: #6f42c1;"> <!-- Roxo moderno (Bootstrap purple) -->
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-tools me-2"></i>PETs</h5>
-                    <p class="card-text">Crie e gerencie as Permissões de Trabalho.</p>
-                    <a href="<?= BASE_URL ?>/pets" class="btn btn-light btn-sm">Acessar</a>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-vials fa-2x text-danger me-3"></i>
+                    <div>
+                        <h6 class="mb-0">Amostragem Complexa</h6>
+                        <span class="fs-4 fw-bold">7</span>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    Múltiplos pontos ou ciclos
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-check-circle fa-2x text-success me-3"></i>
+                    <div>
+                        <h6 class="mb-0">Concluídos</h6>
+                        <span class="fs-4 fw-bold">18</span>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    Prontos para documentação
+                </small>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- MÓDULOS PRINCIPAIS -->
+<!-- ========================= -->
+<div class="row g-4 mt-4">
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-building fa-2x text-primary mb-3"></i>
+                <h5>Empresas</h5>
+                <p class="text-muted">
+                    Gestão das unidades, setores e ambientes avaliados.
+                </p>
+                <a href="<?= BASE_URL ?>/empresas" class="btn btn-outline-primary btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-file-signature fa-2x text-warning mb-3"></i>
+                <h5>Planos de Quantificação</h5>
+                <p class="text-muted">
+                    Definição da técnica, pontuação e estratégia de amostragem.
+                </p>
+                <a href="<?= BASE_URL ?>/relatorios" class="btn btn-outline-warning btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
+                <h5>Inventário de Riscos</h5>
+                <p class="text-muted">
+                    Caracterização dos agentes e critérios de avaliação.
+                </p>
+                <a href="<?= BASE_URL ?>/riscos" class="btn btn-outline-danger btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- DOCUMENTOS E CONTROLES -->
+<!-- ========================= -->
+<div class="row g-4 mt-4">
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-file-medical fa-2x text-success mb-3"></i>
+                <h5>Documentos Técnicos</h5>
+                <p class="text-muted">
+                    LTCAT, PCMSO, PPP e memoriais de avaliação.
+                </p>
+                <a href="<?= BASE_URL ?>/laudos" class="btn btn-outline-success btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-hard-hat fa-2x text-secondary mb-3"></i>
+                <h5>EPI / EPC</h5>
+                <p class="text-muted">
+                    Controle técnico vinculado aos riscos avaliados.
+                </p>
+                <a href="<?= BASE_URL ?>/epis" class="btn btn-outline-secondary btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <i class="fas fa-tools fa-2x text-dark mb-3"></i>
+                <h5>Permissões de Trabalho</h5>
+                <p class="text-muted">
+                    Gestão de atividades críticas e controles operacionais.
+                </p>
+                <a href="<?= BASE_URL ?>/pets" class="btn btn-outline-dark btn-sm mt-auto">
+                    Acessar módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>
