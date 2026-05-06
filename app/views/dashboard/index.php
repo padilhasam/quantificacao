@@ -1,193 +1,131 @@
 <?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
 
-<!-- TÍTULO DA PÁGINA -->
-<div class="mb-4">
-    <h3 class="fw-bold mb-1">
-        <span class="text-accent">Painel Técnico</span>
-    </h3>
+<main class="content flex-grow-1 p-4">
 
-    <p class="text-muted mb-0">
-        Planejamento, quantificação e gestão de riscos ocupacionais
-    </p>
-</div>
+    <!-- TÍTULO -->
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">
+            <span class="text-accent">Painel Técnico SST</span>
+        </h3>
+        <p class="text-muted mb-0">
+            Monitoramento de visitas, riscos e avaliações quantitativas
+        </p>
+    </div>
 
-<!-- ========================= -->
-<!-- INDICADORES TÉCNICOS -->
-<!-- ========================= -->
-<div class="row g-4">
+    <!-- ALERTAS -->
+    <?php if (!empty($acima_lt)): ?>
+        <div class="alert alert-danger">
+            ⚠️ Existem <strong><?= $acima_lt ?></strong> avaliações acima do limite de tolerância
+        </div>
+    <?php endif; ?>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-project-diagram fa-2x text-primary me-3"></i>
-                    <div>
-                        <h6 class="mb-0">Planejamentos Ativos</h6>
-                        <span class="fs-4 fw-bold">12</span>
+    <?php if (!empty($nao_conformidades)): ?>
+        <div class="alert alert-warning">
+            ⚠️ <strong><?= $nao_conformidades ?></strong> não conformidades pendentes
+        </div>
+    <?php endif; ?>
+
+    <!-- ========================= -->
+    <!-- INDICADORES -->
+    <!-- ========================= -->
+    <div class="row g-4">
+
+        <?php
+        $cards = [
+            ['icon'=>'fa-calendar-check','color'=>'primary','title'=>'Visitas','value'=>$visitas ?? 0],
+            ['icon'=>'fa-exclamation-triangle','color'=>'danger','title'=>'Riscos Críticos','value'=>$riscos_criticos ?? 0],
+            ['icon'=>'fa-vials','color'=>'warning','title'=>'Acima do LT','value'=>$acima_lt ?? 0],
+            ['icon'=>'fa-times-circle','color'=>'dark','title'=>'Não Conformidades','value'=>$nao_conformidades ?? 0],
+        ];
+        ?>
+
+        <?php foreach ($cards as $card): ?>
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas <?= $card['icon'] ?> fa-2x text-<?= $card['color'] ?> mb-2"></i>
+                        <h6 class="mb-1"><?= $card['title'] ?></h6>
+                        <span class="fs-4 fw-bold"><?= $card['value'] ?></span>
                     </div>
                 </div>
-                <small class="text-muted">
-                    Avaliações em execução
-                </small>
             </div>
-        </div>
+        <?php endforeach; ?>
+
     </div>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-exclamation-circle fa-2x text-warning me-3"></i>
-                    <div>
-                        <h6 class="mb-0">Quantificação Crítica</h6>
-                        <span class="fs-4 fw-bold">5</span>
+    <!-- ========================= -->
+    <!-- GRÁFICOS -->
+    <!-- ========================= -->
+    <div class="row g-4 mt-4">
+
+        <!-- VISITAS -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5><i class="fas fa-calendar text-primary"></i> Visitas por Mês</h5>
+                    <div class="chart-box">
+                        <canvas id="chartVisitas"></canvas>
                     </div>
                 </div>
-                <small class="text-muted">
-                    Alta variabilidade ou risco elevado
-                </small>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-vials fa-2x text-danger me-3"></i>
-                    <div>
-                        <h6 class="mb-0">Amostragem Complexa</h6>
-                        <span class="fs-4 fw-bold">7</span>
+        <!-- RISCOS -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5><i class="fas fa-exclamation-triangle text-danger"></i> Riscos por Categoria</h5>
+                    <div class="chart-box">
+                        <canvas id="chartRiscos"></canvas>
                     </div>
                 </div>
-                <small class="text-muted">
-                    Múltiplos pontos ou ciclos
-                </small>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check-circle fa-2x text-success me-3"></i>
-                    <div>
-                        <h6 class="mb-0">Concluídos</h6>
-                        <span class="fs-4 fw-bold">18</span>
+        <!-- QUANTIFICAÇÃO -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5><i class="fas fa-vials text-warning"></i> Avaliações (LT)</h5>
+                    <div class="chart-box">
+                        <canvas id="chartQuantificacao"></canvas>
                     </div>
                 </div>
-                <small class="text-muted">
-                    Prontos para documentação
-                </small>
             </div>
         </div>
-    </div>
 
-</div>
-
-<!-- ========================= -->
-<!-- MÓDULOS PRINCIPAIS -->
-<!-- ========================= -->
-<div class="row g-4 mt-4">
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-building fa-2x text-primary mb-3"></i>
-                <h5>Empresas</h5>
-                <p class="text-muted">
-                    Gestão das unidades, setores e ambientes avaliados.
-                </p>
-                <a href="<?= BASE_URL ?>/empresas" class="btn btn-outline-primary btn-sm mt-auto">
-                    Acessar módulo
-                </a>
+        <!-- NÃO CONFORMIDADES -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5><i class="fas fa-times-circle text-dark"></i> Não Conformidades</h5>
+                    <div class="chart-box">
+                        <canvas id="chartNC"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-file-signature fa-2x text-warning mb-3"></i>
-                <h5>Planos de Quantificação</h5>
-                <p class="text-muted">
-                    Definição da técnica, pontuação e estratégia de amostragem.
-                </p>
-                <a href="<?= BASE_URL ?>/relatorios" class="btn btn-outline-warning btn-sm mt-auto">
-                    Acessar módulo
-                </a>
-            </div>
-        </div>
-    </div>
+</main>
 
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
-                <h5>Inventário de Riscos</h5>
-                <p class="text-muted">
-                    Caracterização dos agentes e critérios de avaliação.
-                </p>
-                <a href="<?= BASE_URL ?>/riscos" class="btn btn-outline-danger btn-sm mt-auto">
-                    Acessar módulo
-                </a>
-            </div>
-        </div>
-    </div>
+<!-- VARIÁVEIS PARA JS -->
+<script>
+    window.visitasMes = <?= json_encode($visitas_mes ?? []) ?>;
+    window.riscosCategoria = <?= json_encode($riscos_categoria ?? []) ?>;
+    window.quantificacao = <?= json_encode($quantificacao ?? []) ?>;
+    window.naoConformidades = <?= json_encode($nao_conformidades_status ?? []) ?>;
+</script>
 
-</div>
+<!-- CHART JS -->
+<script src="/js/chart.js"></script>
 
-<!-- ========================= -->
-<!-- DOCUMENTOS E CONTROLES -->
-<!-- ========================= -->
-<div class="row g-4 mt-4">
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-file-medical fa-2x text-success mb-3"></i>
-                <h5>Documentos Técnicos</h5>
-                <p class="text-muted">
-                    LTCAT, PCMSO, PPP e memoriais de avaliação.
-                </p>
-                <a href="<?= BASE_URL ?>/laudos" class="btn btn-outline-success btn-sm mt-auto">
-                    Acessar módulo
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-hard-hat fa-2x text-secondary mb-3"></i>
-                <h5>EPI / EPC</h5>
-                <p class="text-muted">
-                    Controle técnico vinculado aos riscos avaliados.
-                </p>
-                <a href="<?= BASE_URL ?>/epis" class="btn btn-outline-secondary btn-sm mt-auto">
-                    Acessar módulo
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-                <i class="fas fa-tools fa-2x text-dark mb-3"></i>
-                <h5>Permissões de Trabalho</h5>
-                <p class="text-muted">
-                    Gestão de atividades críticas e controles operacionais.
-                </p>
-                <a href="<?= BASE_URL ?>/pets" class="btn btn-outline-dark btn-sm mt-auto">
-                    Acessar módulo
-                </a>
-            </div>
-        </div>
-    </div>
-
-</div>
+<style>
+.chart-box {
+    position: relative;
+    height: 250px;
+}
+</style>
 
 <?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>

@@ -1,24 +1,76 @@
 /* ============================
+   GRID / CONTEÚDO DASHBOARD
+============================ */
+.content {
+    background-color: #f8fafc;
+}
+
+/* ============================
    CARDS DASHBOARD
 ============================ */
 .card {
     background-color: #ffffff;
     border-radius: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     border: none;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    height: 100%;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Hover apenas em desktop */
+@media (hover: hover) {
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    }
+}
+
+/* ============================
+   CONTEÚDO DO CARD
+============================ */
+.card-body {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-}
-
-.card h5 {
+/* TÍTULOS */
+.card h5,
+.card h6 {
     font-weight: 600;
+    color: #111827;
 }
 
+/* TEXTOS */
 .card p {
     font-size: 0.95rem;
+    color: #4b5563;
+}
+
+/* ÍCONES */
+.card i {
+    opacity: 0.9;
+}
+
+/* ============================
+   BOTÃO NO FINAL DO CARD
+============================ */
+.card .btn {
+    margin-top: auto;
+}
+
+/* ============================
+   RESPONSIVIDADE
+============================ */
+@media (max-width: 768px) {
+    .card {
+        border-radius: 12px;
+    }
+
+    .card p {
+        font-size: 0.9rem;
+    }
 }

@@ -1,83 +1,65 @@
-/* Título e botão "Nova Empresa" */
-.container h2 {
-    font-weight: 700;
-    color: #343a40;
-    margin-bottom: 1rem;
-}
+/* ============================
+   TABLET (ATÉ 992px)
+============================ */
+@media (max-width: 992px) {
 
-.btn-nova-empresa {
-    font-weight: 600;
-    border-radius: 25px;
-    padding: 0.5rem 1rem;
-}
+    /* CONTENT */
+    .content {
+        padding: 15px;
+        overflow-x: hidden;
+    }
 
-/* Estilo da Tabela */
-#tabelaEmpresas {
-    font-size: 0.9rem;
-}
+    /* CARD */
+    .card {
+        border-radius: 10px;
+    }
 
-#tabelaEmpresas thead th {
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    vertical-align: middle;
-}
+    /* TABELA */
+    .table {
+        font-size: 0.85rem;
+    }
 
-#tabelaEmpresas td {
-    vertical-align: middle;
-}
+    .table th,
+    .table td {
+        white-space: nowrap; /* 🔥 evita quebrar layout */
+    }
 
-/* Ícones de ação */
-.icone-acao {
-    margin: 0 4px;
-    font-size: 0.95rem;
-}
+    /* SCROLL HORIZONTAL SUAVE */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 
-/* Botões com hover */
-.btn-editar, .btn-excluir {
-    border: none;
-    background: none;
-    padding: 6px;
-    color: #333;
-    transition: color 0.3s;
-}
+    /* DATATABLE CONTROLES */
+    .dataTables_wrapper .row {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-.btn-editar:hover {
-    color: #0d6efd;
-}
+    /* FILTRO (BUSCA) */
+    .dataTables_filter {
+        width: 100%;
+        text-align: left !important;
+    }
 
-.btn-excluir:hover {
-    color: #dc3545;
-}
+    .dataTables_filter input {
+        width: 100%;
+        margin-left: 0 !important;
+    }
 
-/* Botão voltar */
-.btn-voltar-dashboard {
-    margin-top: 1.5rem;
-    font-weight: 600;
-}
-form .form-group {
-    margin-bottom: 1.2rem;
-}
+    /* PAGINAÇÃO */
+    .dataTables_paginate {
+        text-align: center !important;
+    }
 
-/* Botões do formulário */
-form .btn {
-    min-width: 120px;
-    font-weight: 600;
-    padding: 0.5rem 1.25rem;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
+    /* SELECT (itens por página) */
+    .dataTables_length {
+        text-align: left !important;
+    }
 
-form .btn i {
-    margin-right: 6px;
-}
-
-form .btn-success:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
-form .btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
+    /* BOTÕES */
+    .table .btn {
+        padding: 6px 10px;
+    }
 }

@@ -1,12 +1,20 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $rotaAtual = $_GET['url'] ?? 'dashboard';
     $rotaAtual = trim($rotaAtual, '/');
+
+    $usuario = $_SESSION['nome'] ?? 'Usuário';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title><?= APP_NAME ?></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +29,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/footer.css">
 
-    <!-- CSS POR PÁGINA (se existir) -->
+    <!-- CSS POR PÁGINA -->
     <?php if (!empty($css)) : ?>
         <link rel="stylesheet" href="<?= BASE_URL ?>/css/<?= $css ?>">
     <?php endif; ?>
@@ -29,7 +37,7 @@
 
 <body>
 
-<div class="app-wrapper min-vh-100 d-flex flex-column">
+<div class="app-wrapper">
 
     <!-- HEADER -->
     <header>
@@ -37,9 +45,7 @@
             <div class="container-fluid justify-content-between">
 
                 <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-outline-primary d-lg"
-                            type="button"
-                            id="btnToggleSidebar">
+                    <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">
                         <i class="fas fa-bars"></i>
                     </button>
 
@@ -49,6 +55,7 @@
                     </a>
                 </div>
 
+                <!-- USUÁRIO -->
                 <div class="dropdown">
                     <button class="btn btn-link text-decoration-none dropdown-toggle d-flex align-items-center gap-2"
                             data-bs-toggle="dropdown">
@@ -89,84 +96,227 @@
     </header>
 
     <!-- BODY -->
-    <div class="app-body d-flex flex-grow-1">
+    <div class="app-body">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar border-end d-flex flex-column" id="sidebar">
-        <ul class="nav flex-column pt-3">
+        <!-- SIDEBAR -->
+        <aside class="sidebar border-end d-flex flex-column" id="sidebar">
+            <ul class="nav flex-column pt-3">
 
-            <!-- DASHBOARD -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/dashboard" class="nav-link <?= $rotaAtual === 'dashboard' ? 'active' : '' ?>">
-                    <i class="fas fa-chart-line me-2"></i>
-                    Dashboard
+                <!-- DASHBOARD -->
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/dashboard"
+                    class="nav-link <?= $rotaAtual === 'dashboard' ? 'active' : '' ?>">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <!-- ===================== -->
+                <!-- CADASTROS -->
+                <!-- ===================== -->
+                <?php
+                $rotasCadastros = [
+                    'usuarios','tecnicos','riscos',
+                    'empresas','unidades','setores','cargos'
+                ];
+                $menuCadastrosAberto = in_array($rotaAtual, $rotasCadastros);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuCadastrosAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuCadastros">
+
+                        <span>
+                            <i class="fas fa-database me-2"></i>
+                            Cadastros
+                        </span>
+
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuCadastrosAberto ? 'show' : '' ?>" id="menuCadastros">
+
+                        <ul class="nav flex-column ms-3">
+
+                            <!-- USUÁRIOS -->
+                            <li>
+                                <a href="<?= BASE_URL ?>/usuarios"
+                                class="nav-link <?= $rotaAtual === 'usuarios' ? 'active' : '' ?>">
+                                    <i class="fas fa-users me-2"></i>
+                                    Usuários
+                                </a>
+                            </li>
+
+                            <!-- TÉCNICOS -->
+                            <li>
+                                <a href="<?= BASE_URL ?>/tecnicos"
+                                class="nav-link <?= $rotaAtual === 'tecnicos' ? 'active' : '' ?>">
+                                    <i class="fas fa-user-gear me-2"></i>
+                                    Técnicos
+                                </a>
+                            </li>
+
+                            <!-- RISCOS -->
+                            <li>
+                                <a href="<?= BASE_URL ?>/riscos"
+                                class="nav-link <?= $rotaAtual === 'riscos' ? 'active' : '' ?>">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Riscos
+                                </a>
+                            </li>
+
+                            <!-- ===================== -->
+                            <!-- ESTRUTURA ORGANIZACIONAL -->
+                            <!-- ===================== -->
+                            <?php
+                            $rotasEstrutura = ['empresas','unidades','setores','cargos'];
+                            $menuEstruturaAberto = in_array($rotaAtual, $rotasEstrutura);
+                            ?>
+
+                            <li>
+                                <a class="nav-link d-flex justify-content-between align-items-center <?= $menuEstruturaAberto ? '' : 'collapsed' ?>"
+                                data-bs-toggle="collapse"
+                                href="#menuEstrutura">
+
+                                    <span>
+                                        <i class="fas fa-sitemap me-2"></i>
+                                        Estrutura Organizacional
+                                    </span>
+
+                                    <i class="fas fa-chevron-down small"></i>
+                                </a>
+
+                                <div class="collapse <?= $menuEstruturaAberto ? 'show' : '' ?>" id="menuEstrutura">
+                                    <ul class="nav flex-column ms-3">
+
+                                        <li>
+                                            <a href="<?= BASE_URL ?>/empresas"
+                                            class="nav-link <?= $rotaAtual === 'empresas' ? 'active' : '' ?>">
+                                                <i class="fas fa-building me-2"></i>
+                                                Empresas
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="<?= BASE_URL ?>/unidades"
+                                            class="nav-link <?= $rotaAtual === 'unidades' ? 'active' : '' ?>">
+                                                <i class="fas fa-industry me-2"></i>
+                                                Unidades
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="<?= BASE_URL ?>/setores"
+                                            class="nav-link <?= $rotaAtual === 'setores' ? 'active' : '' ?>">
+                                                <i class="fas fa-layer-group me-2"></i>
+                                                Setores
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="<?= BASE_URL ?>/cargos"
+                                            class="nav-link <?= $rotaAtual === 'cargos' ? 'active' : '' ?>">
+                                                <i class="fas fa-briefcase me-2"></i>
+                                                Cargos
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- ===================== -->
+                <!-- GESTÃO TÉCNICA -->
+                <!-- ===================== -->
+                <?php
+                $rotasTecnicas = ['visitas','checklist','quantificacao','nao-conformidades'];
+                $menuTecnicoAberto = in_array($rotaAtual, $rotasTecnicas);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuTecnicoAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuTecnico">
+
+                        <span>
+                            <i class="fas fa-flask me-2"></i>
+                            Gestão Técnica
+                        </span>
+
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuTecnicoAberto ? 'show' : '' ?>" id="menuTecnico">
+                        <ul class="nav flex-column ms-3">
+
+                            <li>
+                                <a href="<?= BASE_URL ?>/visitas"
+                                class="nav-link <?= $rotaAtual === 'visitas' ? 'active' : '' ?>">
+                                    <i class="fas fa-calendar-check me-2"></i>
+                                    Visitas
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= BASE_URL ?>/checklist"
+                                class="nav-link <?= $rotaAtual === 'checklist' ? 'active' : '' ?>">
+                                    <i class="fas fa-clipboard-check me-2"></i>
+                                    Checklist
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= BASE_URL ?>/quantificacao"
+                                class="nav-link <?= $rotaAtual === 'quantificacao' ? 'active' : '' ?>">
+                                    <i class="fas fa-vials me-2"></i>
+                                    Quantificação
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="<?= BASE_URL ?>/nao-conformidades"
+                                class="nav-link <?= $rotaAtual === 'nao-conformidades' ? 'active' : '' ?>">
+                                    <i class="fas fa-times-circle me-2"></i>
+                                    Não Conformidades
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- RELATÓRIOS -->
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/relatorios"
+                    class="nav-link <?= $rotaAtual === 'relatorios' ? 'active' : '' ?>">
+                        <i class="fas fa-file-pdf me-2"></i>
+                        Relatórios
+                    </a>
+                </li>
+
+                <!-- CONFIG -->
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/configuracoes"
+                    class="nav-link <?= $rotaAtual === 'configuracoes' ? 'active' : '' ?>">
+                        <i class="fas fa-gear me-2"></i>
+                        Configurações
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- LOGOUT -->
+            <div class="logout-box p-3 border-top">
+                <a href="<?= BASE_URL ?>/logout" class="nav-link text-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i> Sair do sistema
                 </a>
-            </li>
-
-            <!-- USUÁRIOS -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/usuarios" class="nav-link">
-                    <i class="fas fa-users me-2"></i>
-                    Usuários
-                </a>
-            </li>
-
-            <!-- EMPRESAS -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/empresas" class="nav-link">
-                    <i class="fas fa-building me-2"></i>
-                    Empresas
-                </a>
-            </li>
-
-            <!-- PLANOS DE QUANTIFICAÇÃO -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/relatorios" class="nav-link">
-                    <i class="fas fa-file-signature me-2"></i>
-                    Planos de Quantificação
-                </a>
-            </li>
-
-            <!-- INVENTÁRIO DE RISCOS -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/riscos" class="nav-link">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Inventário de Riscos
-                </a>
-            </li>
-
-            <!-- DOCUMENTOS TÉCNICOS -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/laudos" class="nav-link">
-                    <i class="fas fa-file-medical me-2"></i>
-                    Documentos Técnicos
-                </a>
-            </li>
-
-            <!-- EPI / EPC -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/epis" class="nav-link">
-                    <i class="fas fa-hard-hat me-2"></i>
-                    EPI / EPC
-                </a>
-            </li>
-
-            <!-- PERMISSÕES DE TRABALHO -->
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/pets" class="nav-link">
-                    <i class="fas fa-tools me-2"></i>
-                    Permissões de Trabalho
-                </a>
-            </li>
-
-        </ul>
-
-        <div class="mt-auto p-3 border-top">
-            <a href="<?= BASE_URL ?>/logout" class="nav-link text-danger">
-                <i class="fas fa-sign-out-alt me-2"></i> Sair do sistema
-            </a>
-        </div>
-    </aside>
+            </div>
+        </aside>
 
         <!-- CONTEÚDO -->
-        <main class="content flex-grow-1 p-4">
+        <main class="content p-4">
