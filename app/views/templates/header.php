@@ -44,15 +44,22 @@
         <nav class="navbar navbar-expand-lg px-3">
             <div class="container-fluid justify-content-between">
 
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">
+                <div class="d-flex align-items-center gap-2 w-100">
+
+                    <!-- Botão mobile/tablet -->
+                    <button class="btn btn-outline-primary d-lg-none flex-shrink-0" id="btnToggleSidebar">
                         <i class="fas fa-bars"></i>
                     </button>
 
-                    <a class="navbar-brand" href="<?= BASE_URL ?>/dashboard">
-                        <span class="logo-white">HO</span>
-                        <span class="logo-blue"> | SANTIAGO</span>
+                    <!-- Logo -->
+                    <a class="logo d-flex align-items-center" href="<?= BASE_URL ?>/dashboard">
+                        <img 
+                            src="<?= BASE_URL ?>/image/logo.png" 
+                            alt="Logo NEXUS SST"
+                            class="img-fluid logo-img"
+                        >
                     </a>
+
                 </div>
 
                 <!-- USUÁRIO -->
@@ -100,7 +107,8 @@
 
         <!-- SIDEBAR -->
         <aside class="sidebar border-end d-flex flex-column" id="sidebar">
-            <ul class="nav flex-column pt-3">
+
+            <ul class="nav flex-column pt-3" id="sidebarMenu">
 
                 <!-- DASHBOARD -->
                 <li class="nav-item">
@@ -123,9 +131,11 @@
                 ?>
 
                 <li class="nav-item">
+
                     <a class="nav-link d-flex justify-content-between align-items-center <?= $menuCadastrosAberto ? '' : 'collapsed' ?>"
                     data-bs-toggle="collapse"
-                    href="#menuCadastros">
+                    href="#menuCadastros"
+                    role="button">
 
                         <span>
                             <i class="fas fa-database me-2"></i>
@@ -135,7 +145,9 @@
                         <i class="fas fa-chevron-down small"></i>
                     </a>
 
-                    <div class="collapse <?= $menuCadastrosAberto ? 'show' : '' ?>" id="menuCadastros">
+                    <div class="collapse <?= $menuCadastrosAberto ? 'show' : '' ?>"
+                        id="menuCadastros"
+                        data-bs-parent="#sidebarMenu">
 
                         <ul class="nav flex-column ms-3">
 
@@ -175,9 +187,11 @@
                             ?>
 
                             <li>
+
                                 <a class="nav-link d-flex justify-content-between align-items-center <?= $menuEstruturaAberto ? '' : 'collapsed' ?>"
                                 data-bs-toggle="collapse"
-                                href="#menuEstrutura">
+                                href="#menuEstrutura"
+                                role="button">
 
                                     <span>
                                         <i class="fas fa-sitemap me-2"></i>
@@ -187,7 +201,9 @@
                                     <i class="fas fa-chevron-down small"></i>
                                 </a>
 
-                                <div class="collapse <?= $menuEstruturaAberto ? 'show' : '' ?>" id="menuEstrutura">
+                                <div class="collapse <?= $menuEstruturaAberto ? 'show' : '' ?>"
+                                    id="menuEstrutura">
+
                                     <ul class="nav flex-column ms-3">
 
                                         <li>
@@ -222,11 +238,22 @@
                                             </a>
                                         </li>
 
+                                        <li>
+                                            <a href="<?= BASE_URL ?>/importacoes/hierarquia"
+                                            class="nav-link <?= $rotaAtual === 'importacoes/hierarquia' ? 'active' : '' ?>">
+                                                
+                                                <i class="fas fa-file-csv me-2"></i>
+                                                Importar Hierarquia CSV
+                                            </a>
+                                        </li>
+
                                     </ul>
+
                                 </div>
                             </li>
 
                         </ul>
+
                     </div>
                 </li>
 
@@ -239,9 +266,11 @@
                 ?>
 
                 <li class="nav-item">
+
                     <a class="nav-link d-flex justify-content-between align-items-center <?= $menuTecnicoAberto ? '' : 'collapsed' ?>"
                     data-bs-toggle="collapse"
-                    href="#menuTecnico">
+                    href="#menuTecnico"
+                    role="button">
 
                         <span>
                             <i class="fas fa-flask me-2"></i>
@@ -251,7 +280,10 @@
                         <i class="fas fa-chevron-down small"></i>
                     </a>
 
-                    <div class="collapse <?= $menuTecnicoAberto ? 'show' : '' ?>" id="menuTecnico">
+                    <div class="collapse <?= $menuTecnicoAberto ? 'show' : '' ?>"
+                        id="menuTecnico"
+                        data-bs-parent="#sidebarMenu">
+
                         <ul class="nav flex-column ms-3">
 
                             <li>
@@ -287,6 +319,7 @@
                             </li>
 
                         </ul>
+
                     </div>
                 </li>
 
@@ -299,7 +332,7 @@
                     </a>
                 </li>
 
-                <!-- CONFIG -->
+                <!-- CONFIGURAÇÕES -->
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/configuracoes"
                     class="nav-link <?= $rotaAtual === 'configuracoes' ? 'active' : '' ?>">
@@ -313,9 +346,11 @@
             <!-- LOGOUT -->
             <div class="logout-box p-3 border-top">
                 <a href="<?= BASE_URL ?>/logout" class="nav-link text-danger">
-                    <i class="fas fa-sign-out-alt me-2"></i> Sair do sistema
+                    <i class="fas fa-sign-out-alt me-2"></i>
+                    Sair do sistema
                 </a>
             </div>
+
         </aside>
 
         <!-- CONTEÚDO -->

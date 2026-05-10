@@ -8,7 +8,6 @@ class EmpresasController extends AuthController
     {
         parent::__construct();
 
-        // Corrigido para usar a model Empresa corretamente
         require_once __DIR__ . '/../models/Empresa.php';
         $this->empresaModel = new Empresa();
     }
@@ -26,14 +25,22 @@ class EmpresasController extends AuthController
 
     public function armazenar()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $dados = [
-                'nome' => trim($_POST['nome']),
-                'cnpj' => trim($_POST['cnpj']),
-                'cnae' => trim($_POST['cnae']),
-                'responsavel' => trim($_POST['responsavel']),
-                'contato_responsavel' => trim($_POST['contato_responsavel']),
-                'endereco' => trim($_POST['endereco']),
+                'razao_social' => trim($_POST['razao_social']),
+                'nome_fantasia' => trim($_POST['nome_fantasia'] ?? ''),
+                'cnpj' => trim($_POST['cnpj'] ?? ''),
+                'inscricao_estadual' => trim($_POST['inscricao_estadual'] ?? ''),
+                'telefone' => trim($_POST['telefone'] ?? ''),
+                'email' => trim($_POST['email'] ?? ''),
+                'responsavel' => trim($_POST['responsavel'] ?? ''),
+                'contato_responsavel' => trim($_POST['contato_responsavel'] ?? ''),
+                'endereco' => trim($_POST['endereco'] ?? ''),
+                'cidade' => trim($_POST['cidade'] ?? ''),
+                'estado' => trim($_POST['estado'] ?? ''),
+                'cep' => trim($_POST['cep'] ?? ''),
+                'ativo' => 1
             ];
 
             $salvo = $this->empresaModel->salvar($dados);
@@ -41,15 +48,16 @@ class EmpresasController extends AuthController
             if ($salvo) {
                 header('Location: ' . BASE_URL . '/empresas');
                 exit;
-            } else {
-                echo "Erro ao salvar empresa.";
             }
+
+            echo "Erro ao salvar empresa.";
         }
     }
 
     public function editar($id)
     {
         $empresa = $this->empresaModel->buscarPorId($id);
+
         if (!$empresa) {
             header('Location: ' . BASE_URL . '/empresas');
             exit;
@@ -60,14 +68,22 @@ class EmpresasController extends AuthController
 
     public function atualizar($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $dados = [
-                'nome' => trim($_POST['nome']),
-                'cnpj' => trim($_POST['cnpj']),
-                'cnae' => trim($_POST['cnae']),
-                'responsavel' => trim($_POST['responsavel']),
-                'contato_responsavel' => trim($_POST['contato_responsavel']),
-                'endereco' => trim($_POST['endereco']),
+                'razao_social' => trim($_POST['razao_social']),
+                'nome_fantasia' => trim($_POST['nome_fantasia'] ?? ''),
+                'cnpj' => trim($_POST['cnpj'] ?? ''),
+                'inscricao_estadual' => trim($_POST['inscricao_estadual'] ?? ''),
+                'telefone' => trim($_POST['telefone'] ?? ''),
+                'email' => trim($_POST['email'] ?? ''),
+                'responsavel' => trim($_POST['responsavel'] ?? ''),
+                'contato_responsavel' => trim($_POST['contato_responsavel'] ?? ''),
+                'endereco' => trim($_POST['endereco'] ?? ''),
+                'cidade' => trim($_POST['cidade'] ?? ''),
+                'estado' => trim($_POST['estado'] ?? ''),
+                'cep' => trim($_POST['cep'] ?? ''),
+                'ativo' => $_POST['ativo'] ?? 1
             ];
 
             $atualizado = $this->empresaModel->atualizar($id, $dados);
@@ -75,9 +91,9 @@ class EmpresasController extends AuthController
             if ($atualizado) {
                 header('Location: ' . BASE_URL . '/empresas');
                 exit;
-            } else {
-                echo "Erro ao atualizar empresa.";
             }
+
+            echo "Erro ao atualizar empresa.";
         }
     }
 

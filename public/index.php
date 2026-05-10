@@ -46,6 +46,16 @@ $routes = [
     '/empresas/editar/{id}'      => ['controller' => 'EmpresasController', 'method' => 'editar'],
     '/empresas/atualizar/{id}'   => ['controller' => 'EmpresasController', 'method' => 'atualizar'],
     '/empresas/excluir/{id}'     => ['controller' => 'EmpresasController', 'method' => 'excluir'],
+
+    // =========================
+    // USUÁRIOS (ADICIONADO)
+    // =========================
+    '/usuarios' => ['controller' => 'UsuariosController', 'method' => 'index'],
+    '/usuarios/criar' => ['controller' => 'UsuariosController', 'method' => 'criar'],
+    '/usuarios/salvar' => ['controller' => 'UsuariosController', 'method' => 'salvar'],
+    '/usuarios/editar/{id}' => ['controller' => 'UsuariosController', 'method' => 'editar'],
+    '/usuarios/atualizar/{id}' => ['controller' => 'UsuariosController', 'method' => 'atualizar'],
+    '/usuarios/excluir/{id}' => ['controller' => 'UsuariosController', 'method' => 'excluir'],
 ];
 
 // Verifica rota exata
@@ -57,14 +67,13 @@ if (array_key_exists($route, $routes)) {
     // Se não achou, tenta bater com rotas dinâmicas
     $found = false;
     foreach ($routes as $routePattern => $action) {
-        // Transforma {qualquerCoisa} em regex que aceita número ou texto
         $pattern = preg_replace('#\{[a-zA-Z0-9_]+\}#', '([a-zA-Z0-9_-]+)', $routePattern);
         $pattern = "#^" . $pattern . "$#";
 
         if (preg_match($pattern, $route, $matches)) {
             $controllerName = $action['controller'];
             $method = $action['method'];
-            $params = array_slice($matches, 1); // captura parâmetros
+            $params = array_slice($matches, 1);
             $found = true;
             break;
         }
