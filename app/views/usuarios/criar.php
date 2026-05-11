@@ -32,36 +32,80 @@
                     <!-- NOME -->
                     <div class="col-12 col-md-12">
                         <label class="form-label">Nome</label>
-                        <input type="text" class="form-control form-control-md" name="nome" required>
+
+                        <input 
+                            type="text"
+                            class="form-control form-control-md"
+                            name="nome"
+                            placeholder="Digite o nome completo"
+                            required
+                        >
                     </div>
 
                     <!-- EMAIL -->
                     <div class="col-12 col-md-12">
                         <label class="form-label">E-mail</label>
-                        <input type="email" class="form-control form-control-md" name="email" required>
+
+                        <input 
+                            type="email"
+                            class="form-control form-control-md"
+                            name="email"
+                            id="email"
+                            placeholder="exemplo@empresa.com.br"
+                            autocomplete="off"
+                            required
+                        >
                     </div>
 
                     <!-- SENHA -->
                     <div class="col-12 col-md-6">
                         <label class="form-label">Senha</label>
-                        <input type="password" class="form-control" name="senha" required>
+
+                        <input 
+                            type="password"
+                            class="form-control"
+                            name="senha"
+                            placeholder="Digite uma senha segura"
+                            required
+                        >
                     </div>
 
                     <!-- TIPO -->
                     <div class="col-12 col-md-6">
                         <label class="form-label">Tipo</label>
+
                         <select class="form-select" name="tipo">
-                            <option value="ADMIN">Administrador</option>
-                            <option value="TECNICO" selected>Técnico</option>
-                            <option value="CLIENTE">Cliente</option>
-                            <option value="VISUALIZADOR">Visualizador</option>
+
+                            <option value="ADMIN">
+                                Administrador
+                            </option>
+
+                            <option value="TECNICO" selected>
+                                Técnico
+                            </option>
+
+                            <option value="CLIENTE">
+                                Cliente
+                            </option>
+
+                            <option value="VISUALIZADOR">
+                                Visualizador
+                            </option>
+
                         </select>
                     </div>
 
                     <!-- TELEFONE -->
                     <div class="col-12 col-md-6">
                         <label class="form-label">Telefone</label>
-                        <input type="text" class="form-control" name="telefone">
+
+                        <input 
+                            type="text"
+                            class="form-control"
+                            name="telefone"
+                            id="telefone"
+                            placeholder="(41) 99999-9999"
+                        >
                     </div>
 
                     <!-- STATUS -->
@@ -71,18 +115,29 @@
 
                         <div class="form-check form-switch d-flex align-items-center gap-3">
 
-                            <input class="form-check-input switch-lg" type="checkbox" id="ativo" name="ativo" value="1" checked>
+                            <input 
+                                class="form-check-input switch-lg"
+                                type="checkbox"
+                                id="ativo"
+                                name="ativo"
+                                value="1"
+                                checked
+                            >
 
                             <div>
+
                                 <label class="form-check-label fw-semibold mb-0" for="ativo">
                                     Status do usuário
                                 </label>
 
                                 <div class="status-text">
+
                                     <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">
                                         Ativo
                                     </span>
+
                                 </div>
+
                             </div>
 
                         </div>
@@ -135,6 +190,39 @@
         switchInput.addEventListener('change', updateStatus);
         updateStatus();
     });
+
+    // Máscara TELEFONE
+    const telefone = document.getElementById('telefone');
+
+    telefone.addEventListener('input', function(e) {
+
+        let value = e.target.value.replace(/\D/g, '');
+
+        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+
+        value = value.replace(/(\d{5})(\d)/, '$1-$2');
+
+        e.target.value = value.substring(0, 15);
+    });
+
+
+    // Validação visual EMAIL
+    const email = document.getElementById('email');
+
+    email.addEventListener('blur', function() {
+
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email.value !== '' && !regex.test(email.value)) {
+
+            email.classList.add('is-invalid');
+
+        } else {
+
+            email.classList.remove('is-invalid');
+        }
+    });
+
 </script>
 
 <?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>
