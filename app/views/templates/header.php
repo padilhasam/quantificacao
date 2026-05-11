@@ -42,9 +42,11 @@
     <!-- HEADER -->
     <header>
         <nav class="navbar navbar-expand-lg px-3">
-            <div class="container-fluid justify-content-between">
+            
+            <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
 
-                <div class="d-flex align-items-center gap-2 w-100">
+                <!-- ESQUERDA (LOGO + MENU) -->
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
 
                     <!-- Botão mobile/tablet -->
                     <button class="btn btn-outline-primary d-lg-none flex-shrink-0" id="btnToggleSidebar">
@@ -62,8 +64,9 @@
 
                 </div>
 
-                <!-- USUÁRIO -->
-                <div class="dropdown">
+                <!-- DIREITA (USUÁRIO) -->
+                <div class="dropdown ms-auto">
+
                     <button class="btn btn-link text-decoration-none dropdown-toggle d-flex align-items-center gap-2"
                             data-bs-toggle="dropdown">
 
@@ -96,9 +99,11 @@
                             </a>
                         </li>
                     </ul>
+
                 </div>
 
             </div>
+
         </nav>
     </header>
 

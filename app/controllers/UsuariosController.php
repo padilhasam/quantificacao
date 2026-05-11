@@ -27,9 +27,9 @@ class UsuariosController extends Controller
         $usuarios = $this->usuarioModel->listarTodos();
 
         $dados = [
-            'titulo' => 'Usuários',
+            'titulo'   => 'Usuários',
             'usuarios' => $usuarios,
-            'css' => 'usuarios.css'
+            'css'      => 'usuarios.css'
         ];
 
         $this->view('usuarios/index', $dados);
@@ -40,7 +40,12 @@ class UsuariosController extends Controller
      */
     public function criar()
     {
-                $this->view('usuarios/criar');
+        $dados = [
+            'titulo' => 'Novo Usuário',
+            'css'    => 'usuarios.css'
+        ];
+
+        $this->view('usuarios/criar', $dados);
     }
 
     /**
@@ -53,11 +58,12 @@ class UsuariosController extends Controller
             exit;
         }
 
-        $nome  = trim($_POST['nome'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $senha = trim($_POST['senha'] ?? '');
-        $tipo  = trim($_POST['tipo'] ?? 'USUARIO');
-        $ativo = isset($_POST['ativo']) ? 1 : 0;
+        $nome     = trim($_POST['nome'] ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $senha    = trim($_POST['senha'] ?? '');
+        $telefone = trim($_POST['telefone'] ?? '');
+        $tipo     = trim($_POST['tipo'] ?? 'TECNICO');
+        $ativo    = (int) ($_POST['ativo'] ?? 0);
 
         // Validação
         if (empty($nome) || empty($email) || empty($senha)) {
@@ -68,7 +74,7 @@ class UsuariosController extends Controller
             exit;
         }
 
-        // Verifica e-mail
+        // Verifica e-mail existente
         if ($this->usuarioModel->buscarPorEmail($email)) {
 
             $_SESSION['erro'] = 'Já existe um usuário com este e-mail.';
@@ -78,14 +84,15 @@ class UsuariosController extends Controller
         }
 
         $dados = [
-            'nome'  => $nome,
-            'email' => $email,
-            'senha' => password_hash($senha, PASSWORD_DEFAULT),
-            'tipo'  => $tipo,
-            'ativo' => $ativo
+            'nome'      => $nome,
+            'email'     => $email,
+            'senha'     => $senha,
+            'telefone'  => $telefone,
+            'tipo'      => $tipo,
+            'ativo'     => $ativo
         ];
 
-        $salvou = $this->usuarioModel->criar($dados);
+        $salvou = $this->usuarioModel->cadastrar($dados);
 
         if ($salvou) {
 
@@ -105,7 +112,7 @@ class UsuariosController extends Controller
      */
     public function editar($id)
     {
-        $usuario = $this->usuarioModel->buscarPorId($id);
+        $usuario = $this->usuarioModel->buscarPorId((int)$id);
 
         if (!$usuario) {
 
@@ -125,7 +132,7 @@ class UsuariosController extends Controller
     }
 
     /**
-     * ATUALIZAR
+     * ATUALIZAR USUÁRIO
      */
     public function atualizar($id)
     {
@@ -134,7 +141,7 @@ class UsuariosController extends Controller
             exit;
         }
 
-        $usuarioAtual = $this->usuarioModel->buscarPorId($id);
+        $usuarioAtual = $this->usuarioModel->buscarPorId((int)$id);
 
         if (!$usuarioAtual) {
 
@@ -144,24 +151,38 @@ class UsuariosController extends Controller
             exit;
         }
 
-        $nome  = trim($_POST['nome'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $tipo  = trim($_POST['tipo'] ?? 'USUARIO');
-        $ativo = isset($_POST['ativo']) ? 1 : 0;
+        $nome     = trim($_POST['nome'] ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $telefone = trim($_POST['telefone'] ?? '');
+        $tipo     = trim($_POST['tipo'] ?? 'TECNICO');
+        $ativo    = (int) ($_POST['ativo'] ?? 0);
+        $senha    = trim($_POST['senha'] ?? '');
 
-        $dados = [
-            'nome'  => $nome,
-            'email' => $email,
-            'tipo'  => $tipo,
-            'ativo' => $ativo
-        ];
+        // Verifica se email pertence a outro usuário
+        $usuarioEmail = $this->usuarioModel->buscarPorEmail($email);
 
-        // Atualizar senha somente se preenchida
-        if (!empty($_POST['senha'])) {
-            $dados['senha'] = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        if ($usuarioEmail && $usuarioEmail['id'] != $id) {
+
+            $_SESSION['erro'] = 'Este e-mail já está sendo utilizado.';
+
+            header('Location: ' . BASE_URL . '/usuarios/editar/' . $id);
+            exit;
         }
 
-        $atualizou = $this->usuarioModel->atualizar($id, $dados);
+        $dados = [
+            'nome'      => $nome,
+            'email'     => $email,
+            'telefone'  => $telefone,
+            'tipo'      => $tipo,
+            'ativo'     => $ativo
+        ];
+
+        // Atualiza senha apenas se preenchida
+        if (!empty($senha)) {
+            $dados['senha'] = $senha;
+        }
+
+        $atualizou = $this->usuarioModel->atualizar((int)$id, $dados);
 
         if ($atualizou) {
 
@@ -177,11 +198,11 @@ class UsuariosController extends Controller
     }
 
     /**
-     * EXCLUIR
+     * EXCLUIR USUÁRIO
      */
     public function excluir($id)
     {
-        $usuario = $this->usuarioModel->buscarPorId($id);
+        $usuario = $this->usuarioModel->buscarPorId((int)$id);
 
         if (!$usuario) {
 
@@ -191,7 +212,7 @@ class UsuariosController extends Controller
             exit;
         }
 
-        // Impede excluir a si mesmo
+        // Impede excluir o próprio usuário logado
         if ($usuario['id'] == $_SESSION['usuario_id']) {
 
             $_SESSION['erro'] = 'Você não pode excluir seu próprio usuário.';
@@ -200,7 +221,7 @@ class UsuariosController extends Controller
             exit;
         }
 
-        $excluiu = $this->usuarioModel->excluir($id);
+        $excluiu = $this->usuarioModel->excluir((int)$id);
 
         if ($excluiu) {
 

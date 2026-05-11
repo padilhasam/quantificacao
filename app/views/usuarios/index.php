@@ -4,6 +4,82 @@
 
 <main class="content flex-grow-1 p-4">
 
+    <!-- TOASTS -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+
+        <?php if (!empty($_SESSION['sucesso'])) : ?>
+
+            <div id="toastSucesso"
+                class="toast align-items-center text-bg-success border-0 shadow-lg"
+                role="alert">
+
+                <div class="d-flex">
+
+                    <div class="toast-body">
+                        <i class="fas fa-circle-check me-2"></i>
+                        <?= $_SESSION['sucesso']; ?>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast">
+                    </button>
+
+                </div>
+
+            </div>
+
+            <?php unset($_SESSION['sucesso']); ?>
+
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['erro'])) : ?>
+
+            <div id="toastErro"
+                class="toast align-items-center text-bg-danger border-0 shadow-lg"
+                role="alert">
+
+                <div class="d-flex">
+
+                    <div class="toast-body">
+                        <i class="fas fa-circle-exclamation me-2"></i>
+                        <?= $_SESSION['erro']; ?>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast">
+                    </button>
+
+                </div>
+
+            </div>
+
+            <?php unset($_SESSION['erro']); ?>
+
+        <?php endif; ?>
+
+    </div>
+
+    <!-- ALERTAS
+    <?php //if (!empty($_SESSION['sucesso'])) : ?>
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <?= $_SESSION['sucesso']; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php //unset($_SESSION['sucesso']); ?>
+    <?php //endif; ?>
+
+    <?php //if (!empty($_SESSION['erro'])) : ?>
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <?= $_SESSION['erro']; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['erro']); ?>
+    <?php //endif; ?> -->
+
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
@@ -51,7 +127,8 @@
                         <option value="">Todos</option>
                         <option>Administrador</option>
                         <option>Técnico</option>
-                        <option>Usuário</option>
+                        <option>Cliente</option>
+                        <option>Visualizador</option>
                     </select>
                 </div>
 
@@ -91,6 +168,7 @@
                     <thead class="table-light">
 
                         <tr>
+                            <th>Id</th>
                             <th>Usuário</th>
                             <th>E-mail</th>
                             <th>Tipo</th>
@@ -111,47 +189,60 @@
 
                                 <tr>
 
-                                    <td>
-                                        <div class="d-flex align-items-center gap-2">
+                                    <!-- ID -->
+                                    <td class="fw-semibold text-muted">
+                                        #<?= $usuario['id'] ?>
+                                    </td>
 
-                                            <div class="avatar-user">
+                                    <!-- USUÁRIO -->
+                                    <td style="min-width: 240px;">
+
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <!-- Avatar 
+                                            <div class="avatar-user flex-shrink-0">
                                                 <?= strtoupper(substr($usuario['nome'], 0, 2)) ?>
-                                            </div>
+                                            </div> -->
 
-                                            <div>
-                                                <div class="fw-semibold">
+                                            <!-- Nome -->
+                                            <div class="overflow-hidden">
+
+                                                <div class="fw-semibold text-truncate">
                                                     <?= htmlspecialchars($usuario['nome']) ?>
                                                 </div>
 
-                                                <small class="text-muted">
-                                                    ID #<?= $usuario['id'] ?>
-                                                </small>
                                             </div>
 
                                         </div>
+
                                     </td>
 
+                                    <!-- EMAIL -->
                                     <td>
                                         <?= htmlspecialchars($usuario['email']) ?>
                                     </td>
 
+                                    <!-- TIPO -->
                                     <td>
-                                        <span class="badge bg-primary-subtle text-primary">
+
+                                        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
                                             <?= htmlspecialchars($usuario['tipo']) ?>
                                         </span>
+
                                     </td>
 
+                                    <!-- STATUS -->
                                     <td>
 
                                         <?php if ($usuario['ativo']) : ?>
 
-                                            <span class="badge bg-success">
+                                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
                                                 Ativo
                                             </span>
 
                                         <?php else : ?>
 
-                                            <span class="badge bg-danger">
+                                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
                                                 Inativo
                                             </span>
 
@@ -159,24 +250,41 @@
 
                                     </td>
 
+                                    <!-- ÚLTIMO ACESSO -->
                                     <td>
-                                        <?= $usuario['ultimo_acesso'] ?? '-' ?>
+
+                                        <?php if (!empty($usuario['ultimo_acesso'])) : ?>
+
+                                            <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
+
+                                        <?php else : ?>
+
+                                            <span class="text-muted">
+                                                Nunca acessou
+                                            </span>
+
+                                        <?php endif; ?>
+
                                     </td>
 
+                                    <!-- AÇÕES -->
                                     <td>
 
                                         <div class="d-flex justify-content-center gap-2">
 
+                                            <!-- EDITAR -->
                                             <a href="<?= BASE_URL ?>/usuarios/editar/<?= $usuario['id'] ?>"
-                                               class="btn btn-sm btn-outline-primary"
+                                               class="btn btn-sm btn-outline-primary rounded-pill px-3"
                                                title="Editar">
 
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
+                                            <!-- EXCLUIR -->
                                             <a href="<?= BASE_URL ?>/usuarios/excluir/<?= $usuario['id'] ?>"
-                                               class="btn btn-sm btn-outline-danger"
-                                               title="Excluir">
+                                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                               title="Excluir"
+                                               onclick="return confirm('Deseja realmente excluir este usuário?')">
 
                                                 <i class="fas fa-trash"></i>
                                             </a>
@@ -220,5 +328,35 @@
     </div>
 
 </main>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const toastSucesso = document.getElementById('toastSucesso');
+
+    if (toastSucesso) {
+
+        const toast = new bootstrap.Toast(toastSucesso, {
+            delay: 4000
+        });
+
+        toast.show();
+    }
+
+    const toastErro = document.getElementById('toastErro');
+
+    if (toastErro) {
+
+        const toast = new bootstrap.Toast(toastErro, {
+            delay: 5000
+        });
+
+        toast.show();
+    }
+
+});
+
+</script>
 
 <?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>

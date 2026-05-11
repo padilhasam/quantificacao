@@ -2,60 +2,139 @@
 
 <link rel="stylesheet" href="<?= BASE_URL ?>/css/usuarios.css">
 
-<div class="container mt-4">
-    <h2>Cadastrar Novo Usuário</h2>
+<div class="container py-4">
 
-    <form action="<?= BASE_URL ?>/usuarios/salvar" method="POST">
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
 
-        <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+        <div>
+            <h3 class="mb-0 fw-bold">
+                <i class="fas fa-user-plus me-2 text-primary"></i>
+                Cadastrar Usuário
+            </h3>
+            <small class="text-muted">Preencha os dados do novo usuário do sistema</small>
         </div>
 
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+        <a href="<?= BASE_URL ?>/usuarios" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Voltar
+        </a>
+
+    </div>
+
+    <!-- CARD FORM -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form action="<?= BASE_URL ?>/usuarios/salvar" method="POST">
+
+                <div class="row g-3">
+
+                    <!-- NOME -->
+                    <div class="col-12 col-md-12">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control form-control-md" name="nome" required>
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="col-12 col-md-12">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" class="form-control form-control-md" name="email" required>
+                    </div>
+
+                    <!-- SENHA -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Senha</label>
+                        <input type="password" class="form-control" name="senha" required>
+                    </div>
+
+                    <!-- TIPO -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="tipo">
+                            <option value="ADMIN">Administrador</option>
+                            <option value="TECNICO" selected>Técnico</option>
+                            <option value="CLIENTE">Cliente</option>
+                            <option value="VISUALIZADOR">Visualizador</option>
+                        </select>
+                    </div>
+
+                    <!-- TELEFONE -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" class="form-control" name="telefone">
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="status-switch w-100">
+
+                        <input type="hidden" name="ativo" value="0">
+
+                        <div class="form-check form-switch d-flex align-items-center gap-3">
+
+                            <input class="form-check-input switch-lg" type="checkbox" id="ativo" name="ativo" value="1" checked>
+
+                            <div>
+                                <label class="form-check-label fw-semibold mb-0" for="ativo">
+                                    Status do usuário
+                                </label>
+
+                                <div class="status-text">
+                                    <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">
+                                        Ativo
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="d-flex justify-content-end flex-wrap gap-2 mt-4">
+
+                    <a href="<?= BASE_URL ?>/usuarios" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i> Cancelar
+                    </a>
+
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-check me-2"></i> Salvar Usuário
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" required>
-        </div>
-
-        <div class="form-group">
-            <label for="tipo">Tipo</label>
-            <select class="form-control" id="tipo" name="tipo">
-                <option value="ADMIN">Administrador</option>
-                <option value="TECNICO" selected>Técnico</option>
-                <option value="CLIENTE">Cliente</option>
-                <option value="VISUALIZADOR">Visualizador</option>
-            </select>
-        </div>
-
-        <div class="form-group mt-2">
-            <label for="telefone">Telefone</label>
-            <input type="text" class="form-control" id="telefone" name="telefone">
-        </div>
-
-        <div class="form-group mt-2">
-            <label for="ativo">Status</label>
-            <select class="form-control" id="ativo" name="ativo">
-                <option value="1" selected>Ativo</option>
-                <option value="0">Inativo</option>
-            </select>
-        </div>
-
-        <div class="form-group text-end mt-4">
-            <button type="submit" class="btn btn-success me-2">
-                <i class="fas fa-check-circle"></i> Salvar
-            </button>
-
-            <a href="<?= BASE_URL ?>/usuarios" class="btn btn-outline-secondary">
-                <i class="fas fa-times-circle"></i> Cancelar
-            </a>
-        </div>
-
-    </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const switchInput = document.getElementById('ativo');
+        const statusText = document.querySelector('.status-text');
+
+        function updateStatus() {
+            if (switchInput.checked) {
+                statusText.innerHTML = `
+                    <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">
+                        Ativo
+                    </span>
+                `;
+            } else {
+                statusText.innerHTML = `
+                    <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">
+                        Inativo
+                    </span>
+                `;
+            }
+        }
+
+        switchInput.addEventListener('change', updateStatus);
+        updateStatus();
+    });
+</script>
 
 <?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>
