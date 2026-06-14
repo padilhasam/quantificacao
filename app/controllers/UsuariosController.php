@@ -24,11 +24,11 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        $usuarios = $this->usuarioModel->listarTodos();
+        $userName = $this->usuarioModel->listarTodos();
 
         $dados = [
             'titulo'   => 'Usuários',
-            'usuarios' => $usuarios,
+            'usuarios' => $userName,
             'css'      => 'usuarios.css'
         ];
 
