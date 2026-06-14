@@ -1,36 +1,38 @@
 <?php require_once dirname(__DIR__) . '../templates/header.php'; ?>
 
-<link rel="stylesheet" href="<?= BASE_URL ?>/css/usuarios.css">
-
 <main class="content flex-grow-1 p-4">
 
-    <!-- TOASTS -->
+    <?php
+    $sucesso = $_SESSION['sucesso'] ?? null;
+    $erro = $_SESSION['erro'] ?? null;
+
+    unset($_SESSION['sucesso'], $_SESSION['erro']);
+    ?>
+
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
 
-        <?php if (!empty($_SESSION['sucesso'])) : ?>
+        <?php if ($sucesso): ?>
             <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
                 <div class="d-flex">
                     <div class="toast-body">
                         <i class="fas fa-circle-check me-2"></i>
-                        <?= $_SESSION['sucesso']; ?>
+                        <?= htmlspecialchars($sucesso) ?>
                     </div>
                     <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                 </div>
             </div>
-            <?php unset($_SESSION['sucesso']); ?>
         <?php endif; ?>
 
-        <?php if (!empty($_SESSION['erro'])) : ?>
+        <?php if ($erro): ?>
             <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
                 <div class="d-flex">
                     <div class="toast-body">
                         <i class="fas fa-circle-exclamation me-2"></i>
-                        <?= $_SESSION['erro']; ?>
+                        <?= htmlspecialchars($erro) ?>
                     </div>
                     <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                 </div>
             </div>
-            <?php unset($_SESSION['erro']); ?>
         <?php endif; ?>
 
     </div>
@@ -233,9 +235,13 @@
                 </p>
 
                 <p><strong>Último acesso:</strong><br>
-                    <?= !empty($usuario['ultimo_acesso'])
-                        ? date('d/m/Y H:i', strtotime($usuario['ultimo_acesso']))
-                        : 'Nunca acessou' ?>
+                    <td>
+                        <?php if (!empty($usuario['ultimo_acesso'])): ?>
+                            <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
+                        <?php else: ?>
+                            <span class="text-muted">Nunca acessou</span>
+                        <?php endif; ?>
+                    </td>
                 </p>
 
             </div>

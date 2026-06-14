@@ -1,21 +1,21 @@
-<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
+<?php require_once dirname(__DIR__) . '../templates/header.php'; ?>
 
 <main class="content flex-grow-1 p-4">
 
 <?php
-    $sucesso = $_SESSION['sucesso'] ?? null;
-    $erro = $_SESSION['erro'] ?? null;
-    unset($_SESSION['sucesso'], $_SESSION['erro']);
+$sucesso = $_SESSION['sucesso'] ?? null;
+$erro = $_SESSION['erro'] ?? null;
+
+unset($_SESSION['sucesso'], $_SESSION['erro']);
 ?>
 
-<!-- TOASTS -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
 
     <?php if ($sucesso): ?>
         <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
             <div class="d-flex">
                 <div class="toast-body">
-                    <i class="fas fa-check-circle me-2"></i>
+                    <i class="fas fa-circle-check me-2"></i>
                     <?= htmlspecialchars($sucesso) ?>
                 </div>
                 <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -151,7 +151,7 @@
                                     <button class="btn btn-sm btn-outline-secondary rounded-pill px-3"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalTecnico<?= $tec['id'] ?>">
-                                        <i class="fas fa-circle-info""></i>
+                                        <i class="fas fa-circle-info"></i>
                                     </button>
 
                                     <!-- EDITAR -->
@@ -245,4 +245,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>
+<?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>

@@ -60,7 +60,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================
-   DASH
+   DASHBOARD / CHARTS
 ============================ */
 .chart-box {
     position: relative;
@@ -74,11 +74,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================
-   TABLET RESPONSIVO
+   TABLET / RESPONSIVO
 ============================ */
 @media (max-width: 992px) {
 
-    /* padding mais compacto */
     table.table td,
     table.table th {
         padding: 6px 8px;
@@ -86,13 +85,11 @@ h1, h2, h3, h4, h5, h6 {
         vertical-align: middle;
     }
 
-    /* tabela responsiva correta */
     table {
         width: 100%;
-        table-layout: auto; /* ✔ corrigido */
+        table-layout: auto;
     }
 
-    /* ID pequeno sem quebrar layout */
     .col-id {
         width: 60px;
         max-width: 60px;
@@ -100,16 +97,58 @@ h1, h2, h3, h4, h5, h6 {
         white-space: nowrap;
     }
 
-    /* badges menores */
     .badge {
         font-size: 0.75rem;
         padding: 4px 8px;
     }
 
-    /* contato quebra linha corretamente */
     td.small div {
         white-space: normal;
         word-break: break-word;
         line-height: 1.2;
     }
+}
+
+/* ============================
+   SWITCH / STATUS
+============================ */
+.switch-lg {
+    width: 3.4em;
+    height: 1.7em;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.switch-lg:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.switch-lg:focus {
+    box-shadow: none;
+}
+
+.status-switch {
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.status-text {
+    transition: all 0.2s ease;
+}
+
+/* ============================
+   TOASTS (CORRIGIDO)
+============================ */
+.toast {
+    border-radius: 16px;
+    min-width: 320px;
+    backdrop-filter: blur(10px);
+}
+
+.toast-body {
+    font-weight: 500;
+    padding: 14px 18px;
 }
