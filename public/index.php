@@ -15,13 +15,19 @@ spl_autoload_register(function($class) {
     }
 });
 
-// Pega URI atual sem query string
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$requestUri = str_replace('/index.php', '', $requestUri);
+$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$scriptName = dirname($_SERVER['SCRIPT_NAME']);
-$route = str_replace($scriptName, '', $requestUri);
+// base do sistema (remove /public automaticamente)
+$basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 
+$route = $requestPath;
+
+// remove basePath se existir
+if ($basePath !== '/' && str_starts_with($route, $basePath)) {
+    $route = substr($route, strlen($basePath));
+}
+
+// normaliza
 $route = '/' . trim($route, '/');
 
 if ($route === '//') {
@@ -36,7 +42,9 @@ $routes = [
     '/logout' => ['controller' => 'LoginController', 'method' => 'logout'],
     '/dashboard' => ['controller' => 'DashboardController', 'method' => 'index'],
 
-    // Rotas de riscos
+    // =========================
+    // RISCOS
+    // =========================
     '/riscos' => ['controller' => 'RiscosController', 'method' => 'index'],
     '/riscos/fisicos' => ['controller' => 'RiscosController', 'method' => 'fisicos'],
     '/riscos/quimicos' => ['controller' => 'RiscosController', 'method' => 'quimicos'],
@@ -44,7 +52,9 @@ $routes = [
     '/riscos/ergonomicos' => ['controller' => 'RiscosController', 'method' => 'ergonomicos'],
     '/riscos/acidente' => ['controller' => 'RiscosController', 'method' => 'acidente'],
 
-    // Rotas para Empresas
+    // =========================
+    // EMPRESAS
+    // =========================
     '/empresas'                 => ['controller' => 'EmpresasController', 'method' => 'index'],
     '/empresas/criar'            => ['controller' => 'EmpresasController', 'method' => 'criar'],
     '/empresas/armazenar'        => ['controller' => 'EmpresasController', 'method' => 'armazenar'],
@@ -53,7 +63,7 @@ $routes = [
     '/empresas/excluir/{id}'     => ['controller' => 'EmpresasController', 'method' => 'excluir'],
 
     // =========================
-    // USUÁRIOS (ADICIONADO)
+    // USUÁRIOS
     // =========================
     '/usuarios' => ['controller' => 'UsuariosController', 'method' => 'index'],
     '/usuarios/criar' => ['controller' => 'UsuariosController', 'method' => 'criar'],
@@ -61,6 +71,16 @@ $routes = [
     '/usuarios/editar/{id}' => ['controller' => 'UsuariosController', 'method' => 'editar'],
     '/usuarios/atualizar/{id}' => ['controller' => 'UsuariosController', 'method' => 'atualizar'],
     '/usuarios/excluir/{id}' => ['controller' => 'UsuariosController', 'method' => 'excluir'],
+
+    // =========================
+    // TECNICOS
+    // =========================
+    '/tecnicos' => ['controller' => 'TecnicosController', 'method' => 'index'],
+    '/tecnicos/criar' => ['controller' => 'TecnicosController', 'method' => 'criar'],
+    '/tecnicos/salvar' => ['controller' => 'TecnicosController', 'method' => 'salvar'],
+    '/tecnicos/editar/{id}' => ['controller' => 'TecnicosController', 'method' => 'editar'],
+    '/tecnicos/atualizar/{id}' => ['controller' => 'TecnicosController', 'method' => 'atualizar'],
+    '/tecnicos/excluir/{id}' => ['controller' => 'TecnicosController', 'method' => 'excluir'],
 ];
 
 // Verifica rota exata

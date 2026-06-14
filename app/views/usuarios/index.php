@@ -8,77 +8,32 @@
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
 
         <?php if (!empty($_SESSION['sucesso'])) : ?>
-
-            <div id="toastSucesso"
-                class="toast align-items-center text-bg-success border-0 shadow-lg"
-                role="alert">
-
+            <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
                 <div class="d-flex">
-
                     <div class="toast-body">
                         <i class="fas fa-circle-check me-2"></i>
                         <?= $_SESSION['sucesso']; ?>
                     </div>
-
-                    <button type="button"
-                            class="btn-close btn-close-white me-2 m-auto"
-                            data-bs-dismiss="toast">
-                    </button>
-
+                    <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                 </div>
-
             </div>
-
             <?php unset($_SESSION['sucesso']); ?>
-
         <?php endif; ?>
 
         <?php if (!empty($_SESSION['erro'])) : ?>
-
-            <div id="toastErro"
-                class="toast align-items-center text-bg-danger border-0 shadow-lg"
-                role="alert">
-
+            <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
                 <div class="d-flex">
-
                     <div class="toast-body">
                         <i class="fas fa-circle-exclamation me-2"></i>
                         <?= $_SESSION['erro']; ?>
                     </div>
-
-                    <button type="button"
-                            class="btn-close btn-close-white me-2 m-auto"
-                            data-bs-dismiss="toast">
-                    </button>
-
+                    <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                 </div>
-
             </div>
-
             <?php unset($_SESSION['erro']); ?>
-
         <?php endif; ?>
 
     </div>
-
-    <!-- ALERTAS
-    <?php //if (!empty($_SESSION['sucesso'])) : ?>
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <?= $_SESSION['sucesso']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <?php //unset($_SESSION['sucesso']); ?>
-    <?php //endif; ?>
-
-    <?php //if (!empty($_SESSION['erro'])) : ?>
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <?= $_SESSION['erro']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <?php unset($_SESSION['erro']); ?>
-    <?php //endif; ?> -->
 
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
@@ -88,14 +43,12 @@
                 <i class="fas fa-users me-2 text-primary"></i>
                 Usuários
             </h3>
-
             <p class="text-muted mb-0">
                 Gerenciamento de usuários e permissões do sistema
             </p>
         </div>
 
-        <a href="<?= BASE_URL ?>/usuarios/criar"
-           class="btn btn-primary shadow-sm">
+        <a href="<?= BASE_URL ?>/usuarios/criar" class="btn btn-primary shadow-sm">
             <i class="fas fa-plus-circle me-2"></i>
             Novo Usuário
         </a>
@@ -109,20 +62,12 @@
             <div class="row g-3">
 
                 <div class="col-lg-4">
-                    <label class="form-label fw-semibold">
-                        Buscar
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Nome ou e-mail">
+                    <label class="form-label fw-semibold">Buscar</label>
+                    <input type="text" class="form-control" placeholder="Nome ou e-mail">
                 </div>
 
                 <div class="col-lg-3">
-                    <label class="form-label fw-semibold">
-                        Tipo
-                    </label>
-
+                    <label class="form-label fw-semibold">Tipo</label>
                     <select class="form-select">
                         <option value="">Todos</option>
                         <option>Administrador</option>
@@ -133,10 +78,7 @@
                 </div>
 
                 <div class="col-lg-3">
-                    <label class="form-label fw-semibold">
-                        Status
-                    </label>
-
+                    <label class="form-label fw-semibold">Status</label>
                     <select class="form-select">
                         <option value="">Todos</option>
                         <option>Ativo</option>
@@ -166,7 +108,6 @@
                 <table class="table table-hover align-middle mb-0">
 
                     <thead class="table-light">
-
                         <tr>
                             <th>Id</th>
                             <th>Usuário</th>
@@ -174,148 +115,81 @@
                             <th>Tipo</th>
                             <th>Status</th>
                             <th>Último acesso</th>
-                            <th width="160" class="text-center">
-                                Ações
-                            </th>
+                            <th width="180" class="text-center">Ações</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
 
-                        <?php if (!empty($usuarios)) : ?>
-
-                            <?php foreach ($usuarios as $usuario) : ?>
-
-                                <tr>
-
-                                    <!-- ID -->
-                                    <td class="fw-semibold text-muted">
-                                        #<?= $usuario['id'] ?>
-                                    </td>
-
-                                    <!-- USUÁRIO -->
-                                    <td style="min-width: 240px;">
-
-                                        <div class="d-flex align-items-center gap-3">
-
-                                            <!-- Avatar 
-                                            <div class="avatar-user flex-shrink-0">
-                                                <?= strtoupper(substr($usuario['nome'], 0, 2)) ?>
-                                            </div> -->
-
-                                            <!-- Nome -->
-                                            <div class="overflow-hidden">
-
-                                                <div class="fw-semibold text-truncate">
-                                                    <?= htmlspecialchars($usuario['nome']) ?>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-
-                                    <!-- EMAIL -->
-                                    <td>
-                                        <?= htmlspecialchars($usuario['email']) ?>
-                                    </td>
-
-                                    <!-- TIPO -->
-                                    <td>
-
-                                        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
-                                            <?= htmlspecialchars($usuario['tipo']) ?>
-                                        </span>
-
-                                    </td>
-
-                                    <!-- STATUS -->
-                                    <td>
-
-                                        <?php if ($usuario['ativo']) : ?>
-
-                                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
-                                                Ativo
-                                            </span>
-
-                                        <?php else : ?>
-
-                                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
-                                                Inativo
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </td>
-
-                                    <!-- ÚLTIMO ACESSO -->
-                                    <td>
-
-                                        <?php if (!empty($usuario['ultimo_acesso'])) : ?>
-
-                                            <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
-
-                                        <?php else : ?>
-
-                                            <span class="text-muted">
-                                                Nunca acessou
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </td>
-
-                                    <!-- AÇÕES -->
-                                    <td>
-
-                                        <div class="d-flex justify-content-center gap-2">
-
-                                            <!-- EDITAR -->
-                                            <a href="<?= BASE_URL ?>/usuarios/editar/<?= $usuario['id'] ?>"
-                                               class="btn btn-sm btn-outline-primary rounded-pill px-3"
-                                               title="Editar">
-
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            <!-- EXCLUIR -->
-                                            <a href="<?= BASE_URL ?>/usuarios/excluir/<?= $usuario['id'] ?>"
-                                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                               title="Excluir"
-                                               onclick="return confirm('Deseja realmente excluir este usuário?')">
-
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            <?php endforeach; ?>
-
-                        <?php else : ?>
+                        <?php foreach ($usuarios as $usuario) : ?>
 
                             <tr>
-                                <td colspan="6" class="text-center py-5">
 
-                                    <div class="text-muted">
+                                <td class="fw-semibold text-muted">
+                                    #<?= $usuario['id'] ?>
+                                </td>
 
-                                        <i class="fas fa-users fa-3x mb-3 opacity-50"></i>
+                                <td class="fw-semibold">
+                                    <?= htmlspecialchars($usuario['nome']) ?>
+                                </td>
 
-                                        <p class="mb-0">
-                                            Nenhum usuário cadastrado.
-                                        </p>
+                                <td>
+                                    <?= htmlspecialchars($usuario['email']) ?>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                        <?= htmlspecialchars($usuario['tipo']) ?>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <?php if ($usuario['ativo']) : ?>
+                                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                                            Ativo
+                                        </span>
+                                    <?php else : ?>
+                                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
+                                            Inativo
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td>
+                                    <?= !empty($usuario['ultimo_acesso'])
+                                        ? date('d/m/Y H:i', strtotime($usuario['ultimo_acesso']))
+                                        : '<span class="text-muted">Nunca acessou</span>' ?>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <!-- INFO -->
+                                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalUsuario<?= $usuario['id'] ?>">
+                                            <i class="fas fa-circle-info"></i>
+                                        </button>
+
+                                        <!-- EDITAR -->
+                                        <a href="<?= BASE_URL ?>/usuarios/editar/<?= $usuario['id'] ?>"
+                                           class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <!-- EXCLUIR -->
+                                        <a href="<?= BASE_URL ?>/usuarios/excluir/<?= $usuario['id'] ?>"
+                                           class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                           onclick="return confirm('Deseja realmente excluir este usuário?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
 
                                     </div>
-
                                 </td>
+
                             </tr>
 
-                        <?php endif; ?>
+                        <?php endforeach; ?>
 
                     </tbody>
 
@@ -329,34 +203,68 @@
 
 </main>
 
-<script>
+<!-- =========================
+     MODAIS DE USUÁRIOS
+========================= -->
+<?php foreach ($usuarios as $usuario) : ?>
 
+<div class="modal fade" id="modalUsuario<?= $usuario['id'] ?>" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user me-2 text-primary"></i>
+                    Detalhes do Usuário
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <p><strong>Nome:</strong> <?= htmlspecialchars($usuario['nome']) ?></p>
+                <p><strong>E-mail:</strong> <?= htmlspecialchars($usuario['email']) ?></p>
+                <p><strong>Tipo:</strong> <?= htmlspecialchars($usuario['tipo']) ?></p>
+
+                <p><strong>Status:</strong>
+                    <?= $usuario['ativo']
+                        ? '<span class="badge bg-success">Ativo</span>'
+                        : '<span class="badge bg-danger">Inativo</span>' ?>
+                </p>
+
+                <p><strong>Último acesso:</strong><br>
+                    <?= !empty($usuario['ultimo_acesso'])
+                        ? date('d/m/Y H:i', strtotime($usuario['ultimo_acesso']))
+                        : 'Nunca acessou' ?>
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php endforeach; ?>
+
+<script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    const toastSucesso = document.getElementById('toastSucesso');
+    ['toastSucesso', 'toastErro'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
 
-    if (toastSucesso) {
-
-        const toast = new bootstrap.Toast(toastSucesso, {
-            delay: 4000
-        });
-
-        toast.show();
-    }
-
-    const toastErro = document.getElementById('toastErro');
-
-    if (toastErro) {
-
-        const toast = new bootstrap.Toast(toastErro, {
-            delay: 5000
-        });
-
-        toast.show();
-    }
+        new bootstrap.Toast(el, {
+            delay: id === 'toastSucesso' ? 4000 : 5000
+        }).show();
+    });
 
 });
-
 </script>
 
 <?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>

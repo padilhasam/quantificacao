@@ -34,9 +34,21 @@
         </div>
 
         <?php if (!empty($erro)): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger fade show" id="alertErro">
                 <?= htmlspecialchars($erro) ?>
             </div>
+
+            <script>
+                setTimeout(() => {
+                    const alerta = document.getElementById('alertErro');
+                    if (alerta) {
+                        alerta.style.transition = "opacity 0.5s ease";
+                        alerta.style.opacity = "0";
+
+                        setTimeout(() => alerta.remove(), 500);
+                    }
+                }, 3000); // 3 segundos
+            </script>
         <?php endif; ?>
 
         <form method="POST" action="<?= BASE_URL ?>/login/autenticar">

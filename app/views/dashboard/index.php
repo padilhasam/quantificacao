@@ -1,21 +1,25 @@
 <?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
 
-<main class="content flex-grow-1 p-4">
+<main class="content p-4">
 
-    <!-- TÍTULO -->
+    <!-- ========================= -->
+    <!-- CABEÇALHO -->
+    <!-- ========================= -->
     <div class="mb-4">
         <h3 class="fw-bold mb-1">
             <span class="text-accent">Painel Técnico SST</span>
         </h3>
         <p class="text-muted mb-0">
-            Monitoramento de visitas, riscos e avaliações quantitativas
+            Visão operacional: visitas, riscos e pendências técnicas
         </p>
     </div>
 
-    <!-- ALERTAS -->
+    <!-- ========================= -->
+    <!-- ALERTAS CRÍTICOS -->
+    <!-- ========================= -->
     <?php if (!empty($acima_lt)): ?>
         <div class="alert alert-danger">
-            ⚠️ Existem <strong><?= $acima_lt ?></strong> avaliações acima do limite de tolerância
+            ⚠️ <strong><?= $acima_lt ?></strong> medições acima do limite de tolerância
         </div>
     <?php endif; ?>
 
@@ -26,105 +30,161 @@
     <?php endif; ?>
 
     <!-- ========================= -->
-    <!-- INDICADORES -->
+    <!-- KPIs PRINCIPAIS -->
     <!-- ========================= -->
     <div class="row g-4">
 
-        <?php
-        $cards = [
-            ['icon'=>'fa-calendar-check','color'=>'primary','title'=>'Visitas','value'=>$visitas ?? 0],
-            ['icon'=>'fa-exclamation-triangle','color'=>'danger','title'=>'Riscos Críticos','value'=>$riscos_criticos ?? 0],
-            ['icon'=>'fa-vials','color'=>'warning','title'=>'Acima do LT','value'=>$acima_lt ?? 0],
-            ['icon'=>'fa-times-circle','color'=>'dark','title'=>'Não Conformidades','value'=>$nao_conformidades ?? 0],
-        ];
-        ?>
-
-        <?php foreach ($cards as $card): ?>
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas <?= $card['icon'] ?> fa-2x text-<?= $card['color'] ?> mb-2"></i>
-                        <h6 class="mb-1"><?= $card['title'] ?></h6>
-                        <span class="fs-4 fw-bold"><?= $card['value'] ?></span>
-                    </div>
+        <!-- VISITAS DO DIA -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-day fa-2x text-primary mb-2"></i>
+                    <h6 class="mb-1">Visitas hoje</h6>
+                    <span class="fs-3 fw-bold"><?= $visitas_hoje ?? 0 ?></span>
                 </div>
             </div>
-        <?php endforeach; ?>
+        </div>
+
+        <!-- VISITAS TOTAIS -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
+                    <h6 class="mb-1">Visitas no mês</h6>
+                    <span class="fs-3 fw-bold"><?= $visitas_mes_total ?? 0 ?></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUANTIFICAÇÕES PENDENTES -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-vials fa-2x text-warning mb-2"></i>
+                    <h6 class="mb-1">Quantificações pendentes</h6>
+                    <span class="fs-3 fw-bold"><?= $quantificacoes_pendentes ?? 0 ?></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NÃO CONFORMIDADES -->
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                    <h6 class="mb-1">Não conformidades</h6>
+                    <span class="fs-3 fw-bold"><?= $nao_conformidades ?? 0 ?></span>
+                </div>
+            </div>
+        </div>
 
     </div>
 
     <!-- ========================= -->
-    <!-- GRÁFICOS -->
+    <!-- LISTA OPERACIONAL -->
     <!-- ========================= -->
-    <div class="row g-4 mt-4">
+    <div class="row mt-4 g-4">
 
-        <!-- VISITAS -->
+        <!-- VISITAS DE HOJE -->
         <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
+            <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5><i class="fas fa-calendar text-primary"></i> Visitas por Mês</h5>
-                    <div class="chart-box">
-                        <canvas id="chartVisitas"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <h5 class="mb-3">
+                        <i class="fas fa-calendar-day text-primary"></i>
+                        Visitas de hoje
+                    </h5>
 
-        <!-- RISCOS -->
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5><i class="fas fa-exclamation-triangle text-danger"></i> Riscos por Categoria</h5>
-                    <div class="chart-box">
-                        <canvas id="chartRiscos"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <?php if (!empty($lista_visitas_hoje)): ?>
+                        <ul class="list-group list-group-flush">
+                            <?php foreach ($lista_visitas_hoje as $v): ?>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><?= htmlspecialchars($v['empresa']) ?></span>
+                                    <span class="badge bg-primary"><?= $v['hora'] ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p class="text-muted">Nenhuma visita hoje</p>
+                    <?php endif; ?>
 
-        <!-- QUANTIFICAÇÃO -->
-        <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5><i class="fas fa-vials text-warning"></i> Avaliações (LT)</h5>
-                    <div class="chart-box">
-                        <canvas id="chartQuantificacao"></canvas>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- NÃO CONFORMIDADES -->
         <div class="col-md-6">
-            <div class="card h-100 shadow-sm">
+            <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5><i class="fas fa-times-circle text-dark"></i> Não Conformidades</h5>
-                    <div class="chart-box">
-                        <canvas id="chartNC"></canvas>
-                    </div>
+                    <h5 class="mb-3">
+                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                        Não conformidades abertas
+                    </h5>
+
+                    <?php if (!empty($lista_nc)): ?>
+                        <ul class="list-group list-group-flush">
+                            <?php foreach ($lista_nc as $nc): ?>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><?= htmlspecialchars($nc['descricao']) ?></span>
+                                    <span class="badge bg-danger"><?= $nc['status'] ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p class="text-muted">Nenhuma não conformidade aberta</p>
+                    <?php endif; ?>
+
                 </div>
             </div>
         </div>
 
     </div>
 
+    <!-- ========================= -->
+    <!-- GRÁFICOS -->
+    <!-- ========================= -->
+    <div class="row mt-4 g-4">
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5><i class="fas fa-chart-line text-primary"></i> Visitas por mês</h5>
+                    <canvas id="chartVisitas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body py-2">
+                    
+                    <h5 class="mb-2">
+                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                        Riscos por categoria
+                    </h5>
+
+                    <div class="chart-box">
+                        <canvas id="chartRiscos" class="chart-small"></canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- JS DATA -->
+    <!-- ========================= -->
+    <script>
+        window.visitasMes = <?= json_encode($visitas_mes ?? []) ?>;
+        window.riscosCategoria = <?= json_encode($riscos_categoria ?? []) ?>;
+    </script>
+
 </main>
 
-<!-- VARIÁVEIS PARA JS -->
-<script>
-    window.visitasMes = <?= json_encode($visitas_mes ?? []) ?>;
-    window.riscosCategoria = <?= json_encode($riscos_categoria ?? []) ?>;
-    window.quantificacao = <?= json_encode($quantificacao ?? []) ?>;
-    window.naoConformidades = <?= json_encode($nao_conformidades_status ?? []) ?>;
-</script>
-
-<!-- CHART JS -->
-<script src="/js/chart.js"></script>
-
 <style>
-.chart-box {
-    position: relative;
-    height: 250px;
+.card {
+    border-radius: 12px;
 }
 </style>
 

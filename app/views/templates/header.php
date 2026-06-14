@@ -50,7 +50,7 @@
             <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
 
                 <!-- ESQUERDA (LOGO + MENU) -->
-                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                <div class="d-flex align-items-center gap-4 flex-shrink-0">
 
                     <!-- Botão mobile/tablet -->
                     <button class="btn btn-outline-primary d-lg-none flex-shrink-0" id="btnToggleSidebar">
