@@ -2,27 +2,26 @@
 
 <main class="content flex-grow-1 p-4">
 
-<!-- HEADER -->
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
     <div>
-         <h3 class="mb-0 fw-bold">
-            <i class="fas fa-bolt text-warning me-2"></i>
-            Riscos Físicos
+        <h3 class="mb-0 fw-bold">
+            <i class="fas fa-brain text-primary me-2"></i>
+            Riscos Psicossociais
         </h3>
         <p class="text-muted mb-0">
-            Gerenciamento de riscos físicos cadastrados no sistema
+            Gerenciamento de riscos psicossociais cadastrados no sistema
         </p>
     </div>
 
-    <a href="<?= BASE_URL ?>/riscos/novo/fisico" class="btn btn-primary shadow-sm px-4">
+    <a href="<?= BASE_URL ?>/riscos/novo/psicossocial"
+       class="btn btn-primary shadow-sm px-4">
         <i class="fas fa-plus-circle me-2"></i>
         Novo Risco
     </a>
 
 </div>
 
-<!-- CARD TABELA -->
 <div class="card border-0 shadow-sm">
 
     <div class="card-body p-0">
@@ -47,10 +46,7 @@
                     <?php foreach ($riscos as $risco): ?>
 
                         <tr>
-
-                            <td class="text-muted fw-semibold">
-                                #<?= $risco['id'] ?>
-                            </td>
+                            <td class="text-muted fw-semibold">#<?= $risco['id'] ?></td>
 
                             <td class="fw-semibold">
                                 <?= htmlspecialchars($risco['nome']) ?>
@@ -61,16 +57,13 @@
                             </td>
 
                             <td class="text-center">
-
                                 <div class="d-flex justify-content-center gap-2">
 
-                                    <!-- EDITAR -->
                                     <a href="<?= BASE_URL ?>/riscos/editar/<?= $risco['id'] ?>"
                                        class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <!-- EXCLUIR -->
                                     <a href="<?= BASE_URL ?>/riscos/excluir/<?= $risco['id'] ?>"
                                        class="btn btn-sm btn-outline-danger rounded-pill px-3"
                                        onclick="return confirm('Deseja excluir este risco?')">
@@ -78,9 +71,7 @@
                                     </a>
 
                                 </div>
-
                             </td>
-
                         </tr>
 
                     <?php endforeach; ?>
@@ -89,8 +80,8 @@
 
                     <tr>
                         <td colspan="4" class="text-center py-5 text-muted">
-                            <i class="fas fa-bolt fa-3x mb-3 opacity-50"></i>
-                            <div>Nenhum risco físico cadastrado</div>
+                            <i class="fas fa-brain fa-3x mb-3 opacity-50"></i>
+                            <div>Nenhum risco psicossocial cadastrado</div>
                         </td>
                     </tr>
 
@@ -101,9 +92,7 @@
             </table>
 
         </div>
-
     </div>
-
 </div>
 
 </main>

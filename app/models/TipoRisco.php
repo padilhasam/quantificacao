@@ -10,7 +10,7 @@ class TipoRisco extends Database {
 
     // Listar todos os tipos de agentes (riscos)
     public function listarTodos() {
-        $sql = "SELECT id, nome FROM tipos_agentes ORDER BY nome";
+        $sql = "SELECT id, nome FROM tipos_riscos ORDER BY nome";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,7 +18,7 @@ class TipoRisco extends Database {
 
     // Buscar tipo de agente pelo ID
     public function buscarPorId($id) {
-        $sql = "SELECT id, nome FROM tipos_agentes WHERE id = :id LIMIT 1";
+        $sql = "SELECT id, nome FROM tipos_riscos WHERE id = :id LIMIT 1";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

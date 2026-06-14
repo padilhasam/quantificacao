@@ -46,11 +46,13 @@ $routes = [
     // RISCOS
     // =========================
     '/riscos' => ['controller' => 'RiscosController', 'method' => 'index'],
+
     '/riscos/fisicos' => ['controller' => 'RiscosController', 'method' => 'fisicos'],
     '/riscos/quimicos' => ['controller' => 'RiscosController', 'method' => 'quimicos'],
     '/riscos/biologicos' => ['controller' => 'RiscosController', 'method' => 'biologicos'],
     '/riscos/ergonomicos' => ['controller' => 'RiscosController', 'method' => 'ergonomicos'],
-    '/riscos/acidente' => ['controller' => 'RiscosController', 'method' => 'acidente'],
+    '/riscos/acidentes' => ['controller' => 'RiscosController', 'method' => 'acidentes'],
+    '/riscos/psicossociais' => ['controller' => 'RiscosController', 'method' => 'psicossociais'],
 
     // =========================
     // EMPRESAS

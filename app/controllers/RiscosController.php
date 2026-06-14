@@ -1,36 +1,53 @@
 <?php
 
 class RiscosController extends AuthController {
+
     public function index() {
-        $tipoAgenteModel = $this->model('TipoRisco');
-        $tipos = $tipoAgenteModel->listarTodos();
+        $tipoModel = $this->model('TipoRisco');
+        $tipos = $tipoModel->listarTodos();
 
         $this->view('riscos/index', ['tipos' => $tipos]);
     }
 
-
     public function fisicos() {
-
-        $riscosModel = $this->model('Risco');
-        $riscos = $riscosModel->listarPorCategoria('fisico');
-
-        $this->view('riscos/fisicos/index', ['riscos' => $riscos]);
+        $model = $this->model('Risco');
+        $this->view('riscos/fisicos/index', [
+            'riscos' => $model->listarPorCategoria(1)
+        ]);
     }
 
     public function quimicos() {
-        $this->view('riscos/quimicos/index');
+        $model = $this->model('Risco');
+        $this->view('riscos/quimicos/index', [
+            'riscos' => $model->listarPorCategoria(2)
+        ]);
     }
 
     public function biologicos() {
-        $this->view('riscos/biologicos/index');
+        $model = $this->model('Risco');
+        $this->view('riscos/biologicos/index', [
+            'riscos' => $model->listarPorCategoria(3)
+        ]);
     }
 
     public function ergonomicos() {
-        $this->view('riscos/ergonomicos/index');
+        $model = $this->model('Risco');
+        $this->view('riscos/ergonomicos/index', [
+            'riscos' => $model->listarPorCategoria(4)
+        ]);
     }
 
-    public function acidente() {
-        $this->view('riscos/acidente/index');
+    public function acidentes() {
+        $model = $this->model('Risco');
+        $this->view('riscos/acidentes/index', [
+            'riscos' => $model->listarPorCategoria(5)
+        ]);
     }
-    
+
+    public function psicossociais() {
+        $model = $this->model('Risco');
+        $this->view('riscos/psicossociais/index', [
+            'riscos' => $model->listarPorCategoria(6)
+        ]);
+    }
 }
