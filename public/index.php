@@ -16,19 +16,24 @@ spl_autoload_register(function($class) {
 });
 
 // Pega URI atual sem query string
-$requestUri = $_SERVER['REQUEST_URI'];
-$requestPath = parse_url($requestUri, PHP_URL_PATH);
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestUri = str_replace('/index.php', '', $requestUri);
 
-// Remove o BASE_URL da URI para trabalhar só com a rota
-$route = substr($requestPath, strlen(BASE_URL));
-$route = $route ?: '/';
+$scriptName = dirname($_SERVER['SCRIPT_NAME']);
+$route = str_replace($scriptName, '', $requestUri);
+
+$route = '/' . trim($route, '/');
+
+if ($route === '//') {
+    $route = '/';
+}
 
 // Rotas definidas manualmente
 $routes = [
     '/' => ['controller' => 'LoginController', 'method' => 'index'],
     '/login' => ['controller' => 'LoginController', 'method' => 'index'],
     '/login/autenticar' => ['controller' => 'LoginController', 'method' => 'autenticar'],
-    '/login/logout' => ['controller' => 'LoginController', 'method' => 'logout'],
+    '/logout' => ['controller' => 'LoginController', 'method' => 'logout'],
     '/dashboard' => ['controller' => 'DashboardController', 'method' => 'index'],
 
     // Rotas de riscos
