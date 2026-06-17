@@ -35,7 +35,16 @@
                                 <label for="unidade_id" class="form-label fw-semibold text-secondary small">Unidade Alvo *</label>
                                 <select class="form-select rounded-3 border-dark-subtle" name="unidade_id" id="unidade_id" required>
                                     <option value="" disabled selected>Selecione uma unidade...</option>
-                                    </select>
+                                    
+                                    <?php if (!empty($unidades)): ?>
+                                        <?php foreach ($unidades as $u): ?>
+                                            <option value="<?= $u['id'] ?>">
+                                                <?= htmlspecialchars($u['nome']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                    
+                                </select>
                                 <div class="invalid-feedback">Por favor, selecione uma unidade para o setor.</div>
                             </div>
                             
@@ -64,7 +73,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Ativa a validação visual nativa do Bootstrap 5
     const forms = document.querySelectorAll('.needs-validation');
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
