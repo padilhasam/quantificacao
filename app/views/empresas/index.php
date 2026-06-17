@@ -16,22 +16,15 @@
             <?php if ($sucesso): ?>
                 <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
                     <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="fas fa-circle-check me-2"></i>
-                            <?= htmlspecialchars($sucesso) ?>
-                        </div>
+                        <div class="toast-body"><i class="fas fa-circle-check me-2"></i> <?= htmlspecialchars($sucesso) ?></div>
                         <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
                 </div>
             <?php endif; ?>
-
             <?php if ($erro): ?>
                 <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
                     <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="fas fa-circle-exclamation me-2"></i>
-                            <?= htmlspecialchars($erro) ?>
-                        </div>
+                        <div class="toast-body"><i class="fas fa-circle-exclamation me-2"></i> <?= htmlspecialchars($erro) ?></div>
                         <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
                 </div>
@@ -65,7 +58,6 @@
 
         <div class="card border-0 shadow-sm rounded-3">
             <div class="card-body p-4">
-
                 <?php if (!empty($empresas)): ?>
                     <div class="table-responsive">
                         <table id="tabelaEmpresas" class="table table-hover align-middle nowrap w-100">
@@ -92,23 +84,9 @@
                                         <td class="text-muted"><?= !empty($emp['responsavel']) ? htmlspecialchars($emp['responsavel']) : '-' ?></td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
-                                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#modalEmpresa<?= $emp['id'] ?>" 
-                                                        title="Visualizar Detalhes">
-                                                    <i class="fas fa-circle-info"></i>
-                                                </button>
-                                                <a href="<?= BASE_URL ?>/empresas/editar/<?= $emp['id'] ?>" 
-                                                   class="btn btn-sm btn-outline-primary rounded-pill px-3" 
-                                                   title="Editar Registro">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="<?= BASE_URL ?>/empresas/excluir/<?= $emp['id'] ?>" 
-                                                   class="btn btn-sm btn-outline-danger rounded-pill px-3" 
-                                                   onclick="return confirm('Deseja realmente excluir esta empresa?')" 
-                                                   title="Excluir Registro">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
+                                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEmpresa<?= $emp['id'] ?>"><i class="fas fa-circle-info"></i></button>
+                                                <a href="<?= BASE_URL ?>/empresas/editar/<?= $emp['id'] ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3"><i class="fas fa-edit"></i></a>
+                                                <a href="<?= BASE_URL ?>/empresas/excluir/<?= $emp['id'] ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Deseja realmente excluir esta empresa?')"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -128,12 +106,11 @@
                         </a>
                     </div>
                 <?php endif; ?>
-
             </div>
         </div>
     </div>
 
-    <?php if (!empty($empresas)): foreach ($empresas as $emp): ?>
+    <?php foreach ($empresas as $emp): ?>
         <div class="modal fade" id="modalEmpresa<?= $emp['id'] ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-3">
@@ -180,11 +157,18 @@
                                 <span class="ms-2">CEP: <?= htmlspecialchars($emp['cep'] ?? '-') ?></span>
                             </div>
                         </div>
+                        <div class="border-top mt-3 pt-3">
+                            <label class="text-secondary small fw-semibold d-block">Data de Cadastro</label>
+                            <span class="text-muted small">
+                                <i class="fas fa-calendar-alt me-1"></i> 
+                                <?= !empty($emp['data_cadastro']) ? date('d/m/Y H:i', strtotime($emp['data_cadastro'])) : 'Data não informada' ?>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    <?php endforeach; endif; ?>
+    <?php endforeach; ?>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
