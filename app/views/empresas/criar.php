@@ -6,8 +6,8 @@
 
     <form action="<?= BASE_URL ?>/empresas/armazenar" method="POST">
         <div class="form-group">
-            <label for="nome">Nome da Empresa</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
+            <label for="razão_social">Nome da Empresa</label>
+            <input type="text" class="form-control" id="razão_social" name="razão_social" required>
         </div>
 
         <div class="form-group">

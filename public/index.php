@@ -75,14 +75,65 @@ $routes = [
     '/usuarios/excluir/{id}' => ['controller' => 'UsuariosController', 'method' => 'excluir'],
 
     // =========================
-    // TECNICOS
+    // VEICULOS
     // =========================
-    '/tecnicos' => ['controller' => 'TecnicosController', 'method' => 'index'],
-    '/tecnicos/criar' => ['controller' => 'TecnicosController', 'method' => 'criar'],
-    '/tecnicos/salvar' => ['controller' => 'TecnicosController', 'method' => 'salvar'],
-    '/tecnicos/editar/{id}' => ['controller' => 'TecnicosController', 'method' => 'editar'],
-    '/tecnicos/atualizar/{id}' => ['controller' => 'TecnicosController', 'method' => 'atualizar'],
-    '/tecnicos/excluir/{id}' => ['controller' => 'TecnicosController', 'method' => 'excluir'],
+    '/veiculos' => ['controller' => 'VeiculosController', 'method' => 'index'],
+    '/veiculos/criar' => ['controller' => 'VeiculosController', 'method' => 'criar'],
+    '/veiculos/salvar' => ['controller' => 'VeiculosController', 'method' => 'salvar'],
+    '/veiculos/editar/{id}' => ['controller' => 'VeiculosController', 'method' => 'editar'],
+    '/veiculos/atualizar/{id}' => ['controller' => 'VeiculosController', 'method' => 'atualizar'],
+    '/veiculos/excluir/{id}' => ['controller' => 'VeiculosController', 'method' => 'excluir'],
+
+    // =========================
+    // UNIDADES
+    // =========================
+    '/unidades'                 => ['controller' => 'UnidadesController', 'method' => 'index'],
+    '/unidades/criar'           => ['controller' => 'UnidadesController', 'method' => 'criar'],
+    '/unidades/salvar'          => ['controller' => 'UnidadesController', 'method' => 'salvar'],
+    '/unidades/editar/{id}'     => ['controller' => 'UnidadesController', 'method' => 'editar'],
+    '/unidades/atualizar/{id}'  => ['controller' => 'UnidadesController', 'method' => 'atualizar'],
+    '/unidades/excluir/{id}'    => ['controller' => 'UnidadesController', 'method' => 'excluir'],
+
+    // =========================
+    // SETORES
+    // =========================
+    '/setores'                 => ['controller' => 'SetoresController', 'method' => 'index'],
+    '/setores/criar'           => ['controller' => 'SetoresController', 'method' => 'criar'],
+    '/setores/salvar'          => ['controller' => 'SetoresController', 'method' => 'salvar'],
+    '/setores/editar/{id}'     => ['controller' => 'SetoresController', 'method' => 'editar'],
+    '/setores/atualizar/{id}'  => ['controller' => 'SetoresController', 'method' => 'atualizar'],
+    '/setores/excluir/{id}'    => ['controller' => 'SetoresController', 'method' => 'excluir'],
+
+    // =========================
+    // CARGOS
+    // =========================
+    '/cargos'                 => ['controller' => 'CargosController', 'method' => 'index'],
+    '/cargos/criar'           => ['controller' => 'CargosController', 'method' => 'criar'],
+    '/cargos/salvar'          => ['controller' => 'CargosController', 'method' => 'salvar'],
+    '/cargos/editar/{id}'     => ['controller' => 'CargosController', 'method' => 'editar'],
+    '/cargos/atualizar/{id}'  => ['controller' => 'CargosController', 'method' => 'atualizar'],
+    '/cargos/excluir/{id}'    => ['controller' => 'CargosController', 'method' => 'excluir'],
+
+    // =========================
+    // GESTÃO TÉCNICA
+    // =========================
+    '/visitas'                     => ['controller' => 'VisitasController', 'method' => 'index'],
+    '/visitas/criar'               => ['controller' => 'VisitasController', 'method' => 'criar'],
+    '/visitas/salvar'              => ['controller' => 'VisitasController', 'method' => 'salvar'],
+
+    '/levantamentos'               => ['controller' => 'LevantamentosController', 'method' => 'index'],
+    '/levantamentos/criar'         => ['controller' => 'LevantamentosController', 'method' => 'criar'],
+    '/levantamentos/salvar'        => ['controller' => 'LevantamentosController', 'method' => 'salvar'],
+
+    '/quantificacoes'              => ['controller' => 'QuantificacoesController', 'method' => 'index'],
+    '/quantificacoes/criar'        => ['controller' => 'QuantificacoesController', 'method' => 'criar'],
+    '/quantificacoes/salvar'       => ['controller' => 'QuantificacoesController', 'method' => 'salvar'],
+
+    '/nao_conformidades'           => ['controller' => 'NaoConformidadesController', 'method' => 'index'],
+    '/nao_conformidades/criar'     => ['controller' => 'NaoConformidadesController', 'method' => 'criar'],
+    '/nao_conformidades/salvar'    => ['controller' => 'NaoConformidadesController', 'method' => 'salvar'],
+
+    
 ];
 
 // Verifica rota exata

@@ -11,8 +11,7 @@
     unset($_SESSION['sucesso'], $_SESSION['erro']);
 ?>
 
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
-
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
     <?php if ($sucesso): ?>
         <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
             <div class="d-flex">
@@ -36,238 +35,161 @@
             </div>
         </div>
     <?php endif; ?>
-
 </div>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-
     <div>
         <h3 class="fw-bold mb-1 d-flex align-items-center gap-2">
-            <i class="fas fa-users text-primary"></i>
-            Usuários
+            <i class="fas fa-briefcase text-primary"></i>
+            Cargos
             <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
-                <?= count($usuarios ?? []) ?>
+                <?= count($cargos ?? []) ?>
             </span>
         </h3>
 
         <p class="text-muted mb-0">
-            Gerenciamento de usuários, perfis de acesso e permissões do sistema.
+            Gestão dos cargos e funções organizacionais para análise de riscos ocupacionais.
         </p>
     </div>
 
     <div class="d-flex gap-2 flex-wrap">
-
-        <a href="<?= BASE_URL ?>/dashboard"
-           class="btn btn-light border shadow-sm">
-            <i class="fas fa-arrow-left me-1"></i>
-            Dashboard
+        <a href="<?= BASE_URL ?>/dashboard" class="btn btn-light border shadow-sm">
+            <i class="fas fa-arrow-left me-1"></i> Dashboard
         </a>
 
-        <a href="<?= BASE_URL ?>/usuarios/criar"
-           class="btn btn-primary shadow-sm">
-            <i class="fas fa-plus-circle me-1"></i>
-            Novo Usuário
+        <a href="<?= BASE_URL ?>/cargos/criar" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus-circle me-1"></i> Novo Cargo
         </a>
-
     </div>
-
 </div>
 
 <div class="card border-0 shadow-sm">
-
     <div class="card-body p-4">
 
-        <?php if (!empty($usuarios)): ?>
+        <?php if (!empty($cargos)): ?>
 
             <div class="table-responsive">
-
-                <table id="tabelaUsuarios" class="table table-hover align-middle nowrap w-100">
+                <table id="tabelaCargos" class="table table-hover align-middle nowrap w-100">
 
                     <thead class="table-light">
                         <tr>
                             <th style="width:60px;">#</th>
-                            <th>Usuário</th>
-                            <th>E-mail</th>
-                            <th>Perfil</th>
-                            <th>Status</th>
-                            <th>Último Acesso</th>
+                            <th>Cargo / Função</th>
+                            <th>Setor</th>
+                            <th>CBO</th>
                             <th class="text-center" style="width:140px;">Ações</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
-                        <?php foreach ($usuarios as $usuario): ?>
-
+                        <?php foreach ($cargos as $cargo): ?>
                             <tr>
 
                                 <td class="text-muted fw-semibold">
-                                    #<?= $usuario['id'] ?>
+                                    #<?= $cargo['id'] ?>
                                 </td>
 
                                 <td class="fw-semibold">
-                                    <?= htmlspecialchars($usuario['nome']) ?>
+                                    <?= htmlspecialchars($cargo['nome']) ?>
                                 </td>
 
                                 <td>
-                                    <?= htmlspecialchars($usuario['email']) ?>
+                                    <?= htmlspecialchars($cargo['setor_nome'] ?? '-') ?>
                                 </td>
 
-                                <td>
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
-                                        <?= htmlspecialchars($usuario['tipo']) ?>
-                                    </span>
-                                </td>
-
-                                <td>
-
-                                    <?php if ($usuario['ativo']): ?>
-
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                            Ativo
-                                        </span>
-
-                                    <?php else: ?>
-
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                                            Inativo
-                                        </span>
-
-                                    <?php endif; ?>
-
-                                </td>
-
-                                <td>
-
-                                    <?php if (!empty($usuario['ultimo_acesso'])): ?>
-                                        <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
-                                    <?php else: ?>
-                                        <span class="text-muted">Nunca acessou</span>
-                                    <?php endif; ?>
-
+                                <td class="font-monospace text-muted">
+                                    <?= !empty($cargo['cbo']) ? htmlspecialchars($cargo['cbo']) : '-' ?>
                                 </td>
 
                                 <td class="text-center">
-
                                     <div class="d-flex justify-content-center gap-2">
 
                                         <button
                                             class="btn btn-sm btn-outline-secondary rounded-pill px-3"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#modalUsuario<?= $usuario['id'] ?>">
+                                            data-bs-target="#modalCargo<?= $cargo['id'] ?>">
                                             <i class="fas fa-circle-info"></i>
                                         </button>
 
-                                        <a href="<?= BASE_URL ?>/usuarios/editar/<?= $usuario['id'] ?>"
+                                        <a href="<?= BASE_URL ?>/cargos/editar/<?= $cargo['id'] ?>"
                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <a href="<?= BASE_URL ?>/usuarios/excluir/<?= $usuario['id'] ?>"
+                                        <a href="<?= BASE_URL ?>/cargos/excluir/<?= $cargo['id'] ?>"
                                            class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                           onclick="return confirm('Deseja realmente excluir este usuário?')">
+                                           onclick="return confirm('Deseja excluir este cargo?');">
                                             <i class="fas fa-trash"></i>
                                         </a>
 
                                     </div>
-
                                 </td>
 
                             </tr>
-
                         <?php endforeach; ?>
 
                     </tbody>
 
                 </table>
-
             </div>
 
         <?php else: ?>
 
             <div class="text-center py-5 text-muted">
+                <i class="fas fa-briefcase fa-3x mb-3 opacity-50"></i>
 
-                <i class="fas fa-users fa-3x mb-3 opacity-50"></i>
-
-                <h5>Nenhum usuário cadastrado</h5>
+                <h5>Nenhum cargo cadastrado</h5>
 
                 <p class="small text-muted mb-3">
-                    Clique no botão acima para adicionar o primeiro usuário.
+                    Clique no botão acima para adicionar o primeiro cargo.
                 </p>
 
-                <a href="<?= BASE_URL ?>/usuarios/criar"
-                   class="btn btn-primary btn-sm">
+                <a href="<?= BASE_URL ?>/cargos/criar" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus-circle me-1"></i>
                     Cadastrar
                 </a>
-
             </div>
 
         <?php endif; ?>
 
     </div>
-
 </div>
 
-<?php if (!empty($usuarios)): ?>
-    <?php foreach ($usuarios as $usuario): ?>
+<?php if (!empty($cargos)): ?>
+    <?php foreach ($cargos as $cargo): ?>
 
-        <div class="modal fade"
-             id="modalUsuario<?= $usuario['id'] ?>"
-             tabindex="-1">
-
+        <div class="modal fade" id="modalCargo<?= $cargo['id'] ?>" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
 
                 <div class="modal-content">
 
                     <div class="modal-header">
-
                         <h5 class="modal-title fw-bold">
-                            Usuário #<?= $usuario['id'] ?>
+                            Cargo #<?= $cargo['id'] ?>
                         </h5>
 
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal">
                         </button>
-
                     </div>
 
                     <div class="modal-body">
 
                         <p>
-                            <strong>Nome:</strong>
-                            <?= htmlspecialchars($usuario['nome']) ?>
+                            <strong>Cargo:</strong>
+                            <?= htmlspecialchars($cargo['nome']) ?>
                         </p>
 
                         <p>
-                            <strong>E-mail:</strong>
-                            <?= htmlspecialchars($usuario['email']) ?>
+                            <strong>Setor:</strong>
+                            <?= htmlspecialchars($cargo['setor_nome'] ?? '-') ?>
                         </p>
 
                         <p>
-                            <strong>Perfil:</strong>
-                            <?= htmlspecialchars($usuario['tipo']) ?>
-                        </p>
-
-                        <p>
-                            <strong>Status:</strong>
-
-                            <?= $usuario['ativo']
-                                ? '<span class="badge bg-success">Ativo</span>'
-                                : '<span class="badge bg-danger">Inativo</span>' ?>
-                        </p>
-
-                        <hr>
-
-                        <p>
-                            <strong>Último acesso:</strong><br>
-
-                            <?php if (!empty($usuario['ultimo_acesso'])): ?>
-                                <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
-                            <?php else: ?>
-                                <span class="text-muted">Nunca acessou</span>
-                            <?php endif; ?>
+                            <strong>CBO:</strong>
+                            <?= !empty($cargo['cbo']) ? htmlspecialchars($cargo['cbo']) : 'Não informado' ?>
                         </p>
 
                     </div>
@@ -275,7 +197,6 @@
                 </div>
 
             </div>
-
         </div>
 
     <?php endforeach; ?>
@@ -302,7 +223,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#tabelaUsuarios').DataTable({
+    $('#tabelaCargos').DataTable({
         responsive: true,
         autoWidth: false,
         pageLength: 10,
@@ -313,7 +234,7 @@ $(document).ready(function () {
         columnDefs: [
             {
                 orderable: false,
-                targets: 6
+                targets: 4
             }
         ]
     });

@@ -11,8 +11,7 @@
     unset($_SESSION['sucesso'], $_SESSION['erro']);
 ?>
 
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
-
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
     <?php if ($sucesso): ?>
         <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
             <div class="d-flex">
@@ -36,238 +35,187 @@
             </div>
         </div>
     <?php endif; ?>
-
 </div>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-
     <div>
         <h3 class="fw-bold mb-1 d-flex align-items-center gap-2">
-            <i class="fas fa-users text-primary"></i>
-            Usuários
+            <i class="fas fa-sitemap text-primary"></i>
+            Unidades
             <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
-                <?= count($usuarios ?? []) ?>
+                <?= count($unidades ?? []) ?>
             </span>
         </h3>
 
         <p class="text-muted mb-0">
-            Gerenciamento de usuários, perfis de acesso e permissões do sistema.
+            Gestão das unidades, filiais e plantas operacionais vinculadas às empresas.
         </p>
     </div>
 
     <div class="d-flex gap-2 flex-wrap">
-
-        <a href="<?= BASE_URL ?>/dashboard"
-           class="btn btn-light border shadow-sm">
-            <i class="fas fa-arrow-left me-1"></i>
-            Dashboard
+        <a href="<?= BASE_URL ?>/dashboard" class="btn btn-light border shadow-sm">
+            <i class="fas fa-arrow-left me-1"></i> Dashboard
         </a>
 
-        <a href="<?= BASE_URL ?>/usuarios/criar"
-           class="btn btn-primary shadow-sm">
-            <i class="fas fa-plus-circle me-1"></i>
-            Novo Usuário
+        <a href="<?= BASE_URL ?>/unidades/criar" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus-circle me-1"></i> Nova Unidade
         </a>
-
     </div>
-
 </div>
 
 <div class="card border-0 shadow-sm">
-
     <div class="card-body p-4">
 
-        <?php if (!empty($usuarios)): ?>
+        <?php if (!empty($unidades)): ?>
 
             <div class="table-responsive">
-
-                <table id="tabelaUsuarios" class="table table-hover align-middle nowrap w-100">
+                <table id="tabelaUnidades" class="table table-hover align-middle nowrap w-100">
 
                     <thead class="table-light">
                         <tr>
                             <th style="width:60px;">#</th>
-                            <th>Usuário</th>
-                            <th>E-mail</th>
-                            <th>Perfil</th>
+                            <th>Unidade</th>
+                            <th>Empresa</th>
+                            <th>Cidade / UF</th>
                             <th>Status</th>
-                            <th>Último Acesso</th>
                             <th class="text-center" style="width:140px;">Ações</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
-                        <?php foreach ($usuarios as $usuario): ?>
-
+                        <?php foreach ($unidades as $unidade): ?>
                             <tr>
 
                                 <td class="text-muted fw-semibold">
-                                    #<?= $usuario['id'] ?>
+                                    #<?= $unidade['id'] ?>
                                 </td>
 
                                 <td class="fw-semibold">
-                                    <?= htmlspecialchars($usuario['nome']) ?>
+                                    <?= htmlspecialchars($unidade['nome']) ?>
                                 </td>
 
                                 <td>
-                                    <?= htmlspecialchars($usuario['email']) ?>
+                                    <?= htmlspecialchars($unidade['nome_fantasia'] ?? $unidade['razao_social'] ?? '-') ?>
                                 </td>
 
                                 <td>
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
-                                        <?= htmlspecialchars($usuario['tipo']) ?>
-                                    </span>
+                                    <?= !empty($unidade['cidade']) ? htmlspecialchars($unidade['cidade']) : '-' ?>
+                                    <?= !empty($unidade['estado']) ? ' / ' . htmlspecialchars($unidade['estado']) : '' ?>
                                 </td>
 
                                 <td>
-
-                                    <?php if ($usuario['ativo']): ?>
-
+                                    <?php if ((int)($unidade['ativo'] ?? 0) === 1): ?>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle">
                                             Ativo
                                         </span>
-
                                     <?php else: ?>
-
                                         <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
                                             Inativo
                                         </span>
-
                                     <?php endif; ?>
-
-                                </td>
-
-                                <td>
-
-                                    <?php if (!empty($usuario['ultimo_acesso'])): ?>
-                                        <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
-                                    <?php else: ?>
-                                        <span class="text-muted">Nunca acessou</span>
-                                    <?php endif; ?>
-
                                 </td>
 
                                 <td class="text-center">
-
                                     <div class="d-flex justify-content-center gap-2">
 
                                         <button
                                             class="btn btn-sm btn-outline-secondary rounded-pill px-3"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#modalUsuario<?= $usuario['id'] ?>">
+                                            data-bs-target="#modalUnidade<?= $unidade['id'] ?>">
                                             <i class="fas fa-circle-info"></i>
                                         </button>
 
-                                        <a href="<?= BASE_URL ?>/usuarios/editar/<?= $usuario['id'] ?>"
+                                        <a href="<?= BASE_URL ?>/unidades/editar/<?= $unidade['id'] ?>"
                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <a href="<?= BASE_URL ?>/usuarios/excluir/<?= $usuario['id'] ?>"
+                                        <a href="<?= BASE_URL ?>/unidades/excluir/<?= $unidade['id'] ?>"
                                            class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                           onclick="return confirm('Deseja realmente excluir este usuário?')">
+                                           onclick="return confirm('Deseja excluir esta unidade?');">
                                             <i class="fas fa-trash"></i>
                                         </a>
 
                                     </div>
-
                                 </td>
 
                             </tr>
-
                         <?php endforeach; ?>
 
                     </tbody>
 
                 </table>
-
             </div>
 
         <?php else: ?>
 
             <div class="text-center py-5 text-muted">
+                <i class="fas fa-sitemap fa-3x mb-3 opacity-50"></i>
 
-                <i class="fas fa-users fa-3x mb-3 opacity-50"></i>
-
-                <h5>Nenhum usuário cadastrado</h5>
+                <h5>Nenhuma unidade cadastrada</h5>
 
                 <p class="small text-muted mb-3">
-                    Clique no botão acima para adicionar o primeiro usuário.
+                    Clique no botão acima para adicionar a primeira unidade.
                 </p>
 
-                <a href="<?= BASE_URL ?>/usuarios/criar"
-                   class="btn btn-primary btn-sm">
+                <a href="<?= BASE_URL ?>/unidades/criar" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus-circle me-1"></i>
                     Cadastrar
                 </a>
-
             </div>
 
         <?php endif; ?>
 
     </div>
-
 </div>
 
-<?php if (!empty($usuarios)): ?>
-    <?php foreach ($usuarios as $usuario): ?>
+<?php if (!empty($unidades)): ?>
+    <?php foreach ($unidades as $unidade): ?>
 
-        <div class="modal fade"
-             id="modalUsuario<?= $usuario['id'] ?>"
-             tabindex="-1">
-
+        <div class="modal fade" id="modalUnidade<?= $unidade['id'] ?>" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
 
                 <div class="modal-content">
 
                     <div class="modal-header">
-
                         <h5 class="modal-title fw-bold">
-                            Usuário #<?= $usuario['id'] ?>
+                            Unidade #<?= $unidade['id'] ?>
                         </h5>
 
                         <button type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal">
                         </button>
-
                     </div>
 
                     <div class="modal-body">
 
                         <p>
                             <strong>Nome:</strong>
-                            <?= htmlspecialchars($usuario['nome']) ?>
+                            <?= htmlspecialchars($unidade['nome']) ?>
                         </p>
 
                         <p>
-                            <strong>E-mail:</strong>
-                            <?= htmlspecialchars($usuario['email']) ?>
+                            <strong>Empresa:</strong>
+                            <?= htmlspecialchars($unidade['nome_fantasia'] ?? $unidade['razao_social'] ?? '-') ?>
                         </p>
 
                         <p>
-                            <strong>Perfil:</strong>
-                            <?= htmlspecialchars($usuario['tipo']) ?>
+                            <strong>Cidade:</strong>
+                            <?= htmlspecialchars($unidade['cidade'] ?? '-') ?>
                         </p>
 
                         <p>
-                            <strong>Status:</strong>
-
-                            <?= $usuario['ativo']
-                                ? '<span class="badge bg-success">Ativo</span>'
-                                : '<span class="badge bg-danger">Inativo</span>' ?>
+                            <strong>Estado:</strong>
+                            <?= htmlspecialchars($unidade['estado'] ?? '-') ?>
                         </p>
 
                         <hr>
 
                         <p>
-                            <strong>Último acesso:</strong><br>
-
-                            <?php if (!empty($usuario['ultimo_acesso'])): ?>
-                                <?= date('d/m/Y H:i', strtotime($usuario['ultimo_acesso'])) ?>
-                            <?php else: ?>
-                                <span class="text-muted">Nunca acessou</span>
-                            <?php endif; ?>
+                            <strong>Status:</strong>
+                            <?= ((int)($unidade['ativo'] ?? 0) === 1) ? 'Ativo' : 'Inativo' ?>
                         </p>
 
                     </div>
@@ -275,7 +223,6 @@
                 </div>
 
             </div>
-
         </div>
 
     <?php endforeach; ?>
@@ -302,7 +249,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#tabelaUsuarios').DataTable({
+    $('#tabelaUnidades').DataTable({
         responsive: true,
         autoWidth: false,
         pageLength: 10,
@@ -313,7 +260,7 @@ $(document).ready(function () {
         columnDefs: [
             {
                 orderable: false,
-                targets: 6
+                targets: 5
             }
         ]
     });

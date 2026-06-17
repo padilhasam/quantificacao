@@ -171,10 +171,10 @@
 
                             <!-- TÉCNICOS -->
                             <li>
-                                <a href="<?= BASE_URL ?>/tecnicos"
-                                class="nav-link <?= $rotaAtual === 'tecnicos' ? 'active' : '' ?>">
-                                    <i class="fas fa-user-gear me-2"></i>
-                                    Técnicos
+                                <a href="<?= BASE_URL ?>/veiculos"
+                                class="nav-link <?= $rotaAtual === 'veiculos' ? 'active' : '' ?>">
+                                    <i class="fas fa-car me-2"></i>
+                                    Veículos
                                 </a>
                             </li>
 
@@ -307,7 +307,7 @@
                                 <a href="<?= BASE_URL ?>/checklist"
                                 class="nav-link <?= $rotaAtual === 'checklist' ? 'active' : '' ?>">
                                     <i class="fas fa-clipboard-check me-2"></i>
-                                    Checklist
+                                    Levantamentos
                                 </a>
                             </li>
 
