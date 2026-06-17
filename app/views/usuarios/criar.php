@@ -27,47 +27,65 @@
                     
                     <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
                         <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="fas fa-key"></i> Credenciais e Autenticação
+                            <i class="fas fa-id-badge"></i> Identificação e Perfil Corporativo
                         </h6>
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="nome" class="form-label fw-semibold text-secondary small">Nome Completo *</label>
-                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="nome" name="nome" placeholder="Digite o nome completo" required>
+                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="nome" name="nome" placeholder="Digite o nome completo" maxlength="100" required>
                                 <div class="invalid-feedback">O nome completo é obrigatório.</div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="email" class="form-label fw-semibold text-secondary small">E-mail Corporativo *</label>
-                                <input type="email" class="form-control rounded-3 border-dark-subtle" id="email" name="email" placeholder="exemplo@empresa.com.br" autocomplete="off" required>
-                                <div class="invalid-feedback">Insira um endereço de e-mail corporativo válido.</div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="senha" class="form-label fw-semibold text-secondary small">Senha de Acesso *</label>
-                                <input type="password" class="form-control rounded-3 border-dark-subtle" id="senha" name="senha" placeholder="Digite uma senha segura" required>
-                                <div class="invalid-feedback">Uma senha inicial é obrigatória para o cadastro.</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
                         <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="fas fa-id-badge"></i> Diretrizes e Contato
+                            <i class="fas fa-shield-alt"></i> Autenticação e Segurança
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label fw-semibold text-secondary small">E-mail Corporativo (Login) *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control rounded-end-3 border-dark-subtle" id="email" name="email" placeholder="exemplo@empresa.com" autocomplete="off" maxlength="150" required>
+                                    <div class="invalid-feedback">Insira um endereço de e-mail válido para login.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="senha" class="form-label fw-semibold text-secondary small">Senha de Acesso *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control border-dark-subtle" id="senha" name="senha" placeholder="Crie uma senha inicial segura" minlength="6" required>
+                                    <button class="btn btn-outline-secondary rounded-end-3 border-dark-subtle" type="button" id="btn-toggle-senha">
+                                        <i class="fas fa-eye" id="icon-senha"></i>
+                                    </button>
+                                    <div class="invalid-feedback">A senha inicial é obrigatória (mínimo 6 caracteres).</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-sliders-h"></i> Configurações da Conta e Contato
                         </h6>
                         <div class="row g-3 align-items-center">
                             <div class="col-12 col-md-4">
                                 <label for="tipo" class="form-label fw-semibold text-secondary small">Nível de Permissão *</label>
                                 <select class="form-select rounded-3 border-dark-subtle" name="tipo" id="tipo" required>
+                                    <option value="" disabled selected>Selecione...</option>
                                     <option value="ADMIN">Administrador</option>
-                                    <option value="TECNICO" selected>Técnico</option>
+                                    <option value="TECNICO">Técnico / Usuário Comum</option>
                                     <option value="CLIENTE">Cliente</option>
-                                    <option value="VISUALIZADOR">Visualizador</option>
+                                    <option value="VISUALIZADOR">Apenas Visualização</option>
                                 </select>
+                                <div class="invalid-feedback">Por favor, escolha a permissão de acesso.</div>
                             </div>
 
                             <div class="col-12 col-md-4">
                                 <label for="telefone" class="form-label fw-semibold text-secondary small">Telefone / Ramal</label>
-                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="telefone" name="telefone" placeholder="(41) 99999-9999">
+                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="telefone" name="telefone" placeholder="(00) 00000-0000">
                             </div>
 
                             <div class="col-12 col-md-4 mt-md-4 pt-md-2">
@@ -107,21 +125,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const statusText = document.querySelector('.status-text');
 
     function updateStatus() {
-        if (switchInput.checked) {
-            statusText.innerHTML = `<span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Ativo</span>`;
-        } else {
-            statusText.innerHTML = `<span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Inativo</span>`;
-        }
+        statusText.innerHTML = switchInput.checked 
+            ? `<span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Ativo</span>`
+            : `<span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Inativo</span>`;
     }
     switchInput.addEventListener('change', updateStatus);
     updateStatus();
+
+    // Alternador de visibilidade da senha (Olhinho)
+    const btnToggleSenha = document.getElementById('btn-toggle-senha');
+    const inputSenha = document.getElementById('senha');
+    const iconSenha = document.getElementById('icon-senha');
+
+    btnToggleSenha.addEventListener('click', function() {
+        if (inputSenha.type === 'password') {
+            inputSenha.type = 'text';
+            iconSenha.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            inputSenha.type = 'password';
+            iconSenha.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
 
     // Máscara reativa para Celular/Telefone (padrão brasileiro de 10 e 11 dígitos)
     const telefone = document.getElementById('telefone');
     telefone.addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-        if (value.length > 9) {
+        if (value.length > 13) {
             value = value.replace(/(\d{5})(\d)/, '$1-$2');
         } else {
             value = value.replace(/(\d{4})(\d)/, '$1-$2');

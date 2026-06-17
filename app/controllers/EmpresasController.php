@@ -24,39 +24,50 @@ class EmpresasController extends AuthController
 
     public function armazenar()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            // Quebra com precisão o campo "Cidade / UF" vindo unificado da View
-            $cidade = null;
-            $estado = null;
-            if (!empty($_POST['cidade_uf'])) {
-                $partes = explode('/', $_POST['cidade_uf']);
-                $cidade = trim($partes[0]);
-                $estado = isset($partes[1]) ? trim($partes[1]) : null;
-            }
-
-            $dados = [
-                'razao_social'        => trim($_POST['razao_social']),
-                'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
-                'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
-                'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
-                'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
-                'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
-                'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
-                'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
-                'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
-                'cidade'              => $cidade,
-                'estado'              => $estado,
-                'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
-                'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 1
-            ];
-
-            if ($this->empresaModel->salvar($dados)) {
-                header('Location: ' . BASE_URL . '/empresas');
-                exit;
-            }
-            echo "Erro ao salvar empresa.";
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '/empresas');
+            exit;
         }
+
+        // Processamento dos dados
+        $cidade = null;
+        $estado = null;
+        if (!empty($_POST['cidade_uf'])) {
+            $partes = explode('/', $_POST['cidade_uf']);
+            $cidade = trim($partes[0]);
+            $estado = isset($partes[1]) ? trim($partes[1]) : null;
+        }
+
+        $dados = [
+            'razao_social'        => trim($_POST['razao_social'] ?? ''),
+            'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
+            'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
+            'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
+            'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
+            'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
+            'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
+            'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
+            'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
+            'cidade'              => $cidade,
+            'estado'              => $estado,
+            'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
+            'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 1
+        ];
+
+        if (empty($dados['razao_social'])) {
+            $_SESSION['erro'] = 'A Razão Social é obrigatória.';
+            header('Location: ' . BASE_URL . '/empresas/criar');
+            exit;
+        }
+
+        if ($this->empresaModel->salvar($dados)) {
+            $_SESSION['sucesso'] = 'Empresa cadastrada com sucesso!';
+        } else {
+            $_SESSION['erro'] = 'Erro ao salvar empresa. Verifique os dados.';
+        }
+
+        header('Location: ' . BASE_URL . '/empresas');
+        exit;
     }
 
     public function editar($id)
@@ -64,11 +75,11 @@ class EmpresasController extends AuthController
         $empresa = $this->empresaModel->buscarPorId($id);
 
         if (!$empresa) {
+            $_SESSION['erro'] = 'Empresa não encontrada.';
             header('Location: ' . BASE_URL . '/empresas');
             exit;
         }
 
-        // Reconstrói Cidade / UF para popular o input text correspondente
         if (!empty($empresa['cidade']) && !empty($empresa['estado'])) {
             $empresa['cidade_uf'] = $empresa['cidade'] . ' / ' . $empresa['estado'];
         } else {
@@ -80,43 +91,53 @@ class EmpresasController extends AuthController
 
     public function atualizar($id)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $cidade = null;
-            $estado = null;
-            if (!empty($_POST['cidade_uf'])) {
-                $partes = explode('/', $_POST['cidade_uf']);
-                $cidade = trim($partes[0]);
-                $estado = isset($partes[1]) ? trim($partes[1]) : null;
-            }
-
-            $dados = [
-                'razao_social'        => trim($_POST['razao_social']),
-                'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
-                'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
-                'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
-                'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
-                'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
-                'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
-                'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
-                'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
-                'cidade'              => $cidade,
-                'estado'              => $estado,
-                'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
-                'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 0
-            ];
-
-            if ($this->empresaModel->atualizar($id, $dados)) {
-                header('Location: ' . BASE_URL . '/empresas');
-                exit;
-            }
-            echo "Erro ao atualizar empresa.";
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '/empresas');
+            exit;
         }
+
+        $cidade = null;
+        $estado = null;
+        if (!empty($_POST['cidade_uf'])) {
+            $partes = explode('/', $_POST['cidade_uf']);
+            $cidade = trim($partes[0]);
+            $estado = isset($partes[1]) ? trim($partes[1]) : null;
+        }
+
+        $dados = [
+            'razao_social'        => trim($_POST['razao_social'] ?? ''),
+            'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
+            'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
+            'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
+            'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
+            'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
+            'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
+            'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
+            'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
+            'cidade'              => $cidade,
+            'estado'              => $estado,
+            'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
+            'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 0
+        ];
+
+        if ($this->empresaModel->atualizar($id, $dados)) {
+            $_SESSION['sucesso'] = 'Empresa atualizada com sucesso!';
+        } else {
+            $_SESSION['erro'] = 'Erro ao atualizar empresa.';
+        }
+
+        header('Location: ' . BASE_URL . '/empresas');
+        exit;
     }
 
     public function excluir($id)
     {
-        $this->empresaModel->excluir($id);
+        if ($this->empresaModel->excluir($id)) {
+            $_SESSION['sucesso'] = 'Empresa excluída com sucesso!';
+        } else {
+            $_SESSION['erro'] = 'Não foi possível excluir a empresa.';
+        }
+        
         header('Location: ' . BASE_URL . '/empresas');
         exit;
     }
