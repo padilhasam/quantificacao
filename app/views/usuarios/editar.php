@@ -1,217 +1,100 @@
-<?php require_once dirname(__DIR__) . '../templates/header.php'; ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/css/usuarios.css">
+<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
 
-<div class="container mt-4">
-    <div>
-            <h3 class="mb-0 fw-bold">
-                <i class="fas fa-user-plus me-2 text-primary"></i>
-                Editar Usuário
-            </h3>
-            <small class="text-muted">Preencha os campos a serem alterados</small></br>
-        </div>
+<main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
+    <div class="container-fluid px-2 px-lg-4 mb-4">
+        
+        <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
+                    <span class="icon-container d-flex align-items-center justify-content-center"
+                        style="width: 38px; height: 38px; background: linear-gradient(135deg, #ffc107, #ff9800); border-radius: 8px; box-shadow: 0 2px 6px rgba(255, 152, 0, 0.25);">
+                        <i class="fas fa-map-marked-alt text-white" style="font-size: 1.10rem;"></i>
+                    </span>
+                    Editar Unidade
+                </h3>
+                <small class="text-muted d-block mt-1">Modifique as informações cadastrais, vínculos institucionais ou a localização desta unidade física</small>
+            </div>
 
-        <!-- CARD FORM -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
+            <a href="<?= BASE_URL ?>/unidades" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
+                <i class="fas fa-arrow-left me-1"></i> Voltar à Lista
+            </a>
+        </header>
 
-            <form action="<?= BASE_URL ?>/usuarios/atualizar" method="POST">
-
-                <div class="row g-3">
-
-                    <!-- NOME -->
-                    <div class="col-12 col-md-12">
-                        <label class="form-label">Nome</label>
-
-                        <input 
-                            type="text"
-                            class="form-control form-control-md"
-                            name="nome"
-                            placeholder="Digite o nome completo"
-                            required
-                        >
-                    </div>
-
-                    <!-- EMAIL -->
-                    <div class="col-12 col-md-12">
-                        <label class="form-label">E-mail</label>
-
-                        <input 
-                            type="email"
-                            class="form-control form-control-md"
-                            name="email"
-                            id="email"
-                            placeholder="exemplo@empresa.com.br"
-                            autocomplete="off"
-                            required
-                        >
-                    </div>
-
-                    <!-- SENHA -->
-                    <div class="col-12 col-md-6">
-                        <label class="form-label">Senha</label>
-
-                        <input 
-                            type="password"
-                            class="form-control"
-                            name="senha"
-                            placeholder="Digite uma senha segura"
-                            required
-                        >
-                    </div>
-
-                    <!-- TIPO -->
-                    <div class="col-12 col-md-6">
-                        <label class="form-label">Tipo</label>
-
-                        <select class="form-select" name="tipo">
-
-                            <option value="ADMIN">
-                                Administrador
-                            </option>
-
-                            <option value="TECNICO" selected>
-                                Técnico
-                            </option>
-
-                            <option value="CLIENTE">
-                                Cliente
-                            </option>
-
-                            <option value="VISUALIZADOR">
-                                Visualizador
-                            </option>
-
-                        </select>
-                    </div>
-
-                    <!-- TELEFONE -->
-                    <div class="col-12 col-md-6">
-                        <label class="form-label">Telefone</label>
-
-                        <input 
-                            type="text"
-                            class="form-control"
-                            name="telefone"
-                            id="telefone"
-                            placeholder="(41) 99999-9999"
-                        >
-                    </div>
-
-                    <!-- STATUS -->
-                    <div class="status-switch w-100">
-
-                        <input type="hidden" name="ativo" value="0">
-
-                        <div class="form-check form-switch d-flex align-items-center gap-3">
-
-                            <input 
-                                class="form-check-input switch-lg"
-                                type="checkbox"
-                                id="ativo"
-                                name="ativo"
-                                value="1"
-                                checked
-                            >
-
-                            <div>
-
-                                <label class="form-check-label fw-semibold mb-0" for="ativo">
-                                    Status do usuário
-                                </label>
-
-                                <div class="status-text">
-
-                                    <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">
-                                        Ativo
-                                    </span>
-
-                                </div>
-
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <form action="<?= BASE_URL ?>/unidades/atualizar/<?= $unidade['id'] ?? '' ?>" method="POST" class="needs-validation" novalidate>
+                    
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-id-card"></i> Estrutura Organizacional
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="empresa_id" class="form-label fw-semibold text-secondary small">Empresa Responsável *</label>
+                                <select class="form-select rounded-3 border-dark-subtle" name="empresa_id" id="empresa_id" required>
+                                    <option value="1" selected>Nexus Indústria S.A.</option>
+                                    </select>
+                                <div class="invalid-feedback">Por favor, selecione a empresa proprietária desta unidade.</div>
                             </div>
-
+                            
+                            <div class="col-12 col-md-6">
+                                <label for="nome" class="form-label fw-semibold text-secondary small">Nome da Unidade / Filial *</label>
+                                <input type="text" class="form-control rounded-3 border-dark-subtle" name="nome" id="nome" 
+                                       value="<?= htmlspecialchars($unidade['nome'] ?? 'Planta Industrial Principal') ?>" required>
+                                <div class="invalid-feedback">O nome da unidade é obrigatório.</div>
+                            </div>
                         </div>
-
                     </div>
 
-                </div>
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-map-marker-alt"></i> Endereço da Unidade
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-8">
+                                <label for="endereco" class="form-label fw-semibold text-secondary small">Logradouro (Rua, Número, Bairro)</label>
+                                <input type="text" class="form-control rounded-3 border-dark-subtle" name="endereco" id="endereco" 
+                                       value="<?= htmlspecialchars($unidade['endereco'] ?? '') ?>" placeholder="Ex: Av. das Araucárias, 1500 - Centro">
+                            </div>
+                            
+                            <div class="col-12 col-md-4">
+                                <label for="cidade_uf" class="form-label fw-semibold text-secondary small">Cidade / UF</label>
+                                <input type="text" class="form-control rounded-3 border-dark-subtle" name="cidade_uf" id="cidade_uf" 
+                                       value="<?= htmlspecialchars($unidade['cidade_uf'] ?? 'Araucária / PR') ?>" placeholder="Ex: Curitiba / PR">
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- BOTÕES -->
-                <div class="d-flex justify-content-end flex-wrap gap-2 mt-4">
+                    <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                        <a href="<?= BASE_URL ?>/unidades" class="btn btn-outline-danger rounded-pill px-4 fw-medium">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 fw-medium shadow-sm">
+                            <i class="fas fa-sync-alt me-1"></i> Atualizar Unidade
+                        </button>
+                    </div>
 
-                    <a href="<?= BASE_URL ?>/usuarios" class="btn btn-outline-secondary px-4">
-                        <i class="fas fa-times me-2"></i> Cancelar
-                    </a>
-
-                    <button type="submit" class="btn btn-success px-4">
-                        <i class="fas fa-check me-2"></i> Atualizar
-                    </button>
-
-                </div>
-
-            </form>
-
+                </form>
+            </div>
         </div>
     </div>
-
-</div>
+</main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const switchInput = document.getElementById('ativo');
-        const statusText = document.querySelector('.status-text');
-
-        function updateStatus() {
-            if (switchInput.checked) {
-                statusText.innerHTML = `
-                    <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">
-                        Ativo
-                    </span>
-                `;
-            } else {
-                statusText.innerHTML = `
-                    <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">
-                        Inativo
-                    </span>
-                `;
+document.addEventListener('DOMContentLoaded', function () {
+    // Ativa a validação visual nativa do Bootstrap 5 ao tentar submeter
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
             }
-        }
-
-        switchInput.addEventListener('change', updateStatus);
-        updateStatus();
+            form.classList.add('was-validated');
+        }, false);
     });
-
-    // Máscara TELEFONE
-    const telefone = document.getElementById('telefone');
-
-    telefone.addEventListener('input', function(e) {
-
-        let value = e.target.value.replace(/\D/g, '');
-
-        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-
-        value = value.replace(/(\d{5})(\d)/, '$1-$2');
-
-        e.target.value = value.substring(0, 15);
-    });
-
-
-    // Validação visual EMAIL
-    const email = document.getElementById('email');
-
-    email.addEventListener('blur', function() {
-
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (email.value !== '' && !regex.test(email.value)) {
-
-            email.classList.add('is-invalid');
-
-        } else {
-
-            email.classList.remove('is-invalid');
-        }
-    });
-
+});
 </script>
 
-<?php require_once dirname(__DIR__) . '../templates/footer.php'; ?>
+<?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>
