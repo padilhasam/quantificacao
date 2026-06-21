@@ -167,10 +167,13 @@
                             </small>
                         </div>
                     </div>
+                    <div class="modal-footer bg-light py-2">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    <?php endforeach; endif; ?>
+        <?php endforeach; endif; ?>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

@@ -110,65 +110,74 @@
         </div>
     </div>
 
-    <?php foreach ($empresas as $emp): ?>
-        <div class="modal fade" id="modalEmpresa<?= $emp['id'] ?>" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-3">
-                    <div class="modal-header bg-light border-bottom py-3">
-                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
-                            <i class="fas fa-building border p-2 bg-light rounded-3 text-secondary"></i> Ficha da Empresa #<?= $emp['id'] ?>
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <?php if (!empty($empresas)): foreach ($empresas as $emp): ?>
+    <div class="modal fade" id="modalEmpresa<?= $emp['id'] ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+                <div class="modal-header bg-light border-bottom py-3">
+                    <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                        <i class="fas fa-building border p-2 bg-light rounded-3 text-secondary"></i> Ficha da Empresa #<?= $emp['id'] ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body p-4">
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-secondary small fw-semibold d-block">Nome Fantasia</label>
+                        <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($emp['nome_fantasia'] ?? $emp['nome'] ?? '-') ?></span>
                     </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-3 border-bottom pb-2">
-                            <label class="text-secondary small fw-semibold d-block">Nome Fantasia</label>
-                            <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($emp['nome_fantasia'] ?? $emp['nome'] ?? '-') ?></span>
+                    
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-secondary small fw-semibold d-block">Razão Social</label>
+                        <span class="text-dark fw-medium"><?= htmlspecialchars($emp['razao_social'] ?? '-') ?></span>
+                    </div>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">CNPJ</label>
+                            <span class="font-monospace text-dark fw-bold bg-light px-2 py-1 rounded border"><?= htmlspecialchars($emp['cnpj'] ?? '-') ?></span>
                         </div>
-                        <div class="mb-3">
-                            <label class="text-secondary small fw-semibold d-block">Razão Social</label>
-                            <span class="text-dark fw-medium"><?= htmlspecialchars($emp['razao_social'] ?? '-') ?></span>
-                        </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">CNPJ</label>
-                                <span class="font-monospace text-dark fw-bold bg-light px-2 py-0.5 rounded border"><?= htmlspecialchars($emp['cnpj'] ?? '-') ?></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">Insc. Estadual</label>
-                                <span class="text-dark fw-medium"><?= htmlspecialchars($emp['inscricao_estadual'] ?? '-') ?></span>
-                            </div>
-                        </div>
-                        <div class="row g-3 mb-3 border-top pt-3">
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">Responsável</label>
-                                <span class="text-dark fw-medium"><?= htmlspecialchars($emp['responsavel'] ?? '-') ?></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">Contato</label>
-                                <span class="text-dark fw-medium"><?= htmlspecialchars($emp['contato_responsavel'] ?? '-') ?></span>
-                            </div>
-                        </div>
-                        <div class="border-top pt-3">
-                            <label class="text-secondary small fw-semibold d-block">Endereço</label>
-                            <span class="text-dark"><?= htmlspecialchars($emp['endereco'] ?? '-') ?></span>
-                            <div class="text-muted small mt-1">
-                                <?= htmlspecialchars($emp['cidade'] ?? '-') ?> / <?= htmlspecialchars($emp['estado'] ?? '-') ?>
-                                <span class="ms-2">CEP: <?= htmlspecialchars($emp['cep'] ?? '-') ?></span>
-                            </div>
-                        </div>
-                        <div class="border-top mt-3 pt-3">
-                            <label class="text-secondary small fw-semibold d-block">Data de Cadastro</label>
-                            <span class="text-muted small">
-                                <i class="fas fa-calendar-alt me-1"></i> 
-                                <?= !empty($emp['data_cadastro']) ? date('d/m/Y H:i', strtotime($emp['data_cadastro'])) : 'Data não informada' ?>
-                            </span>
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">Insc. Estadual</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($emp['inscricao_estadual'] ?? '-') ?></span>
                         </div>
                     </div>
+
+                    <div class="row g-3 mb-3 border-top pt-3">
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">Responsável</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($emp['responsavel'] ?? '-') ?></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">Contato</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($emp['contato_responsavel'] ?? '-') ?></span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3">
+                        <label class="text-secondary small fw-semibold d-block">Endereço</label>
+                        <span class="text-dark d-block"><?= htmlspecialchars($emp['endereco'] ?? '-') ?></span>
+                        <div class="text-muted small mt-1">
+                            <?= htmlspecialchars($emp['cidade'] ?? '-') ?> / <?= htmlspecialchars($emp['estado'] ?? '-') ?>
+                            <span class="ms-2">CEP: <?= htmlspecialchars($emp['cep'] ?? '-') ?></span>
+                        </div>
+                    </div>
+
+                    <div class="border-top mt-3 pt-3 text-end">
+                        <small class="text-muted d-block fs-7">
+                            <i class="far fa-calendar-alt me-1"></i> Cadastrado em: 
+                            <?= !empty($emp['data_cadastro']) ? date('d/m/Y H:i', strtotime($emp['data_cadastro'])) : 'Não informado' ?>
+                        </small>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light py-3">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
+    </div>
+    <?php endforeach; endif; ?>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

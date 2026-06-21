@@ -140,22 +140,27 @@
         <div class="modal fade" id="modalUnidade<?= $u['id'] ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-3">
+                    <!-- Cabeçalho -->
                     <div class="modal-header bg-light border-bottom py-3">
                         <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
-                            <i class="fas fa-sitemap border p-2 bg-light rounded-3 text-secondary"></i> Ficha da Unidade #<?= $u['id'] ?>
+                            <i class="fas fa-building border p-2 bg-light rounded-3 text-secondary"></i> Ficha da Unidade #<?= $u['id'] ?>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    
+                    <!-- Corpo -->
                     <div class="modal-body p-4">
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Nome da Unidade</label>
                             <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($u['nome']) ?></span>
                         </div>
+                        
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="text-secondary small fw-semibold d-block">Empresa Vinculada</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($u['nome_fantasia'] ?? $u['razao_social'] ?? '-') ?></span>
+                        </div>
+
                         <div class="row g-3 mb-3">
-                            <div class="col-12">
-                                <label class="text-secondary small fw-semibold d-block">Empresa Vinculada</label>
-                                <span class="text-dark fw-medium"><?= htmlspecialchars($u['nome_fantasia'] ?? $u['razao_social'] ?? '-') ?></span>
-                            </div>
                             <div class="col-6">
                                 <label class="text-secondary small fw-semibold d-block">Cidade</label>
                                 <span class="text-dark fw-medium"><?= htmlspecialchars($u['cidade'] ?? '-') ?></span>
@@ -165,13 +170,19 @@
                                 <span class="text-dark fw-medium"><?= htmlspecialchars($u['estado'] ?? '-') ?></span>
                             </div>
                         </div>
+
                         <div class="mb-3 border-bottom pb-3">
                             <label class="text-secondary small fw-semibold d-block mb-1">Status Operacional</label>
                             <?= ((int)($u['ativo'] ?? 0) === 1) 
-                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold">Unidade Ativa</span>' 
-                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1 fw-semibold">Unidade Inativa</span>' 
+                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Ativa</span>' 
+                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Inativa</span>' 
                             ?>
                         </div>
+                    </div>
+
+                    <!-- Rodapé -->
+                    <div class="modal-footer bg-light py-3">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>

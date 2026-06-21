@@ -1,138 +1,272 @@
-<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
+<?php 
+require_once dirname(__DIR__) . '/templates/header.php'; 
+require_once dirname(__DIR__, 3) . '/config/config.php';
+require_once dirname(__DIR__, 3) . '/app/models/Visita.php'; 
 
-<div class="container py-4">
+// Extração de eventos e datas únicas para os filtros
+$eventos = [];
+$datasDisponiveis = [];
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-        <div>
-            <h3 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                <i class="fas fa-calendar-check text-primary"></i>
-                Controle de Visitas e Veículos
-            </h3>
-            <small class="text-muted">Gerencie os agendamentos de visitas técnicas e reservas da frota</small>
-        </div>
+if (isset($visitas) && is_array($visitas)) {
+    foreach ($visitas as $v) {
+        $eventos[] = [
+            'id'    => $v['id'],
+            'title' => $v['empresa_nome'],
+            'start' => $v['data_visita'] . 'T' . ($v['hora_visita'] ?? '00:00:00'),
+            'url'   => BASE_URL . '/visitas/visualizar?id=' . $v['id'],
+            'extendedProps' => ['status' => $v['status'] ?? 'ABERTA']
+        ];
         
-        <a href="<?= BASE_URL ?>/visitas/criar" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="fas fa-calendar-plus me-2"></i> Novo Agendamento
-        </a>
-    </div>
+        $data = date('Y-m-d', strtotime($v['data_visita']));
+        if (!in_array($data, $datasDisponiveis)) {
+            $datasDisponiveis[] = $data;
+        }
+    }
+    sort($datasDisponiveis);
+}
+?>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-secondary fw-semibold">
-                        <tr>
-                            <th class="ps-4">ID</th>
-                            <th>Usuário (Agendado por)</th>
-                            <th>Veículo Alocado</th>
-                            <th>Destino (Empresa / Unidade)</th>
-                            <th>Data / Horário</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (isset($visitas) && !empty($visitas)): ?>
-                            <?php foreach ($visitas as $visita): ?>
-                                <tr>
-                                    <td class="ps-4 text-muted fw-bold">#<?= $visita['id'] ?></td>
-                                    
-                                    <td>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                <i class="fas fa-user text-xs"></i>
-                                            </div>
-                                            <div>
-                                                <span class="fw-semibold d-block text-dark"><?= htmlspecialchars($visita['usuario_nome'] ?? 'Não informado') ?></span>
-                                                <small class="text-muted text-xs"><?= htmlspecialchars($visita['usuario_email'] ?? '') ?></small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    
-                                    <td>
-                                        <?php if (!empty($visita['veiculo_id'])): ?>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <span class="text-secondary"><i class="fas fa-car"></i></span>
-                                                <div>
-                                                    <span class="d-block fw-medium text-sm"><?= htmlspecialchars($visita['veiculo_modelo']) ?></span>
-                                                    <span class="badge bg-light text-dark border font-monospace text-uppercase" style="font-size: 0.7rem;">
-                                                        <?= htmlspecialchars($visita['veiculo_placa']) ?>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        <?php else: ?>
-                                            <span class="text-muted text-sm"><i class="fas fa-walking me-1"></i> Sem veículo (A pé / Carona)</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    
-                                    <td>
-                                        <div>
-                                            <span class="text-dark fw-medium d-block text-truncate" style="max-width: 200px;" title="<?= htmlspecialchars($visita['empresa_nome']) ?>">
-                                                <i class="fas fa-building text-muted me-1"></i>
-                                                <?= htmlspecialchars($visita['empresa_nome']) ?>
-                                            </span>
-                                            <?php if (!empty($visita['unidade_nome'])): ?>
-                                                <small class="text-muted ps-3">
-                                                    <i class="fas fa-location-dot me-1" style="font-size: 0.75rem;"></i>
-                                                    <?= htmlspecialchars($visita['unidade_nome']) ?>
-                                                </small>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                    
-                                    <td>
-                                        <div class="text-sm">
-                                            <span class="d-block text-dark fw-medium">
-                                                <i class="far fa-calendar me-1 text-muted"></i>
-                                                <?= date('d/m/Y', strtotime($visita['data_visita'])) ?>
-                                            </span>
-                                            <small class="text-muted">
-                                                <i class="far fa-clock me-1"></i>
-                                                <?= !empty($visita['hora_visita']) ? substr($visita['hora_visita'], 0, 5) : 'Não def.' ?>
-                                            </small>
-                                        </div>
-                                    </td>
-                                    
-                                    <td>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+
+<style>
+    /* Força cor preta apenas nos elementos internos do calendário */
+    #calendar .fc-toolbar-title, 
+    #calendar .fc-col-header-cell-cushion, 
+    #calendar .fc-daygrid-day-number, 
+    #calendar .fc-event,
+    #calendar .fc-event-title,
+    #calendar .fc-event-time {
+        color: #000000 !important;
+        text-shadow: none !important;
+    }
+</style>
+
+<main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
+    <div class="container-fluid px-2 px-lg-4 mb-4">
+
+        <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
+                    <span class="icon-container d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);">
+                        <i class="fas fa-calendar-check text-white" style="font-size: 1.10rem;"></i>
+                    </span>
+                    Controle de Visitas e Veículos
+                </h3>
+            </div>
+            <a href="<?= BASE_URL ?>/visitas/criar" class="btn btn-primary rounded-pill px-4 shadow-sm fw-medium">
+                <i class="fas fa-calendar-plus me-2"></i> Novo Agendamento
+            </a>
+        </header>
+
+        <ul class="nav nav-pills mb-4 gap-2" id="visitasTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active rounded-pill px-4" data-bs-toggle="tab" data-bs-target="#tab-calendario">
+                    <i class="fas fa-calendar-alt me-2"></i> Calendário
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4" data-bs-toggle="tab" data-bs-target="#tab-lista">
+                    <i class="fas fa-list me-2"></i> Lista Completa
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-calendario">
+                <div class="card shadow-sm border-0 p-4 rounded-3">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-lista">
+                <div class="card shadow-sm border-0 mb-4 rounded-3">
+                    <div class="card-body p-4">
+                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-filter me-2"></i>Filtrar Agendamentos</h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-semibold">Técnico / Usuário</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0 rounded-start-pill"><i class="fas fa-user text-secondary"></i></span>
+                                    <select id="filtroTecnico" class="form-select bg-light border-0 rounded-end-pill">
+                                        <option value="">Todos os usuários</option>
                                         <?php 
-                                        $status = $visita['status'] ?? 'ABERTA';
-                                        if ($status === 'FINALIZADA') {
-                                            echo '<span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Finalizada</span>';
-                                        } elseif ($status === 'CANCELADA') {
-                                            echo '<span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Cancelada</span>';
-                                        } else {
-                                            echo '<span class="badge bg-warning-subtle text-warning px-2 py-1 rounded-pill">Aberta</span>';
-                                        }
-                                        ?>
-                                    </td>
-                                    
-                                    <td class="text-end pe-4">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="<?= BASE_URL ?>/visitas/visualizar/<?= $visita['id'] ?>" class="btn btn-outline-secondary" title="Ver Detalhes">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <?php if ($status === 'ABERTA'): ?>
-                                                <a href="<?= BASE_URL ?>/visitas/cancelar/<?= $visita['id'] ?>" class="btn btn-outline-danger" title="Cancelar" onclick="return confirm('Deseja realmente cancelar este agendamento?')">
-                                                    <i class="fas fa-ban"></i>
-                                                </a>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="fas fa-calendar-times display-6 d-block mb-3 text-black-50"></i>
-                                    Nenhuma visita ou agendamento de veículo encontrado.
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                                        $usuariosUnicos = array_unique(array_column($visitas, 'usuario_nome'));
+                                        foreach ($usuariosUnicos as $u): if($u): ?>
+                                            <option value="<?= htmlspecialchars($u) ?>"><?= htmlspecialchars($u) ?></option>
+                                        <?php endif; endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-semibold">Veículo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0 rounded-start-pill"><i class="fas fa-car text-secondary"></i></span>
+                                    <select id="filtroVeiculo" class="form-select bg-light border-0 rounded-end-pill">
+                                        <option value="">Todos os veículos</option>
+                                        <?php 
+                                        $veiculosUnicos = array_unique(array_column($visitas, 'veiculo_modelo'));
+                                        foreach ($veiculosUnicos as $v): if($v): ?>
+                                            <option value="<?= htmlspecialchars($v) ?>"><?= htmlspecialchars($v) ?></option>
+                                        <?php endif; endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-semibold">Data da Visita</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0 rounded-start-pill"><i class="fas fa-calendar-day text-secondary"></i></span>
+                                    <input type="date" id="filtroData" class="form-control bg-light border-0 rounded-end-pill">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0" id="tabelaVisitas">
+                                <thead class="table-light text-secondary fw-semibold">
+                                    <tr>
+                                        <th class="ps-4">#</th>
+                                        <th>Usuário</th>
+                                        <th>Veículo</th>
+                                        <th>Destino</th>
+                                        <th>Data / Horário</th>
+                                        <th>Status</th>
+                                        <th class="text-center pe-4">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpo-tabela-visitas">
+                                    <?php include 'listar-tabela-ajax.php'; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <?php if (isset($visitas) && !empty($visitas)): foreach ($visitas as $v): ?>
+        <div class="modal fade" id="modalVisita<?= $v['id'] ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-3">
+                    <div class="modal-header bg-light border-bottom py-3">
+                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                            <i class="fas fa-calendar-check border p-2 bg-light rounded-3 text-secondary"></i> 
+                            Ficha da Visita #<?= $v['id'] ?>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="modal-body p-4">
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="text-secondary small fw-semibold d-block">Destino (Empresa)</label>
+                            <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($v['empresa_nome']) ?></span>
+                        </div>
+                        
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="text-secondary small fw-semibold d-block">Usuário Responsável</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($v['usuario_nome'] ?? 'N/A') ?></span>
+                        </div>
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="text-secondary small fw-semibold d-block">Veículo</label>
+                                <span class="text-dark fw-bold"><?= !empty($v['veiculo_modelo']) ? htmlspecialchars($v['veiculo_modelo']) : 'A pé' ?></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-secondary small fw-semibold d-block">Status</label>
+                                <?php 
+                                $s = $v['status'] ?? 'ABERTA';
+                                $col = ($s == 'FINALIZADA') ? 'success' : (($s == 'CANCELADA') ? 'danger' : 'warning');
+                                echo '<span class="text-'.$col.' fw-bold">'.ucfirst(strtolower($s)).'</span>';
+                                ?>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <small class="text-muted d-block fs-7">
+                                <i class="far fa-calendar-alt me-1"></i> Data: <?= date('d/m/Y', strtotime($v['data_visita'])) ?> às <?= substr($v['hora_visita'] ?? '00:00', 0, 5) ?>
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer bg-light border-top py-3">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+                        <?php if ($v['status'] !== 'FINALIZADA'): ?>
+                            <a href="<?= BASE_URL ?>/visitas/editar?id=<?= $v['id'] ?>" class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-edit me-1"></i> Editar
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; endif; ?>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-info-circle me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Sistema</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                </div>
+        </div>
+    </div>
+</main>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="<?= BASE_URL ?>/app.js"></script>
+<script src="<?= BASE_URL ?>/js/calendario-visitas.js"></script>
+
+<script>
+    window.eventosData = <?= json_encode($eventos) ?>;
+    window.baseUrl = '<?= BASE_URL ?>';
+
+    function aplicarFiltros() {
+        const tecnico = document.getElementById('filtroTecnico').value.toLowerCase();
+        const veiculo = document.getElementById('filtroVeiculo').value.toLowerCase();
+        const data = document.getElementById('filtroData').value; 
+
+        document.querySelectorAll('#tabelaVisitas tbody tr').forEach(tr => {
+            if (tr.children.length < 2) return;
+            const textUsuario = tr.children[1].innerText.toLowerCase();
+            const textVeiculo = tr.children[2].innerText.toLowerCase();
+            const dataLinha = tr.querySelector('[data-raw]')?.getAttribute('data-raw') || '';
+
+            const matchTecnico = (tecnico === "" || textUsuario.includes(tecnico));
+            const matchVeiculo = (veiculo === "" || textVeiculo.includes(veiculo));
+            const matchData = (data === "" || dataLinha === data);
+
+            tr.style.display = (matchTecnico && matchVeiculo && matchData) ? '' : 'none';
+        });
+    }
+
+    document.getElementById('filtroTecnico').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroVeiculo').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtroData').addEventListener('input', aplicarFiltros);
+
+    document.querySelector('button[data-bs-target="#tab-calendario"]').addEventListener('shown.bs.tab', () => { 
+        if(window.calendar) window.calendar.render(); 
+    });
+
+    $(document).ready(function () {
+        // Os Toasts agora são geridos pelo app.js automaticamente
+        
+        $('#tabelaVisitas').DataTable({
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            language: { url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' },
+            columnDefs: [{ orderable: false, targets: 5 }],
+            drawCallback: function() {
+                $('.dataTables_paginate .paginate_button').addClass('shadow-sm');
+            }
+        });
+    });
+</script>
 <?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>

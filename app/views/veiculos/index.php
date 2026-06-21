@@ -146,51 +146,59 @@
     </div>
 
     <?php if (!empty($veiculos)): foreach ($veiculos as $vei): ?>
-        <div class="modal fade" id="modalVeiculo<?= $vei['id'] ?>" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-3">
-                    <div class="modal-header bg-light border-bottom py-3">
-                        <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
-                            <i class="fas fa-car border p-2 bg-light rounded-3 text-secondary"></i> Ficha do Veículo #<?= $vei['id'] ?>
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="modalVeiculo<?= $vei['id'] ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+                <div class="modal-header bg-light border-bottom py-3">
+                    <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                        <i class="fas fa-car border p-2 bg-light rounded-3 text-secondary"></i> Ficha do Veículo #<?= $vei['id'] ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body p-4">
+                    <div class="mb-3 border-bottom pb-2">
+                        <label class="text-secondary small fw-semibold d-block">Modelo do Veículo</label>
+                        <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($vei['modelo']) ?></span>
                     </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-3 border-bottom pb-2">
-                            <label class="text-secondary small fw-semibold d-block">Modelo do Veículo</label>
-                            <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($vei['modelo']) ?></span>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">Identificação / Placa</label>
+                            <span class="font-monospace text-dark fw-bold bg-light px-2 py-1 rounded border">
+                                <?php 
+                                    $placa = htmlspecialchars($vei['placa']);
+                                    echo (strlen($placa) === 7) ? substr($placa, 0, 3) . '-' . substr($placa, 3) : $placa;
+                                ?>
+                            </span>
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">Identificação / Placa</label>
-                                <span class="font-monospace text-dark fw-bold bg-light px-2 py-0.5 rounded border">
-                                    <?php 
-                                        $placa = htmlspecialchars($vei['placa']);
-                                        echo (strlen($placa) === 7) ? substr($placa, 0, 3) . '-' . substr($placa, 3) : $placa;
-                                    ?>
-                                </span>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-secondary small fw-semibold d-block">Cor Predominante</label>
-                                <span class="text-dark fw-medium"><?= htmlspecialchars($vei['cor'] ?? 'Não informada') ?></span>
-                            </div>
-                        </div>
-                        <div class="mb-3 border-bottom pb-3">
-                            <label class="text-secondary small fw-semibold d-block mb-1">Status Operacional</label>
-                            <?= !empty($vei['ativo']) 
-                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold">Disponível para Visitas Técnicas</span>' 
-                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1 fw-semibold">Inativo / Sob Manutenção</span>' 
-                            ?>
-                        </div>
-                        <div class="text-end">
-                            <small class="text-muted d-block fs-7">
-                                <i class="far fa-calendar-alt me-1"></i> Cadastrado em: <?= date('d/m/Y H:i', strtotime($vei['criado_em'])) ?>
-                            </small>
+                        <div class="col-6">
+                            <label class="text-secondary small fw-semibold d-block">Cor Predominante</label>
+                            <span class="text-dark fw-medium"><?= htmlspecialchars($vei['cor'] ?? 'Não informada') ?></span>
                         </div>
                     </div>
+
+                    <div class="mb-3 border-bottom pb-3">
+                        <label class="text-secondary small fw-semibold d-block mb-1">Status Operacional</label>
+                        <?= !empty($vei['ativo']) 
+                            ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Disponível para Visitas</span>' 
+                            : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-semibold">Inativo / Manutenção</span>' 
+                        ?>
+                    </div>
+
+                    <div class="text-end">
+                        <small class="text-muted d-block fs-7">
+                            <i class="far fa-calendar-alt me-1"></i> Cadastrado em: <?= date('d/m/Y H:i', strtotime($vei['criado_em'])) ?>
+                        </small>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light py-3">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
+    </div>
     <?php endforeach; endif; ?>
 </main>
 

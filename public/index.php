@@ -117,9 +117,15 @@ $routes = [
     // =========================
     // GESTÃO TÉCNICA
     // =========================
-    '/visitas'                     => ['controller' => 'VisitasController', 'method' => 'index'],
-    '/visitas/criar'               => ['controller' => 'VisitasController', 'method' => 'criar'],
-    '/visitas/salvar'              => ['controller' => 'VisitasController', 'method' => 'salvar'],
+    '/visitas'                    => ['controller' => 'VisitasController', 'method' => 'index'],
+    '/visitas/criar'              => ['controller' => 'VisitasController', 'method' => 'criar'],
+    '/visitas/salvar'             => ['controller' => 'VisitasController', 'method' => 'salvar'],
+    '/visitas/visualizar'         => ['controller' => 'VisitasController', 'method' => 'visualizar'],
+    '/visitas/editar'             => ['controller' => 'VisitasController', 'method' => 'editar'],
+    '/visitas/atualizar'          => ['controller' => 'VisitasController', 'method' => 'atualizar'],
+    '/visitas/atualizarStatus'    => ['controller' => 'VisitasController', 'method' => 'atualizarStatus'], // <--- ADICIONE ESTA LINHA
+    '/visitas/cancelar'           => ['controller' => 'VisitasController', 'method' => 'cancelar'],
+    '/visitas/excluir'            => ['controller' => 'VisitasController', 'method' => 'excluir'],
 
     '/levantamentos'               => ['controller' => 'LevantamentosController', 'method' => 'index'],
     '/levantamentos/criar'         => ['controller' => 'LevantamentosController', 'method' => 'criar'],

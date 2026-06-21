@@ -40,19 +40,20 @@ class VisitasController extends Controller {
         }
             
         $dados = [
-            'usuario_id'                 => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
-            'veiculo_id'                 => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
-            'empresa_id'                 => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
-            'unidade_id'                 => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
-            'data_visita'                => filter_input(INPUT_POST, 'data_visita', FILTER_DEFAULT),
-            'hora_visita'                => filter_input(INPUT_POST, 'hora_visita', FILTER_DEFAULT),
-            'responsavel_acompanhamento' => filter_input(INPUT_POST, 'responsavel_acompanhamento', FILTER_DEFAULT),
-            'objetivo'                   => filter_input(INPUT_POST, 'objetivo', FILTER_DEFAULT),
-            'observacoes'                => filter_input(INPUT_POST, 'observacoes', FILTER_DEFAULT)
+            'usuario_id'               => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
+            'veiculo_id'               => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
+            'empresa_id'               => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
+            'unidade_id'               => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
+            'data_visita'              => trim($_POST['data_visita'] ?? ''),
+            'hora_visita'              => trim($_POST['hora_visita'] ?? ''),
+            'responsavel_acompanhamento' => trim($_POST['responsavel_acompanhamento'] ?? ''),
+            'objetivo'                 => trim($_POST['objetivo'] ?? ''),
+            'observacoes'              => trim($_POST['observacoes'] ?? '')
         ];
 
-        if (!$dados['usuario_id'] || !$dados['empresa_id'] || !$dados['data_visita']) {
-            $_SESSION['erro'] = "Por favor, preencha todos os campos obrigatórios.";
+        // Validação idêntica ao padrão adotado em UsuariosController
+        if (empty($dados['usuario_id']) || empty($dados['empresa_id']) || empty($dados['data_visita'])) {
+            $_SESSION['erro'] = "Preencha todos os campos obrigatórios.";
             header('Location: ' . BASE_URL . '/visitas/criar');
             exit;
         }
@@ -67,15 +68,27 @@ class VisitasController extends Controller {
         exit;
     }
 
-    public function editar($id) {
+    public function editar($id = null) {
+        // Se o ID não foi passado como argumento, tenta obter via GET da URL
+        if ($id === null) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        }
+        
+        // Validação de segurança: se não houver ID, interrompe a execução
+        if (!$id) {
+            $_SESSION['erro'] = "ID do agendamento não informado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
         $visita = $this->visitaModel->buscarPorId((int)$id);
+        
         if (!$visita) {
             $_SESSION['erro'] = "Agendamento não encontrado.";
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
         
-        // Carrega dependências para o formulário
         $empresaModel = $this->model('Empresa');
         $db = (new Database())->getConnection();
         
@@ -88,24 +101,39 @@ class VisitasController extends Controller {
         ]);
     }
 
-    public function atualizar($id) {
+    public function atualizar($id = null) {
+        // 1. Captura o ID caso não tenha sido passado pelo roteador
+        if ($id === null) {
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        }
+
+        // 2. Garante que é uma requisição POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
 
+        // 3. Valida se o ID existe
+        if (!$id || !$this->visitaModel->buscarPorId((int)$id)) {
+            $_SESSION['erro'] = "Agendamento não encontrado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
+        // 4. Captura e filtra os dados do formulário
         $dados = [
-            'usuario_id'                 => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
-            'veiculo_id'                 => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
-            'empresa_id'                 => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
-            'unidade_id'                 => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
-            'data_visita'                => filter_input(INPUT_POST, 'data_visita', FILTER_DEFAULT),
-            'hora_visita'                => filter_input(INPUT_POST, 'hora_visita', FILTER_DEFAULT),
-            'responsavel_acompanhamento' => filter_input(INPUT_POST, 'responsavel_acompanhamento', FILTER_DEFAULT),
-            'objetivo'                   => filter_input(INPUT_POST, 'objetivo', FILTER_DEFAULT),
-            'observacoes'                => filter_input(INPUT_POST, 'observacoes', FILTER_DEFAULT)
+            'usuario_id'               => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
+            'veiculo_id'               => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
+            'empresa_id'               => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
+            'unidade_id'               => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
+            'data_visita'              => trim($_POST['data_visita'] ?? ''),
+            'hora_visita'              => trim($_POST['hora_visita'] ?? ''),
+            'responsavel_acompanhamento' => trim($_POST['responsavel_acompanhamento'] ?? ''),
+            'objetivo'                 => trim($_POST['objetivo'] ?? ''),
+            'observacoes'              => trim($_POST['observacoes'] ?? '')
         ];
 
+        // 5. Executa a atualização
         if ($this->visitaModel->atualizar((int)$id, $dados)) {
             $_SESSION['sucesso'] = "Agendamento atualizado com sucesso!";
         } else {
@@ -116,7 +144,36 @@ class VisitasController extends Controller {
         exit;
     }
 
+    public function atualizarData() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+            $novaData = trim($_POST['nova_data'] ?? '');
+
+            if (!$id || empty($novaData)) {
+                http_response_code(400);
+                echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
+                return;
+            }
+
+            // CORREÇÃO: Usar $this->visitaModel em vez de $this->model
+            $resultado = $this->visitaModel->updateData($id, $novaData);
+
+            if ($resultado) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar no banco']);
+            }
+        }
+    }
+
     public function excluir($id) {
+        if (!$this->visitaModel->buscarPorId((int)$id)) {
+            $_SESSION['erro'] = "Agendamento não encontrado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
         if ($this->visitaModel->deletar((int)$id)) {
             $_SESSION['sucesso'] = "Visita excluída com sucesso!";
         } else {
@@ -124,5 +181,65 @@ class VisitasController extends Controller {
         }
         header('Location: ' . BASE_URL . '/visitas');
         exit;
+    }
+
+    public function cancelar() {
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        
+        // Verifica se a visita existe
+        $visita = $this->visitaModel->buscarPorId((int)$id);
+        
+        if (!$id || !$visita) {
+            $_SESSION['erro'] = "Agendamento não encontrado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
+        // Chama um método no seu model que faz: UPDATE visitas SET status = 'CANCELADA' WHERE id = ...
+        if ($this->visitaModel->atualizarStatus((int)$id, 'CANCELADA')) {
+            $_SESSION['sucesso'] = "Visita cancelada com sucesso!";
+        } else {
+            $_SESSION['erro'] = "Erro ao cancelar agendamento.";
+        }
+        
+        header('Location: ' . BASE_URL . '/visitas');
+        exit;
+    }
+
+    public function atualizarStatus() {
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $novoStatus = $_POST['status'] ?? 'ABERTA';
+        
+        if (!$id || !$this->visitaModel->buscarPorId((int)$id)) {
+            $_SESSION['erro'] = "Agendamento não encontrado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
+        if ($this->visitaModel->atualizarStatus((int)$id, $novoStatus)) {
+            $_SESSION['sucesso'] = "Status atualizado para {$novoStatus}!";
+        } else {
+            $_SESSION['erro'] = "Erro ao atualizar status.";
+        }
+        
+        header('Location: ' . BASE_URL . '/visitas/visualizar?id=' . $id);
+        exit;
+    }
+
+    public function visualizar() {
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if (!$id) {
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+        
+        $visita = $this->visitaModel->buscarPorId($id);
+        if (!$visita) {
+            $_SESSION['erro'] = "Agendamento não encontrado.";
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+        
+        $this->view('visitas/visualizar', ['visita' => $visita]);
     }
 }

@@ -110,13 +110,15 @@
                         <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
                             <i class="fas fa-sitemap border p-2 bg-light rounded-3 text-secondary"></i> Ficha do Setor #<?= $s['id'] ?>
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    
                     <div class="modal-body p-4">
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Nome do Setor</label>
                             <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($s['nome']) ?></span>
                         </div>
+                        
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-secondary small fw-semibold d-block">Unidade</label>
@@ -127,6 +129,10 @@
                                 <span class="text-dark fw-medium"><?= htmlspecialchars($s['empresa_nome'] ?? '-') ?></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="modal-footer bg-light py-3">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>
