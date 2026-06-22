@@ -206,26 +206,6 @@ class VisitasController extends Controller {
         exit;
     }
 
-    public function atualizarStatus() {
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $novoStatus = $_POST['status'] ?? 'ABERTA';
-        
-        if (!$id || !$this->visitaModel->buscarPorId((int)$id)) {
-            $_SESSION['erro'] = "Agendamento não encontrado.";
-            header('Location: ' . BASE_URL . '/visitas');
-            exit;
-        }
-
-        if ($this->visitaModel->atualizarStatus((int)$id, $novoStatus)) {
-            $_SESSION['sucesso'] = "Status atualizado para {$novoStatus}!";
-        } else {
-            $_SESSION['erro'] = "Erro ao atualizar status.";
-        }
-        
-        header('Location: ' . BASE_URL . '/visitas/visualizar?id=' . $id);
-        exit;
-    }
-
     public function visualizar() {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (!$id) {

@@ -46,30 +46,28 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
         eventDrop: function(info) {
-            if (!confirm("Confirmar a alteração da data para " + info.event.startStr + "?")) {
-                info.revert();
-            } else {
-                $.ajax({
-                    // Use uma URL relativa à raiz do seu projeto (assumindo que baseUrl aponta para a raiz)
-                    url: window.baseUrl + '/api.php?action=atualizar_visita', 
-                    type: 'POST',
-                    data: {
-                        id: info.event.id,
-                        nova_data: info.event.startStr
-                    },
-                    success: function(response) {
-                        // Log para ver o que o servidor respondeu
-                        console.log("Resposta do servidor:", response); 
-                        showToast("Data da visita atualizada!", "success");
-                        $('#tabelaVisitas').load(window.baseUrl + '/visitas/listar-tabela-ajax.php');
-                    },
-                    error: function(xhr) {
-                        console.error("Erro AJAX:", xhr.responseText); // MUITO IMPORTANTE
-                        showToast("Erro ao atualizar: " + xhr.statusText, "danger");
-                        info.revert();
+            const dataFormatada = info.event.startStr.split('T')[0];
+            
+            $.ajax({
+                url: window.baseUrl + '/visitas/atualizarData',
+                type: 'POST',
+                data: {
+                    id: info.event.id,
+                    nova_data: dataFormatada
+                },
+                success: function(response) {
+                    if (response.status === 'sucesso') {
+                        showToast(response.mensagem, 'success');
+                    } else {
+                        showToast(response.mensagem, 'danger');
+                        info.revert(); // Volta o evento para a data original se falhar
                     }
-                });
-            }
+                },
+                error: function() {
+                    showToast('Erro ao conectar com o servidor.', 'danger');
+                    info.revert();
+                }
+            });
         },
         
         dateClick: function(info) {

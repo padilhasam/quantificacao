@@ -1,20 +1,32 @@
 /**
- * ARQUIVO GLOBAL DE SCRIPTS (app.js)
+ * ARQUIVO GLOBAL DE SCRIPTS (public/js/app.js)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa automaticamente qualquer toast vindo do PHP
+    // 1. Inicializa Toasts que foram renderizados via PHP no servidor
     const toasts = document.querySelectorAll('.toast');
     toasts.forEach(toastEl => {
-        // Define o tempo baseado no ID se existir, ou padrão
-        const delay = toastEl.id === 'toastSucesso' ? 4000 : 5000;
-        new bootstrap.Toast(toastEl, { delay: delay }).show();
+        new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+        // Garante que o toast seja removido do DOM após o fechamento
+        toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
     });
 });
 
-// Função para disparar novos Toasts via AJAX
+/**
+ * Função global para disparar Toasts dinamicamente via AJAX ou eventos JS
+ * @param {string} mensagem - Texto a exibir
+ * @param {string} tipo - 'success' ou 'danger'
+ */
 function showToast(mensagem, tipo = 'success') {
-    const container = document.querySelector('.toast-container');
+    // Busca o container ou cria um dinamicamente se não existir
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed top-0 end-0 p-3';
+        container.style.zIndex = '9999';
+        document.body.appendChild(container);
+    }
+
     const id = 'toast-' + Date.now();
     const classe = tipo === 'success' ? 'text-bg-success' : 'text-bg-danger';
     const icone = tipo === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
@@ -31,7 +43,11 @@ function showToast(mensagem, tipo = 'success') {
     `;
 
     container.insertAdjacentHTML('beforeend', html);
+    
     const toastEl = document.getElementById(id);
-    new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+    const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+    toast.show();
+    
+    // Remove o elemento do DOM após a animação de saída para manter o HTML limpo
     toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
 }

@@ -43,6 +43,37 @@ if (isset($visitas) && is_array($visitas)) {
 
 <main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
     <div class="container-fluid px-2 px-lg-4 mb-4">
+        <?php
+        $sucesso = $_SESSION['sucesso'] ?? null;
+        $erro = $_SESSION['erro'] ?? null;
+        unset($_SESSION['sucesso'], $_SESSION['erro']);
+        ?>
+
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
+            <?php if ($sucesso): ?>
+                <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-circle-check me-2"></i>
+                            <?= htmlspecialchars($sucesso) ?>
+                        </div>
+                        <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($erro): ?>
+                <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-circle-exclamation me-2"></i>
+                            <?= htmlspecialchars($erro) ?>
+                        </div>
+                        <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
 
         <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
@@ -147,7 +178,7 @@ if (isset($visitas) && is_array($visitas)) {
             </div>
         </div>
     </div>
-    <?php if (isset($visitas) && !empty($visitas)): foreach ($visitas as $v): ?>
+   <?php if (isset($visitas) && !empty($visitas)): foreach ($visitas as $v): ?>
         <div class="modal fade" id="modalVisita<?= $v['id'] ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-3">
@@ -158,18 +189,15 @@ if (isset($visitas) && is_array($visitas)) {
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    
                     <div class="modal-body p-4">
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Destino (Empresa)</label>
                             <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($v['empresa_nome']) ?></span>
                         </div>
-                        
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Usuário Responsável</label>
                             <span class="text-dark fw-medium"><?= htmlspecialchars($v['usuario_nome'] ?? 'N/A') ?></span>
                         </div>
-                        
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-secondary small fw-semibold d-block">Veículo</label>
@@ -184,14 +212,12 @@ if (isset($visitas) && is_array($visitas)) {
                                 ?>
                             </div>
                         </div>
-                        
                         <div class="text-end">
                             <small class="text-muted d-block fs-7">
                                 <i class="far fa-calendar-alt me-1"></i> Data: <?= date('d/m/Y', strtotime($v['data_visita'])) ?> às <?= substr($v['hora_visita'] ?? '00:00', 0, 5) ?>
                             </small>
                         </div>
                     </div>
-                    
                     <div class="modal-footer bg-light border-top py-3">
                         <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
                         <?php if ($v['status'] !== 'FINALIZADA'): ?>
@@ -204,22 +230,26 @@ if (isset($visitas) && is_array($visitas)) {
             </div>
         </div>
     <?php endforeach; endif; ?>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <i class="fas fa-info-circle me-2" id="toastIcon"></i>
-                <strong class="me-auto" id="toastTitle">Sistema</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body" id="toastBody">
-                </div>
-        </div>
-    </div>
+
+    <?php if (isset($_SESSION['sucesso']) || isset($_SESSION['erro'])): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                <?php if (isset($_SESSION['sucesso'])): ?>
+                    showToast("<?= addslashes($_SESSION['sucesso']) ?>", "success");
+                <?php endif; ?>
+                <?php if (isset($_SESSION['erro'])): ?>
+                    showToast("<?= addslashes($_SESSION['erro']) ?>", "danger");
+                <?php endif; ?>
+            });
+        </script>
+        <?php unset($_SESSION['sucesso'], $_SESSION['erro']); ?>
+    <?php endif; ?>
+
 </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-<script src="<?= BASE_URL ?>/app.js"></script>
+<script src="<?= BASE_URL ?>/js/app.js"></script>
 <script src="<?= BASE_URL ?>/js/calendario-visitas.js"></script>
 
 <script>
@@ -254,8 +284,6 @@ if (isset($visitas) && is_array($visitas)) {
     });
 
     $(document).ready(function () {
-        // Os Toasts agora são geridos pelo app.js automaticamente
-        
         $('#tabelaVisitas').DataTable({
             responsive: true,
             autoWidth: false,
@@ -270,3 +298,5 @@ if (isset($visitas) && is_array($visitas)) {
     });
 </script>
 <?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>
+    
+</main>
