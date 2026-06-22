@@ -98,7 +98,11 @@ $visita = $data['visita'] ?? null;
                                 <?php if (($visita['status'] ?? '') !== 'FINALIZADA'): ?>
                                     <form action="<?= BASE_URL ?>/visitas/atualizarStatus?id=<?= $visita['id'] ?>" method="POST" onsubmit="return confirm('Confirmar finalização desta visita?');" class="m-0">
                                         <input type="hidden" name="status" value="FINALIZADA">
-                                        <button type="submit" class="btn btn-success rounded-pill px-3 fw-medium">
+                                        <button type="submit"
+                                                formaction="<?= BASE_URL ?>/visitas/atualizarStatus?id=<?= $visita['id'] ?>"
+                                                formmethod="POST"
+                                                class="btn btn-success rounded-pill px-3 fw-medium"
+                                                onclick="return confirm('Confirmar finalização desta visita?');">
                                             <i class="fas fa-check-circle me-1"></i> Finalizar
                                         </button>
                                     </form>

@@ -222,4 +222,32 @@ class VisitasController extends Controller {
         
         $this->view('visitas/visualizar', ['visita' => $visita]);
     }
+
+    public function atualizarStatus()
+    {
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+        if (!$id) {
+            $_SESSION['erro'] = 'ID da visita não informado.';
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
+        $status = trim($_POST['status'] ?? '');
+
+        if (empty($status)) {
+            $_SESSION['erro'] = 'Status não informado.';
+            header('Location: ' . BASE_URL . '/visitas');
+            exit;
+        }
+
+        if ($this->visitaModel->atualizarStatus($id, $status)) {
+            $_SESSION['sucesso'] = 'Status atualizado com sucesso!';
+        } else {
+            $_SESSION['erro'] = 'Erro ao atualizar status.';
+        }
+
+        header('Location: ' . BASE_URL . '/visitas');
+        exit;
+    }
 }
