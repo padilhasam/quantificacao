@@ -1,19 +1,19 @@
-.empresas-app-view {
+.hierarquias-app-view {
     display: none;
 }
 
-.empresas-desktop-view {
+.hierarquias-desktop-view {
     display: block;
 }
 
-.empresas-summary {
+.hierarquias-summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: .85rem;
     margin-bottom: 1rem;
 }
 
-.empresas-summary-card {
+.hierarquias-summary-card {
     background: #fff;
     border: 1px solid #e9ecef;
     border-radius: 1.15rem;
@@ -21,23 +21,49 @@
     box-shadow: 0 4px 14px rgba(15, 23, 42, .04);
 }
 
-.empresas-summary-card span {
+.hierarquias-summary-card span {
     display: block;
     font-size: .78rem;
     color: #6c757d;
 }
 
-.empresas-summary-card strong {
+.hierarquias-summary-card strong {
     font-size: 1.35rem;
     color: #212529;
 }
 
+.hierarquia-modal-flow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .85rem;
+}
+
+.hierarquia-modal-flow div {
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 1rem;
+    padding: .9rem;
+}
+
+.hierarquia-modal-flow small {
+    display: block;
+    color: #6c757d;
+    font-size: .75rem;
+    font-weight: 700;
+    margin-bottom: .2rem;
+}
+
+.hierarquia-modal-flow strong {
+    color: #212529;
+    font-size: .92rem;
+}
+
 @media (max-width: 991px) {
-    .empresas-desktop-view {
+    .hierarquias-desktop-view {
         display: none !important;
     }
 
-    .empresas-app-view {
+    .hierarquias-app-view {
         display: block;
     }
 
@@ -45,12 +71,12 @@
         padding: .75rem !important;
     }
 
-    .page-header-empresas {
+    .page-header-hierarquias {
         padding: 1rem !important;
         border-radius: 1.25rem !important;
     }
 
-    .page-header-empresas h3 {
+    .page-header-hierarquias h3 {
         font-size: 1.15rem !important;
         line-height: 1.3;
     }
@@ -68,26 +94,26 @@
         min-height: 42px;
     }
 
-    .empresas-summary {
+    .hierarquias-summary {
         grid-template-columns: repeat(2, 1fr);
         gap: .65rem;
     }
 
-    .empresas-summary-card {
+    .hierarquias-summary-card {
         padding: .85rem;
         border-radius: 1rem;
     }
 
-    .empresas-app-toolbar {
+    .hierarquias-app-toolbar {
         border-radius: 1.25rem !important;
     }
 
-    .empresas-app-search input {
+    .hierarquias-app-search input {
         font-size: 16px;
         min-height: 44px;
     }
 
-    .empresa-app-card {
+    .hierarquia-app-card {
         background: #fff;
         border: 1px solid #e9ecef;
         border-radius: 1.25rem;
@@ -96,30 +122,26 @@
         box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
     }
 
-    .empresa-app-card-main {
+    .hierarquia-card-top {
         display: flex;
         gap: .85rem;
         align-items: flex-start;
+        margin-bottom: .85rem;
     }
 
-    .empresa-app-icon {
+    .hierarquia-app-icon {
         width: 44px;
         height: 44px;
         min-width: 44px;
         border-radius: 15px;
-        background: linear-gradient(135deg, #6c757d, #343a40);
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    .empresa-app-content {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .empresa-app-content h5 {
+    .hierarquia-card-top h5 {
         font-size: 1rem;
         font-weight: 800;
         margin: 0;
@@ -127,34 +149,39 @@
         line-height: 1.25;
     }
 
-    .empresa-app-razao {
-        margin: .25rem 0 .75rem;
-        font-size: .8rem;
-        color: #6c757d;
-        line-height: 1.3;
-    }
-
-    .empresa-app-meta {
-        display: grid;
-        gap: .45rem;
+    .hierarquia-card-top p {
+        margin: .25rem 0 0;
         font-size: .82rem;
         color: #6c757d;
     }
 
-    .empresa-app-meta span {
-        display: flex;
-        align-items: flex-start;
-        gap: .4rem;
-        line-height: 1.3;
+    .hierarquia-flow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .65rem;
     }
 
-    .empresa-app-meta i {
-        width: 16px;
-        margin-top: .1rem;
+    .hierarquia-flow div {
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 1rem;
+        padding: .75rem;
+    }
+
+    .hierarquia-flow small {
+        display: block;
+        font-size: .72rem;
         color: #6c757d;
+        font-weight: 700;
+        margin-bottom: .2rem;
     }
 
-    .empresa-app-actions {
+    .hierarquia-flow strong {
+        font-size: .86rem;
+        color: #212529;
+    }
+
+    .hierarquia-app-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: .5rem;
@@ -163,14 +190,14 @@
         border-top: 1px solid #f1f3f5;
     }
 
-    .empresa-app-actions .btn {
+    .hierarquia-app-actions .btn {
         min-height: 42px;
         font-size: .86rem;
         font-weight: 600;
     }
 
-    .modal-body .col-6 {
-        width: 100%;
+    .hierarquia-modal-flow {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -179,15 +206,15 @@
         grid-template-columns: 1fr;
     }
 
-    .empresas-summary {
+    .hierarquias-summary {
         grid-template-columns: 1fr 1fr;
     }
 
-    .empresa-app-card-main {
-        gap: .7rem;
+    .hierarquia-flow {
+        grid-template-columns: 1fr;
     }
 
-    .empresa-app-actions {
+    .hierarquia-app-actions {
         grid-template-columns: 1fr;
     }
 

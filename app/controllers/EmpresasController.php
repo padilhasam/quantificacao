@@ -2,19 +2,24 @@
 
 class EmpresasController extends AuthController
 {
-    private $empresaModel;
+    private Empresa $empresaModel;
 
     public function __construct()
     {
         parent::__construct();
+
         require_once __DIR__ . '/../models/Empresa.php';
+
         $this->empresaModel = new Empresa();
     }
 
     public function index()
     {
         $empresas = $this->empresaModel->listar();
-        $this->view('empresas/index', ['empresas' => $empresas]);
+
+        $this->view('empresas/index', [
+            'empresas' => $empresas
+        ]);
     }
 
     public function criar()
@@ -29,42 +34,100 @@ class EmpresasController extends AuthController
             exit;
         }
 
-        // Processamento dos dados
         $cidade = null;
         $estado = null;
+
         if (!empty($_POST['cidade_uf'])) {
+
             $partes = explode('/', $_POST['cidade_uf']);
+
             $cidade = trim($partes[0]);
             $estado = isset($partes[1]) ? trim($partes[1]) : null;
         }
 
         $dados = [
-            'razao_social'        => trim($_POST['razao_social'] ?? ''),
-            'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
-            'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
-            'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
-            'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
-            'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
-            'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
-            'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
-            'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
-            'cidade'              => $cidade,
-            'estado'              => $estado,
-            'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
-            'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 1
+
+            'codigo' => 'EMP' . strtoupper(uniqid()),
+
+            'codigo_externo' => !empty($_POST['codigo_externo'])
+                ? trim($_POST['codigo_externo'])
+                : null,
+
+            'razao_social' => trim($_POST['razao_social'] ?? ''),
+
+            'nome_fantasia' => !empty($_POST['nome_fantasia'])
+                ? trim($_POST['nome_fantasia'])
+                : null,
+
+            'cnpj' => !empty($_POST['cnpj'])
+                ? trim($_POST['cnpj'])
+                : null,
+
+            'inscricao_estadual' => !empty($_POST['inscricao_estadual'])
+                ? trim($_POST['inscricao_estadual'])
+                : null,
+
+            'telefone' => !empty($_POST['telefone'])
+                ? trim($_POST['telefone'])
+                : null,
+
+            'email' => !empty($_POST['email'])
+                ? trim($_POST['email'])
+                : null,
+
+            'responsavel' => !empty($_POST['responsavel'])
+                ? trim($_POST['responsavel'])
+                : null,
+
+            'contato_responsavel' => !empty($_POST['contato_responsavel'])
+                ? trim($_POST['contato_responsavel'])
+                : null,
+
+            'endereco' => !empty($_POST['endereco'])
+                ? trim($_POST['endereco'])
+                : null,
+
+            'cidade' => $cidade,
+
+            'estado' => $estado,
+
+            'cep' => !empty($_POST['cep'])
+                ? trim($_POST['cep'])
+                : null,
+
+            'ativo' => isset($_POST['ativo'])
+                ? (int)$_POST['ativo']
+                : 1
         ];
 
         if (empty($dados['razao_social'])) {
+
             $_SESSION['erro'] = 'A Razão Social é obrigatória.';
+
             header('Location: ' . BASE_URL . '/empresas/criar');
             exit;
         }
 
-        if ($this->empresaModel->salvar($dados)) {
-            $_SESSION['sucesso'] = 'Empresa cadastrada com sucesso!';
-        } else {
-            $_SESSION['erro'] = 'Erro ao salvar empresa. Verifique os dados.';
+        if (!empty($dados['cnpj'])) {
+
+            $empresaExistente =
+                $this->empresaModel->buscarPorCnpj($dados['cnpj']);
+
+            if ($empresaExistente) {
+
+                $_SESSION['erro'] =
+                    'Já existe uma empresa cadastrada com este CNPJ.';
+
+                header('Location: ' . BASE_URL . '/empresas/criar');
+                exit;
+            }
         }
+
+        $empresaId = $this->empresaModel->salvar($dados);
+
+        $_SESSION['sucesso'] = $empresaId
+            ? 'Empresa cadastrada com sucesso!'
+            : 'Erro ao salvar empresa.';
 
         header('Location: ' . BASE_URL . '/empresas');
         exit;
@@ -72,58 +135,107 @@ class EmpresasController extends AuthController
 
     public function editar($id)
     {
-        $empresa = $this->empresaModel->buscarPorId($id);
+        $empresa = $this->empresaModel->buscarPorId((int)$id);
 
         if (!$empresa) {
+
             $_SESSION['erro'] = 'Empresa não encontrada.';
+
             header('Location: ' . BASE_URL . '/empresas');
             exit;
         }
 
-        if (!empty($empresa['cidade']) && !empty($empresa['estado'])) {
-            $empresa['cidade_uf'] = $empresa['cidade'] . ' / ' . $empresa['estado'];
-        } else {
-            $empresa['cidade_uf'] = $empresa['cidade'] ?? $empresa['estado'] ?? '';
-        }
+        $empresa['cidade_uf'] =
+            (!empty($empresa['cidade']) && !empty($empresa['estado']))
+            ? $empresa['cidade'] . ' / ' . $empresa['estado']
+            : ($empresa['cidade'] ?? $empresa['estado'] ?? '');
 
-        $this->view('empresas/editar', ['empresa' => $empresa]);
+        $this->view('empresas/editar', [
+            'empresa' => $empresa
+        ]);
     }
 
     public function atualizar($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
             header('Location: ' . BASE_URL . '/empresas');
             exit;
         }
 
         $cidade = null;
         $estado = null;
+
         if (!empty($_POST['cidade_uf'])) {
+
             $partes = explode('/', $_POST['cidade_uf']);
+
             $cidade = trim($partes[0]);
             $estado = isset($partes[1]) ? trim($partes[1]) : null;
         }
 
         $dados = [
-            'razao_social'        => trim($_POST['razao_social'] ?? ''),
-            'nome_fantasia'       => !empty($_POST['nome_fantasia']) ? trim($_POST['nome_fantasia']) : null,
-            'cnpj'                => !empty($_POST['cnpj']) ? trim($_POST['cnpj']) : null,
-            'inscricao_estadual'  => !empty($_POST['inscricao_estadual']) ? trim($_POST['inscricao_estadual']) : null,
-            'telefone'            => !empty($_POST['telefone']) ? trim($_POST['telefone']) : null,
-            'email'               => !empty($_POST['email']) ? trim($_POST['email']) : null,
-            'responsavel'         => !empty($_POST['responsavel']) ? trim($_POST['responsavel']) : null,
-            'contato_responsavel' => !empty($_POST['contato_responsavel']) ? trim($_POST['contato_responsavel']) : null,
-            'endereco'            => !empty($_POST['endereco']) ? trim($_POST['endereco']) : null,
-            'cidade'              => $cidade,
-            'estado'              => $estado,
-            'cep'                 => !empty($_POST['cep']) ? trim($_POST['cep']) : null,
-            'ativo'               => isset($_POST['ativo']) ? (int)$_POST['ativo'] : 0
+
+            'codigo_externo' => !empty($_POST['codigo_externo'])
+                ? trim($_POST['codigo_externo'])
+                : null,
+
+            'razao_social' => trim($_POST['razao_social'] ?? ''),
+
+            'nome_fantasia' => !empty($_POST['nome_fantasia'])
+                ? trim($_POST['nome_fantasia'])
+                : null,
+
+            'cnpj' => !empty($_POST['cnpj'])
+                ? trim($_POST['cnpj'])
+                : null,
+
+            'inscricao_estadual' => !empty($_POST['inscricao_estadual'])
+                ? trim($_POST['inscricao_estadual'])
+                : null,
+
+            'telefone' => !empty($_POST['telefone'])
+                ? trim($_POST['telefone'])
+                : null,
+
+            'email' => !empty($_POST['email'])
+                ? trim($_POST['email'])
+                : null,
+
+            'responsavel' => !empty($_POST['responsavel'])
+                ? trim($_POST['responsavel'])
+                : null,
+
+            'contato_responsavel' => !empty($_POST['contato_responsavel'])
+                ? trim($_POST['contato_responsavel'])
+                : null,
+
+            'endereco' => !empty($_POST['endereco'])
+                ? trim($_POST['endereco'])
+                : null,
+
+            'cidade' => $cidade,
+
+            'estado' => $estado,
+
+            'cep' => !empty($_POST['cep'])
+                ? trim($_POST['cep'])
+                : null,
+
+            'ativo' => isset($_POST['ativo'])
+                ? (int)$_POST['ativo']
+                : 0
         ];
 
-        if ($this->empresaModel->atualizar($id, $dados)) {
-            $_SESSION['sucesso'] = 'Empresa atualizada com sucesso!';
+        if ($this->empresaModel->atualizar((int)$id, $dados)) {
+
+            $_SESSION['sucesso'] =
+                'Empresa atualizada com sucesso!';
+
         } else {
-            $_SESSION['erro'] = 'Erro ao atualizar empresa.';
+
+            $_SESSION['erro'] =
+                'Erro ao atualizar empresa.';
         }
 
         header('Location: ' . BASE_URL . '/empresas');
@@ -132,12 +244,17 @@ class EmpresasController extends AuthController
 
     public function excluir($id)
     {
-        if ($this->empresaModel->excluir($id)) {
-            $_SESSION['sucesso'] = 'Empresa excluída com sucesso!';
+        if ($this->empresaModel->desativar((int)$id)) {
+
+            $_SESSION['sucesso'] =
+                'Empresa desativada com sucesso!';
+
         } else {
-            $_SESSION['erro'] = 'Não foi possível excluir a empresa.';
+
+            $_SESSION['erro'] =
+                'Não foi possível desativar a empresa.';
         }
-        
+
         header('Location: ' . BASE_URL . '/empresas');
         exit;
     }

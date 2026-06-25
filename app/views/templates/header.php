@@ -26,12 +26,14 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-    <!-- CSS GLOBAL -->
+    <!-- CSS BASE / GLOBAL -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css">
-
-    <!-- CSS HEADER / FOOTER -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/footer.css">
+
+    <!-- CSS COMPONENTES / RESPONSIVO -->
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/components.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/responsive.css">
 
     <!-- CSS POR PÁGINA -->
     <?php if (!empty($css)) : ?>
@@ -248,11 +250,11 @@
                                         </li>
 
                                         <li>
-                                            <a href="<?= BASE_URL ?>/importacoes/hierarquia"
-                                            class="nav-link <?= $rotaAtual === 'importacoes/hierarquia' ? 'active' : '' ?>">
+                                            <a href="<?= BASE_URL ?>/hierarquias"
+                                            class="nav-link <?= $rotaAtual === 'hierarquias' ? 'active' : '' ?>">
                                                 
                                                 <i class="fas fa-file-csv me-2"></i>
-                                                Importar Hierarquia CSV
+                                                Hierarquia
                                             </a>
                                         </li>
 

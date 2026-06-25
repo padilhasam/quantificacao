@@ -1,55 +1,155 @@
 <?php
 
-class Setor extends Model {
+class Setor extends Model
+{
+    public function listarTudo()
+    {
+        $sql = "
+            SELECT *
+            FROM setores
+            ORDER BY nome ASC
+        ";
 
-    public function listarTudo() {
-        $sql = "SELECT s.*, u.nome AS unidade_nome, e.nome_fantasia AS empresa_nome 
-                FROM setores s
-                INNER JOIN unidades u ON s.unidade_id = u.id
-                INNER JOIN empresas e ON u.empresa_id = e.id
-                ORDER BY s.nome ASC";
         $stmt = $this->db->query($sql);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorId($id) {
-        $sql = "SELECT * FROM setores WHERE id = :id";
+    public function listarAtivos()
+    {
+        $sql = "
+            SELECT *
+            FROM setores
+            WHERE ativo = 1
+            ORDER BY nome ASC
+        ";
+
+        $stmt = $this->db->query($sql);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId(int $id)
+    {
+        $sql = "
+            SELECT *
+            FROM setores
+            WHERE id = :id
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
+
+        $stmt->execute([
+            ':id' => $id
+        ]);
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorUnidade($unidade_id) {
-        $sql = "SELECT * FROM setores WHERE unidade_id = :unidade_id ORDER BY nome ASC";
+    public function buscarPorCodigo(string $codigo)
+    {
+        $sql = "
+            SELECT *
+            FROM setores
+            WHERE codigo = :codigo
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':unidade_id' => $unidade_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt->execute([
+            ':codigo' => $codigo
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function salvar($dados) {
-        $sql = "INSERT INTO setores (unidade_id, nome, descricao) VALUES (:unidade_id, :nome, :descricao)";
+    public function buscarPorNome(string $nome)
+    {
+        $sql = "
+            SELECT *
+            FROM setores
+            WHERE nome = :nome
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':nome' => $nome
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function salvar(array $dados)
+    {
+        $sql = "
+            INSERT INTO setores (
+                codigo,
+                codigo_externo,
+                nome,
+                descricao,
+                ativo
+            ) VALUES (
+                :codigo,
+                :codigo_externo,
+                :nome,
+                :descricao,
+                :ativo
+            )
+        ";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':codigo'          => $dados['codigo'] ?? null,
+            ':codigo_externo' => $dados['codigo_externo'] ?? null,
+            ':nome'           => $dados['nome'],
+            ':descricao'      => $dados['descricao'] ?? null,
+            ':ativo'          => $dados['ativo'] ?? 1
+        ]);
+
+        return $this->db->lastInsertId();
+    }
+
+    public function atualizar(int $id, array $dados)
+    {
+        $sql = "
+            UPDATE setores SET
+                codigo = :codigo,
+                codigo_externo = :codigo_externo,
+                nome = :nome,
+                descricao = :descricao,
+                ativo = :ativo
+            WHERE id = :id
+        ";
+
+        $stmt = $this->db->prepare($sql);
+
         return $stmt->execute([
-            ':unidade_id' => $dados['unidade_id'],
-            ':nome'       => $dados['nome'],
-            ':descricao'  => $dados['descricao'] ?? null
+            ':id'             => $id,
+            ':codigo'         => $dados['codigo'] ?? null,
+            ':codigo_externo' => $dados['codigo_externo'] ?? null,
+            ':nome'           => $dados['nome'],
+            ':descricao'      => $dados['descricao'] ?? null,
+            ':ativo'          => $dados['ativo'] ?? 1
         ]);
     }
 
-    public function atualizar($id, $dados) {
-        $sql = "UPDATE setores SET unidade_id = :unidade_id, nome = :nome, descricao = :descricao WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
-            ':id'         => $id,
-            ':unidade_id' => $dados['unidade_id'],
-            ':nome'       => $dados['nome'],
-            ':descricao'  => $dados['descricao'] ?? null
-        ]);
-    }
+    public function desativar(int $id)
+    {
+        $sql = "
+            UPDATE setores
+            SET ativo = 0
+            WHERE id = :id
+        ";
 
-    public function deletar($id) {
-        $sql = "DELETE FROM setores WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':id' => $id]);
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
     }
 }

@@ -41,8 +41,7 @@
         <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
-                    <span class="icon-container d-flex align-items-center justify-content-center"
-                        style="width: 38px; height: 38px; background: linear-gradient(135deg, #6c757d, #343a40); border-radius: 8px; box-shadow: 0 2px 6px rgba(108, 117, 125, 0.25);">
+                    <span class="icon-container d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);">
                         <i class="fas fa-sitemap text-white" style="font-size: 1.10rem;"></i>
                     </span>
                     Unidades

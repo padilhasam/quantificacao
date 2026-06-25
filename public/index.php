@@ -115,6 +115,21 @@ $routes = [
     '/cargos/excluir/{id}'    => ['controller' => 'CargosController', 'method' => 'excluir'],
 
     // =========================
+    // HIERARQUIAS
+    // =========================
+    '/hierarquias'                    => ['controller' => 'HierarquiasController', 'method' => 'index'],
+    '/hierarquias/criar'              => ['controller' => 'HierarquiasController', 'method' => 'criar'],
+    '/hierarquias/salvar'             => ['controller' => 'HierarquiasController', 'method' => 'salvar'],
+    '/hierarquias/editar/{id}'        => ['controller' => 'HierarquiasController', 'method' => 'editar'],
+    '/hierarquias/atualizar/{id}'     => ['controller' => 'HierarquiasController', 'method' => 'atualizar'],
+    '/hierarquias/excluir/{id}'       => ['controller' => 'HierarquiasController', 'method' => 'excluir'],
+    '/hierarquias/estrutura/{id}' => ['controller' => 'HierarquiasController', 'method' => 'estrutura'],
+
+    // Importação de hierarquias via Excel/CSV
+    '/hierarquias/importar'           => ['controller' => 'HierarquiasController', 'method' => 'importar'],
+    '/hierarquias/processarImportacao'=> ['controller' => 'HierarquiasController', 'method' => 'processarImportacao'],
+
+    // =========================
     // GESTÃO TÉCNICA
     // =========================
     '/visitas'                    => ['controller' => 'VisitasController', 'method' => 'index'],

@@ -1,75 +1,199 @@
 <?php
 
-class Unidade extends Model {
+class Unidade extends Model
+{
+    public function listarTudo()
+    {
+        $sql = "
+            SELECT *
+            FROM unidades
+            ORDER BY nome ASC
+        ";
 
-    public function listarTudo() {
-        // Traz as unidades com o nome fantasia ou razão social da empresa vinculada
-        $sql = "SELECT u.*, e.razao_social, e.nome_fantasia 
-                FROM unidades u 
-                INNER JOIN empresas e ON u.empresa_id = e.id 
-                ORDER BY u.nome ASC";
         $stmt = $this->db->query($sql);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorId($id) {
-        $sql = "SELECT * FROM unidades WHERE id = :id";
+    public function listarAtivas()
+    {
+        $sql = "
+            SELECT *
+            FROM unidades
+            WHERE ativo = 1
+            ORDER BY nome ASC
+        ";
+
+        $stmt = $this->db->query($sql);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId(int $id)
+    {
+        $sql = "
+            SELECT *
+            FROM unidades
+            WHERE id = :id
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([
+            ':id' => $id
+        ]);
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorEmpresa($empresa_id) {
-        $sql = "SELECT * FROM unidades WHERE empresa_id = :empresa_id AND ativo = 1 ORDER BY nome ASC";
+    public function buscarPorCodigo(string $codigo)
+    {
+        $sql = "
+            SELECT *
+            FROM unidades
+            WHERE codigo = :codigo
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':empresa_id' => $empresa_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt->execute([
+            ':codigo' => $codigo
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function salvar($dados) {
-        $sql = "INSERT INTO unidades (empresa_id, nome, cnpj, endereco, cidade, estado, telefone, ativo) 
-                VALUES (:empresa_id, :nome, :cnpj, :endereco, :cidade, :estado, :telefone, :ativo)";
+    public function buscarPorCnpj(string $cnpj)
+    {
+        $sql = "
+            SELECT *
+            FROM unidades
+            WHERE cnpj = :cnpj
+            LIMIT 1
+        ";
+
         $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':cnpj' => $cnpj
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function salvar(array $dados)
+    {
+        $sql = "
+            INSERT INTO unidades (
+                codigo,
+                codigo_externo,
+                nome,
+                cnpj,
+                endereco,
+                numero,
+                bairro,
+                cidade,
+                estado,
+                cep,
+                telefone,
+                email,
+                responsavel,
+                ativo
+            ) VALUES (
+                :codigo,
+                :codigo_externo,
+                :nome,
+                :cnpj,
+                :endereco,
+                :numero,
+                :bairro,
+                :cidade,
+                :estado,
+                :cep,
+                :telefone,
+                :email,
+                :responsavel,
+                :ativo
+            )
+        ";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute([
+            ':codigo'          => $dados['codigo'] ?? null,
+            ':codigo_externo' => $dados['codigo_externo'] ?? null,
+            ':nome'           => $dados['nome'],
+            ':cnpj'           => $dados['cnpj'] ?? null,
+            ':endereco'       => $dados['endereco'] ?? null,
+            ':numero'         => $dados['numero'] ?? null,
+            ':bairro'         => $dados['bairro'] ?? null,
+            ':cidade'         => $dados['cidade'] ?? null,
+            ':estado'         => $dados['estado'] ?? null,
+            ':cep'            => $dados['cep'] ?? null,
+            ':telefone'       => $dados['telefone'] ?? null,
+            ':email'          => $dados['email'] ?? null,
+            ':responsavel'    => $dados['responsavel'] ?? null,
+            ':ativo'          => $dados['ativo'] ?? 1
+        ]);
+
+        return $this->db->lastInsertId();
+    }
+
+    public function atualizar(int $id, array $dados)
+    {
+        $sql = "
+            UPDATE unidades SET
+                codigo = :codigo,
+                codigo_externo = :codigo_externo,
+                nome = :nome,
+                cnpj = :cnpj,
+                endereco = :endereco,
+                numero = :numero,
+                bairro = :bairro,
+                cidade = :cidade,
+                estado = :estado,
+                cep = :cep,
+                telefone = :telefone,
+                email = :email,
+                responsavel = :responsavel,
+                ativo = :ativo
+            WHERE id = :id
+        ";
+
+        $stmt = $this->db->prepare($sql);
+
         return $stmt->execute([
-            ':empresa_id' => $dados['empresa_id'],
-            ':nome'       => $dados['nome'],
-            ':cnpj'       => $dados['cnpj'] ?? null,
-            ':endereco'   => $dados['endereco'] ?? null,
-            ':cidade'     => $dados['cidade'] ?? null,
-            ':estado'     => $dados['estado'] ?? null,
-            ':telefone'   => $dados['telefone'] ?? null,
-            ':ativo'      => $dados['ativo'] ?? 1
+            ':id'             => $id,
+            ':codigo'         => $dados['codigo'] ?? null,
+            ':codigo_externo' => $dados['codigo_externo'] ?? null,
+            ':nome'           => $dados['nome'],
+            ':cnpj'           => $dados['cnpj'] ?? null,
+            ':endereco'       => $dados['endereco'] ?? null,
+            ':numero'         => $dados['numero'] ?? null,
+            ':bairro'         => $dados['bairro'] ?? null,
+            ':cidade'         => $dados['cidade'] ?? null,
+            ':estado'         => $dados['estado'] ?? null,
+            ':cep'            => $dados['cep'] ?? null,
+            ':telefone'       => $dados['telefone'] ?? null,
+            ':email'          => $dados['email'] ?? null,
+            ':responsavel'    => $dados['responsavel'] ?? null,
+            ':ativo'          => $dados['ativo'] ?? 1
         ]);
     }
 
-    public function atualizar($id, $dados) {
-        $sql = "UPDATE unidades SET 
-                    empresa_id = :empresa_id, 
-                    nome = :nome, 
-                    cnpj = :cnpj, 
-                    endereco = :endereco, 
-                    cidade = :cidade, 
-                    estado = :estado, 
-                    telefone = :telefone, 
-                    ativo = :ativo 
-                WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
-            ':id'         => $id,
-            ':empresa_id' => $dados['empresa_id'],
-            ':nome'       => $dados['nome'],
-            ':cnpj'       => $dados['cnpj'] ?? null,
-            ':endereco'   => $dados['endereco'] ?? null,
-            ':cidade'     => $dados['cidade'] ?? null,
-            ':estado'     => $dados['estado'] ?? null,
-            ':telefone'   => $dados['telefone'] ?? null,
-            ':ativo'      => $dados['ativo'] ?? 1
-        ]);
-    }
+    public function desativar(int $id)
+    {
+        $sql = "
+            UPDATE unidades
+            SET ativo = 0
+            WHERE id = :id
+        ";
 
-    public function deletar($id) {
-        $sql = "DELETE FROM unidades WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':id' => $id]);
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
     }
 }
