@@ -249,6 +249,13 @@ require_once dirname(__DIR__) . '/templates/header.php';
                                     <i class="fas fa-edit me-1"></i>
                                     Editar
                                 </a>
+
+                                <a href="<?= BASE_URL ?>/empresas/excluir/<?= $emp['id'] ?>"
+                                class="btn btn-outline-danger rounded-pill px-3"
+                                onclick="return confirm('Deseja realmente excluir esta empresa?')">
+                                    <i class="fas fa-trash me-1"></i>
+                                    Excluir
+                                </a>
                             </div>
                         </article>
                     <?php endforeach; ?>

@@ -31,9 +31,27 @@
                         </h6>
                         <div class="row g-3">
                             <div class="col-12">
-                                <label for="nome" class="form-label fw-semibold text-secondary small">Nome Completo *</label>
-                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="nome" name="nome" placeholder="Digite o nome completo" maxlength="100" required>
-                                <div class="invalid-feedback">O nome completo é obrigatório.</div>
+                                <label for="nome" class="form-label fw-semibold text-secondary small">
+                                    Nome Completo *
+                                </label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+
+                                    <input type="text"
+                                        class="form-control rounded-end-3 border-dark-subtle"
+                                        id="nome"
+                                        name="nome"
+                                        placeholder="Digite o nome completo"
+                                        maxlength="100"
+                                        required>
+
+                                    <div class="invalid-feedback">
+                                        O nome completo é obrigatório.
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,20 +90,53 @@
                         </h6>
                         <div class="row g-3 align-items-center">
                             <div class="col-12 col-md-4">
-                                <label for="tipo" class="form-label fw-semibold text-secondary small">Nível de Permissão *</label>
-                                <select class="form-select rounded-3 border-dark-subtle" name="tipo" id="tipo" required>
-                                    <option value="" disabled selected>Selecione...</option>
-                                    <option value="ADMIN">Administrador</option>
-                                    <option value="TECNICO">Técnico / Usuário Comum</option>
-                                    <option value="CLIENTE">Cliente</option>
-                                    <option value="VISUALIZADOR">Apenas Visualização</option>
-                                </select>
-                                <div class="invalid-feedback">Por favor, escolha a permissão de acesso.</div>
+                                <label for="tipo" class="form-label fw-semibold text-secondary small">
+                                    Nível de Permissão *
+                                </label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-user-shield"></i>
+                                    </span>
+
+                                    <select class="form-select rounded-end-3 border-dark-subtle"
+                                            name="tipo"
+                                            id="tipo"
+                                            required>
+
+                                        <option value="" disabled selected>
+                                            Selecione...
+                                        </option>
+
+                                        <option value="ADMIN">Administrador</option>
+                                        <option value="TECNICO">Técnico</option>
+                                        <option value="CLIENTE">Cliente</option>
+                                        <option value="VISUALIZADOR">Visualizador</option>
+
+                                    </select>
+
+                                    <div class="invalid-feedback">
+                                        Selecione uma permissão.
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-12 col-md-4">
-                                <label for="telefone" class="form-label fw-semibold text-secondary small">Telefone / Ramal</label>
-                                <input type="text" class="form-control rounded-3 border-dark-subtle" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                                <label for="telefone" class="form-label fw-semibold text-secondary small">
+                                    Telefone
+                                </label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+
+                                    <input type="text"
+                                        class="form-control rounded-end-3 border-dark-subtle"
+                                        id="telefone"
+                                        name="telefone"
+                                        placeholder="(41) 99999-9999">
+                                </div>
                             </div>
 
                             <div class="col-12 col-md-4 mt-md-4 pt-md-2">

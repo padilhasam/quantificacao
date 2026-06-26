@@ -34,21 +34,28 @@
                         </h6>
 
                         <div class="row g-3">
+
                             <div class="col-12 col-md-6">
                                 <label for="modelo" class="form-label fw-semibold text-secondary small">
                                     Modelo / Marca *
                                 </label>
 
-                                <input type="text"
-                                       class="form-control rounded-3 border-dark-subtle"
-                                       id="modelo"
-                                       name="modelo"
-                                       placeholder="Ex: Fiat Uno 1.0 / Toyota Hilux"
-                                       maxlength="120"
-                                       required>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-car"></i>
+                                    </span>
 
-                                <div class="invalid-feedback">
-                                    Informe o modelo ou marca do veículo.
+                                    <input type="text"
+                                           class="form-control rounded-end-3 border-dark-subtle"
+                                           id="modelo"
+                                           name="modelo"
+                                           placeholder="Ex: Fiat Uno 1.0 / Toyota Hilux"
+                                           maxlength="120"
+                                           required>
+
+                                    <div class="invalid-feedback">
+                                        Informe o modelo ou marca do veículo.
+                                    </div>
                                 </div>
                             </div>
 
@@ -81,13 +88,20 @@
                                     Cor
                                 </label>
 
-                                <input type="text"
-                                       class="form-control rounded-3 border-dark-subtle"
-                                       id="cor"
-                                       name="cor"
-                                       placeholder="Ex: Branco, Prata"
-                                       maxlength="50">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-palette"></i>
+                                    </span>
+
+                                    <input type="text"
+                                           class="form-control rounded-end-3 border-dark-subtle"
+                                           id="cor"
+                                           name="cor"
+                                           placeholder="Ex: Branco, Prata"
+                                           maxlength="50">
+                                </div>
                             </div>
+
                         </div>
                     </div>
 

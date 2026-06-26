@@ -1,7 +1,7 @@
-<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
-
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+<?php
+$css = 'unidades.css';
+require_once dirname(__DIR__) . '/templates/header.php';
+?>
 
 <main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
     <div class="container-fluid px-2 px-lg-4 mb-4">
@@ -38,133 +38,206 @@
             <?php endif; ?>
         </div>
 
-        <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <header class="page-header-unidades mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
-                    <span class="icon-container d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);">
-                        <i class="fas fa-sitemap text-white" style="font-size: 1.10rem;"></i>
+                    <span class="icon-container d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px;">
+                        <i class="fas fa-map-location-dot text-white" style="font-size: 1.10rem;"></i>
                     </span>
+
                     Unidades
+
                     <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 fw-bold fs-6 border border-primary-subtle">
                         <?= count($unidades ?? []) ?>
                     </span>
                 </h3>
-                <small class="text-muted d-block mt-1">Gestão das unidades, filiais e plantas operacionais vinculadas às empresas.</small>
+
+                <small class="text-muted d-block mt-1">
+                    Gestão das unidades, filiais e plantas operacionais vinculadas às empresas.
+                </small>
             </div>
 
-            <div class="d-flex gap-2 flex-wrap">
+            <div class="page-header-actions d-flex gap-2 flex-wrap">
                 <a href="<?= BASE_URL ?>/dashboard" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
                     <i class="fas fa-arrow-left me-1"></i> Dashboard
                 </a>
+
                 <a href="<?= BASE_URL ?>/unidades/criar" class="btn btn-primary btn-sm rounded-pill px-3 fw-medium shadow-sm">
                     <i class="fas fa-plus-circle me-1"></i> Nova Unidade
                 </a>
             </div>
         </header>
 
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-body p-4">
+        <?php if (!empty($unidades)): ?>
 
-                <?php if (!empty($unidades)): ?>
-                    <div class="table-responsive">
-                        <table id="tabelaUnidades" class="table table-hover align-middle nowrap w-100">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px;" class="text-secondary small fw-bold">#</th>
-                                    <th class="text-secondary small fw-bold">Unidade</th>
-                                    <th class="text-secondary small fw-bold">Empresa</th>
-                                    <th class="text-secondary small fw-bold">Cidade / UF</th>
-                                    <th class="text-secondary small fw-bold">Status</th>
-                                    <th class="text-center text-secondary small fw-bold" style="width:140px;">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($unidades as $u): ?>
-                                    <tr>
-                                        <td class="text-muted fw-semibold">#<?= $u['id'] ?></td>
-                                        <td class="fw-semibold text-dark"><?= htmlspecialchars($u['nome']) ?></td>
-                                        <td class="text-muted"><?= htmlspecialchars($u['nome_fantasia'] ?? $u['razao_social'] ?? '-') ?></td>
-                                        <td><?= htmlspecialchars($u['cidade'] ?? '-') ?><?= !empty($u['estado']) ? ' / ' . htmlspecialchars($u['estado']) : '' ?></td>
-                                        <td>
-                                            <?php if ((int)($u['ativo'] ?? 0) === 1): ?>
-                                                <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill border border-success-subtle fw-semibold">Ativo</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill border border-danger-subtle fw-semibold">Inativo</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#modalUnidade<?= $u['id'] ?>" 
-                                                        title="Visualizar Detalhes">
-                                                    <i class="fas fa-circle-info"></i>
-                                                </button>
-                                                <a href="<?= BASE_URL ?>/unidades/editar/<?= $u['id'] ?>" 
-                                                   class="btn btn-sm btn-outline-primary rounded-pill px-3" 
-                                                   title="Editar Registro">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="<?= BASE_URL ?>/unidades/excluir/<?= $u['id'] ?>" 
-                                                   class="btn btn-sm btn-outline-danger rounded-pill px-3" 
-                                                   onclick="return confirm('Deseja realmente excluir esta unidade?')" 
-                                                   title="Excluir Registro">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+            <section class="unidades-app-view">
+
+                <div class="unidades-app-toolbar bg-white border rounded-4 shadow-sm p-3 mb-3">
+                    <div class="input-group unidades-app-search">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+
+                        <input
+                            type="text"
+                            id="buscarUnidadeMobile"
+                            class="form-control border-start-0"
+                            placeholder="Buscar unidade, empresa, cidade ou UF...">
                     </div>
-                <?php else: ?>
+
+                    <div class="d-flex align-items-center justify-content-between mt-3 gap-2">
+                        <small class="text-muted">
+                            <span id="contadorUnidadesMobile"><?= count($unidades ?? []) ?></span>
+                            unidade(s) exibida(s)
+                        </small>
+                    </div>
+                </div>
+
+                <div class="unidades-app-list">
+                    <?php foreach ($unidades as $u): ?>
+                        <?php
+                        $empresaNome = $u['nome_fantasia'] ?? $u['razao_social'] ?? 'Empresa não informada';
+                        $textoBusca = strtolower(
+                            ($u['nome'] ?? '') . ' ' .
+                            ($empresaNome ?? '') . ' ' .
+                            ($u['cidade'] ?? '') . ' ' .
+                            ($u['estado'] ?? '') . ' ' .
+                            ($u['cnpj'] ?? '') . ' ' .
+                            ($u['telefone'] ?? '')
+                        );
+                        ?>
+
+                        <article class="unidade-app-card" data-search="<?= htmlspecialchars($textoBusca) ?>">
+
+                            <div class="unidade-app-card-main">
+                                <div class="unidade-app-icon">
+                                    <i class="fas fa-map-location-dot"></i>
+                                </div>
+
+                                <div class="unidade-app-content">
+                                    <h5><?= htmlspecialchars($u['nome'] ?? 'Unidade sem nome') ?></h5>
+
+                                    <p class="unidade-app-empresa">
+                                        <?= htmlspecialchars($empresaNome) ?>
+                                    </p>
+
+                                    <div class="unidade-app-meta">
+                                        <span>
+                                            <i class="fas fa-location-dot"></i>
+                                            <?= !empty($u['cidade']) ? htmlspecialchars($u['cidade']) : 'Cidade não informada' ?>
+                                            <?= !empty($u['estado']) ? ' / ' . htmlspecialchars($u['estado']) : '' ?>
+                                        </span>
+
+                                        <span>
+                                            <i class="fas fa-id-card"></i>
+                                            <?= !empty($u['cnpj']) ? htmlspecialchars($u['cnpj']) : 'CNPJ não informado' ?>
+                                        </span>
+
+                                        <span>
+                                            <i class="fas fa-phone"></i>
+                                            <?= !empty($u['telefone']) ? htmlspecialchars($u['telefone']) : 'Telefone não informado' ?>
+                                        </span>
+
+                                        <span>
+                                            <i class="<?= ((int)($u['ativo'] ?? 0) === 1) ? 'fas fa-circle-check text-success' : 'fas fa-circle-xmark text-danger' ?>"></i>
+                                            <?= ((int)($u['ativo'] ?? 0) === 1) ? 'Ativa' : 'Inativa' ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="unidade-app-actions">
+                                <button
+                                    class="btn btn-outline-secondary rounded-pill px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalUnidade<?= $u['id'] ?>">
+                                    <i class="fas fa-circle-info me-1"></i>
+                                    Ficha
+                                </button>
+
+                                <a href="<?= BASE_URL ?>/unidades/editar/<?= $u['id'] ?>" class="btn btn-outline-primary rounded-pill px-3">
+                                    <i class="fas fa-edit me-1"></i>
+                                    Editar
+                                </a>
+
+                                <a href="<?= BASE_URL ?>/unidades/excluir/<?= $u['id'] ?>"
+                                   class="btn btn-outline-danger rounded-pill px-3"
+                                   onclick="return confirm('Deseja realmente excluir esta unidade?')">
+                                    <i class="fas fa-trash me-1"></i>
+                                    Excluir
+                                </a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+
+                <div id="semResultadoUnidadesMobile" class="text-center py-5 text-muted d-none">
+                    <i class="fas fa-magnifying-glass fa-2x mb-3 opacity-50"></i>
+                    <h6 class="fw-bold text-dark">Nenhuma unidade encontrada</h6>
+                    <p class="small mb-0">Tente buscar por unidade, empresa, cidade ou UF.</p>
+                </div>
+            </section>
+
+        <?php else: ?>
+
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
                     <div class="text-center py-5 text-muted">
-                        <div class="icon-container d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3 bg-light text-muted opacity-70" style="width: 70px; height: 70px;">
-                            <i class="fas fa-sitemap fa-2x"></i>
+                        <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3 bg-light text-muted opacity-70" style="width: 70px; height: 70px;">
+                            <i class="fas fa-map-location-dot fa-2x"></i>
                         </div>
+
                         <h5 class="fw-bold text-dark mb-1">Nenhuma unidade cadastrada</h5>
-                        <p class="small text-muted mb-3">Clique no botão abaixo para adicionar a primeira unidade.</p>
+
+                        <p class="small text-muted mb-3">
+                            Clique no botão abaixo para adicionar a primeira unidade.
+                        </p>
+
                         <a href="<?= BASE_URL ?>/unidades/criar" class="btn btn-primary btn-sm rounded-pill px-4 fw-medium shadow-sm">
-                            <i class="fas fa-plus-circle me-1"></i> Cadastrar Unidade
+                            <i class="fas fa-plus-circle me-1"></i>
+                            Cadastrar Unidade
                         </a>
                     </div>
-                <?php endif; ?>
-
+                </div>
             </div>
-        </div>
+
+        <?php endif; ?>
     </div>
 
     <?php if (!empty($unidades)): foreach ($unidades as $u): ?>
         <div class="modal fade" id="modalUnidade<?= $u['id'] ?>" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                 <div class="modal-content border-0 shadow-lg rounded-3">
-                    <!-- Cabeçalho -->
+
                     <div class="modal-header bg-light border-bottom py-3">
                         <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
-                            <i class="fas fa-building border p-2 bg-light rounded-3 text-secondary"></i> Ficha da Unidade #<?= $u['id'] ?>
+                            <i class="fas fa-map-location-dot border p-2 bg-light rounded-3 text-secondary"></i>
+                            Ficha da Unidade #<?= $u['id'] ?>
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    
-                    <!-- Corpo -->
+
                     <div class="modal-body p-4">
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Nome da Unidade</label>
-                            <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($u['nome']) ?></span>
+                            <span class="text-dark fw-bold fs-5"><?= htmlspecialchars($u['nome'] ?? '-') ?></span>
                         </div>
-                        
+
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-secondary small fw-semibold d-block">Empresa Vinculada</label>
-                            <span class="text-dark fw-medium"><?= htmlspecialchars($u['nome_fantasia'] ?? $u['razao_social'] ?? '-') ?></span>
+                            <span class="text-dark fw-medium">
+                                <?= htmlspecialchars($u['nome_fantasia'] ?? $u['razao_social'] ?? '-') ?>
+                            </span>
                         </div>
 
                         <div class="row g-3 mb-3">
-                            <div class="col-6">
+                            <div class="col-12 col-md-6">
                                 <label class="text-secondary small fw-semibold d-block">Cidade</label>
                                 <span class="text-dark fw-medium"><?= htmlspecialchars($u['cidade'] ?? '-') ?></span>
                             </div>
-                            <div class="col-6">
+
+                            <div class="col-12 col-md-6">
                                 <label class="text-secondary small fw-semibold d-block">Estado</label>
                                 <span class="text-dark fw-medium"><?= htmlspecialchars($u['estado'] ?? '-') ?></span>
                             </div>
@@ -172,49 +245,65 @@
 
                         <div class="mb-3 border-bottom pb-3">
                             <label class="text-secondary small fw-semibold d-block mb-1">Status Operacional</label>
-                            <?= ((int)($u['ativo'] ?? 0) === 1) 
-                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Ativa</span>' 
-                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Inativa</span>' 
+                            <?= ((int)($u['ativo'] ?? 0) === 1)
+                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Ativa</span>'
+                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-semibold">Unidade Inativa</span>'
                             ?>
                         </div>
                     </div>
 
-                    <!-- Rodapé -->
                     <div class="modal-footer bg-light py-3">
-                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fechar</button>
+                        <a href="<?= BASE_URL ?>/unidades/editar/<?= $u['id'] ?>" class="btn btn-primary rounded-pill px-4">
+                            <i class="fas fa-edit me-1"></i>
+                            Editar
+                        </a>
+
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                            Fechar
+                        </button>
                     </div>
+
                 </div>
             </div>
         </div>
     <?php endforeach; endif; ?>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-
 <script>
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
     ['toastSucesso', 'toastErro'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            new bootstrap.Toast(el, { delay: id === 'toastSucesso' ? 4000 : 5000 }).show();
+            new bootstrap.Toast(el, {
+                delay: id === 'toastSucesso' ? 4000 : 5000
+            }).show();
         }
     });
 
-    $('#tabelaUnidades').DataTable({
-        responsive: true,
-        autoWidth: false,
-        pageLength: 10,
-        lengthMenu: [5, 10, 25, 50, 100],
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' },
-        columnDefs: [{ orderable: false, targets: 5 }],
-        drawCallback: function() {
-            $('.dataTables_paginate .paginate_button').addClass('shadow-sm');
-        }
-    });
+    const inputMobile = document.getElementById('buscarUnidadeMobile');
+    const cardsMobile = document.querySelectorAll('.unidade-app-card');
+    const contadorMobile = document.getElementById('contadorUnidadesMobile');
+    const semResultado = document.getElementById('semResultadoUnidadesMobile');
+
+    if (inputMobile && cardsMobile.length) {
+        inputMobile.addEventListener('input', function () {
+            const termo = this.value.toLowerCase().trim();
+            let totalVisiveis = 0;
+
+            cardsMobile.forEach(card => {
+                const texto = card.dataset.search || '';
+                const visivel = texto.includes(termo);
+
+                card.classList.toggle('d-none', !visivel);
+
+                if (visivel) totalVisiveis++;
+            });
+
+            if (contadorMobile) contadorMobile.textContent = totalVisiveis;
+
+            if (semResultado) semResultado.classList.toggle('d-none', totalVisiveis > 0);
+        });
+    }
 });
 </script>
 
