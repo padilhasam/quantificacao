@@ -26,13 +26,13 @@
             <div>
                 <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
                     <span class="icon-container d-flex align-items-center justify-content-center"
-                        style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #0a58ca); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.2);">
+                        style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #0a58ca); border-radius: 8px;">
                         <i class="fas fa-building text-white" style="font-size: 1.10rem;"></i>
                     </span>
                     Cadastrar Empresa
                 </h3>
                 <small class="text-muted d-block mt-1">
-                    Insira os dados cadastrais, localização e contatos da nova empresa cliente/parceira
+                    Insira os dados cadastrais, localização, contatos e informações técnicas da empresa.
                 </small>
             </div>
 
@@ -52,7 +52,27 @@
                         </h6>
 
                         <div class="row g-3">
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-3">
+                                <label for="codigo" class="form-label fw-semibold text-secondary small">Código Interno</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-hashtag"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase" name="codigo" id="codigo" placeholder="EMP-000001" maxlength="50">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <label for="codigo_externo" class="form-label fw-semibold text-secondary small">Código Externo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-link"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase" name="codigo_externo" id="codigo_externo" placeholder="SOC / ERP / Cliente" maxlength="80">
+                                </div>
+                            </div><br>
+
+                            <div class="col-12 col-md-12">
                                 <label for="razao_social" class="form-label fw-semibold text-secondary small">Razão Social *</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
@@ -63,7 +83,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-12">
                                 <label for="nome_fantasia" class="form-label fw-semibold text-secondary small">Nome Fantasia</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
@@ -83,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-4">
                                 <label for="inscricao_estadual" class="form-label fw-semibold text-secondary small">Inscrição Estadual</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
@@ -97,10 +117,94 @@
 
                     <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
                         <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="fas fa-envelope-open-text"></i> Canais de Comunicação
+                            <i class="fas fa-chart-pie"></i> Características da Empresa
                         </h6>
 
                         <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label for="grupo_economico" class="form-label fw-semibold text-secondary small">Grupo Econômico</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-layer-group"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="grupo_economico" id="grupo_economico" placeholder="Ex: Grupo Santiago" maxlength="150">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="segmento" class="form-label fw-semibold text-secondary small">Segmento / Ramo de Atividade</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-industry"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="segmento" id="segmento" placeholder="Ex: Indústria, Comércio, Serviços" maxlength="150">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="cnae" class="form-label fw-semibold text-secondary small">CNAE Principal</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-barcode"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="cnae" id="cnae" placeholder="Ex: 86.30-5-03" maxlength="30">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="grau_risco" class="form-label fw-semibold text-secondary small">Grau de Risco</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-triangle-exclamation"></i>
+                                    </span>
+                                    <select class="form-select rounded-end-3 border-dark-subtle" name="grau_risco" id="grau_risco">
+                                        <option value="">Selecione...</option>
+                                        <option value="1">Grau 1</option>
+                                        <option value="2">Grau 2</option>
+                                        <option value="3">Grau 3</option>
+                                        <option value="4">Grau 4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="quantidade_funcionarios" class="form-label fw-semibold text-secondary small">Quantidade de Funcionários</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-users"></i>
+                                    </span>
+                                    <input type="number" class="form-control rounded-end-3 border-dark-subtle" name="quantidade_funcionarios" id="quantidade_funcionarios" min="0" placeholder="Ex: 120">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-envelope-open-text"></i> Contatos
+                        </h6>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="responsavel" class="form-label fw-semibold text-secondary small">Responsável Principal / Gestor</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-user-tie"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="responsavel" id="responsavel" maxlength="150">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="cargo_responsavel" class="form-label fw-semibold text-secondary small">Cargo do Responsável</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-briefcase"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="cargo_responsavel" id="cargo_responsavel" placeholder="Ex: Gerente de RH / Técnico SST" maxlength="150">
+                                </div>
+                            </div>
+
                             <div class="col-12 col-md-4">
                                 <label for="telefone" class="form-label fw-semibold text-secondary small">Telefone Comercial</label>
                                 <div class="input-group">
@@ -111,7 +215,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-8">
+                            <div class="col-12 col-md-4">
+                                <label for="contato_responsavel" class="form-label fw-semibold text-secondary small">Celular / WhatsApp</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-mobile-screen-button"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="contato_responsavel" id="contato_responsavel" placeholder="(00) 00000-0000">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
                                 <label for="email" class="form-label fw-semibold text-secondary small">E-mail Institucional</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
@@ -121,35 +235,15 @@
                                     <div class="invalid-feedback">Insira um e-mail válido.</div>
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="responsavel" class="form-label fw-semibold text-secondary small">Nome do Responsável / Gestor</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-user-tie"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="responsavel" id="responsavel" maxlength="150">
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="contato_responsavel" class="form-label fw-semibold text-secondary small">Contato do Responsável</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-mobile-screen-button"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="contato_responsavel" id="contato_responsavel" placeholder="(00) 00000-0000">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
                         <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="fas fa-map-marked-alt"></i> Endereço e Status Cadastral
+                            <i class="fas fa-map-marked-alt"></i> Endereço
                         </h6>
 
-                        <div class="row g-3 align-items-center">
+                        <div class="row g-3">
                             <div class="col-12 col-md-3">
                                 <label for="cep" class="form-label fw-semibold text-secondary small">CEP</label>
                                 <div class="input-group">
@@ -161,16 +255,46 @@
                             </div>
 
                             <div class="col-12 col-md-5">
-                                <label for="endereco" class="form-label fw-semibold text-secondary small">Logradouro</label>
+                                <label for="logradouro" class="form-label fw-semibold text-secondary small">Logradouro</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
                                         <i class="fas fa-road"></i>
                                     </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="endereco" id="endereco" placeholder="Ex: Rua das Flores, 123 - Centro">
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="logradouro" id="logradouro" placeholder="Rua, Avenida, Travessa">
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-3">
+                            <div class="col-12 col-md-2">
+                                <label for="numero" class="form-label fw-semibold text-secondary small">Número</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-location-crosshairs"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="numero" id="numero" maxlength="20">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-2">
+                                <label for="complemento" class="form-label fw-semibold text-secondary small">Complemento</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="complemento" id="complemento" maxlength="100">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="bairro" class="form-label fw-semibold text-secondary small">Bairro</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-map"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="bairro" id="bairro">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-5">
                                 <label for="cidade" class="form-label fw-semibold text-secondary small">Cidade</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
@@ -180,21 +304,96 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-1">
+                            <div class="col-12 col-md-3">
                                 <label for="estado" class="form-label fw-semibold text-secondary small">UF</label>
-                                <input type="text" class="form-control rounded-3 border-dark-subtle text-uppercase" name="estado" id="estado" maxlength="2">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-map-location-dot"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase" name="estado" id="estado" maxlength="2">
+                                </div>
                             </div>
 
-                            <div class="col-12 mt-4">
-                                <input type="hidden" name="ativo" value="0">
-                                <div class="form-check form-switch d-flex align-items-center gap-3 ps-0">
-                                    <input class="form-check-input switch-lg m-0 border-dark-subtle" type="checkbox" id="ativo" name="ativo" value="1" checked style="cursor: pointer;">
-                                    <div>
-                                        <label class="form-check-label fw-semibold text-secondary small d-block" for="ativo">Status Cadastral</label>
-                                        <div class="status-text mt-0.5">
-                                            <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Ativo</span>
-                                        </div>
-                                    </div>
+                            <input type="hidden" name="endereco" id="endereco">
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-user-gear"></i> Responsabilidade Técnica
+                        </h6>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label for="tecnico_responsavel" class="form-label fw-semibold text-secondary small">Técnico Responsável</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-user-helmet-safety"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="tecnico_responsavel" id="tecnico_responsavel" maxlength="150">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="supervisor_responsavel" class="form-label fw-semibold text-secondary small">Supervisor / Gestor Interno</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-user-check"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="supervisor_responsavel" id="supervisor_responsavel" maxlength="150">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="periodicidade_visitas" class="form-label fw-semibold text-secondary small">Periodicidade das Visitas</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </span>
+                                    <select class="form-select rounded-end-3 border-dark-subtle" name="periodicidade_visitas" id="periodicidade_visitas">
+                                        <option value="">Selecione...</option>
+                                        <option value="Mensal">Mensal</option>
+                                        <option value="Bimestral">Bimestral</option>
+                                        <option value="Trimestral">Trimestral</option>
+                                        <option value="Semestral">Semestral</option>
+                                        <option value="Anual">Anual</option>
+                                        <option value="Sob demanda">Sob demanda</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-align-left"></i> Observações Gerais
+                        </h6>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted align-items-start pt-3">
+                                <i class="fas fa-note-sticky"></i>
+                            </span>
+                            <textarea class="form-control rounded-end-3 border-dark-subtle" name="observacoes" id="observacoes" rows="4" placeholder="Informações adicionais sobre a empresa, contrato, atendimento ou particularidades operacionais."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
+                        <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fas fa-toggle-on"></i> Situação da Empresa
+                        </h6>
+
+                        <input type="hidden" name="ativo" value="0">
+
+                        <div class="form-check form-switch d-flex align-items-center gap-3 ps-0">
+                            <input class="form-check-input switch-lg m-0 border-dark-subtle" type="checkbox" id="ativo" name="ativo" value="1" checked style="cursor: pointer;">
+
+                            <div>
+                                <label class="form-check-label fw-semibold text-secondary small d-block" for="ativo">
+                                    Status da Empresa
+                                </label>
+
+                                <div class="status-text mt-0.5">
+                                    <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Empresa Ativa</span>
                                 </div>
                             </div>
                         </div>
@@ -230,24 +429,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateStatus() {
         statusText.innerHTML = switchInput.checked
-            ? `<span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Ativo</span>`
-            : `<span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Inativo</span>`;
+            ? `<span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Empresa Ativa</span>`
+            : `<span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Empresa Inativa</span>`;
     }
 
     switchInput.addEventListener('change', updateStatus);
     updateStatus();
 
+    const upperFields = ['codigo', 'codigo_externo', 'estado'];
+
+    upperFields.forEach(id => {
+        const input = document.getElementById(id);
+
+        if (!input) return;
+
+        input.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+    });
+
     const cnpj = document.getElementById('cnpj');
 
-    cnpj.addEventListener('input', function(e) {
-        let v = e.target.value.replace(/\D/g, '');
-        v = v.replace(/^(\d{2})(\d)/, '$1.$2')
-             .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-             .replace(/\.(\d{3})(\d)/, '.$1/$2')
-             .replace(/(\d{4})(\d)/, '$1-$2');
+    if (cnpj) {
+        cnpj.addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/^(\d{2})(\d)/, '$1.$2')
+                 .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                 .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                 .replace(/(\d{4})(\d)/, '$1-$2');
 
-        e.target.value = v.substring(0, 18);
-    });
+            e.target.value = v.substring(0, 18);
+        });
+    }
 
     const aplicarMascaraTelefone = (id) => {
         const input = document.getElementById(id);
@@ -267,52 +480,96 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const cep = document.getElementById('cep');
 
-    cep.addEventListener('input', function(e) {
-        let v = e.target.value.replace(/\D/g, '');
-        v = v.replace(/^(\d{5})(\d)/, '$1-$2');
-        e.target.value = v.substring(0, 9);
-    });
+    if (cep) {
+        cep.addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+            e.target.value = v.substring(0, 9);
+        });
 
-    cep.addEventListener('blur', function () {
-        const cepLimpo = this.value.replace(/\D/g, '');
+        cep.addEventListener('blur', function () {
+            const cepLimpo = this.value.replace(/\D/g, '');
 
-        if (cepLimpo.length !== 8) return;
+            if (cepLimpo.length !== 8) return;
 
-        fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.erro) {
-                    alert('CEP não encontrado.');
-                    return;
-                }
+            fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) {
+                        alert('CEP não encontrado.');
+                        return;
+                    }
 
-                document.getElementById('endereco').value = `${data.logradouro}, ${data.bairro}`;
-                document.getElementById('cidade').value = data.localidade;
-                document.getElementById('estado').value = data.uf;
-            })
-            .catch(() => {
-                alert('Erro ao buscar o CEP. Tente novamente.');
-            });
+                    document.getElementById('logradouro').value = data.logradouro || '';
+                    document.getElementById('bairro').value = data.bairro || '';
+                    document.getElementById('cidade').value = data.localidade || '';
+                    document.getElementById('estado').value = data.uf || '';
+
+                    atualizarEnderecoCompleto();
+                })
+                .catch(() => {
+                    alert('Erro ao buscar o CEP. Tente novamente.');
+                });
+        });
+    }
+
+    const enderecoCampos = ['logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'estado'];
+
+    function atualizarEnderecoCompleto() {
+        const logradouro = document.getElementById('logradouro')?.value || '';
+        const numero = document.getElementById('numero')?.value || '';
+        const complemento = document.getElementById('complemento')?.value || '';
+        const bairro = document.getElementById('bairro')?.value || '';
+        const cidade = document.getElementById('cidade')?.value || '';
+        const estado = document.getElementById('estado')?.value || '';
+
+        const enderecoCompleto = [
+            logradouro,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado
+        ].filter(Boolean).join(', ');
+
+        const enderecoHidden = document.getElementById('endereco');
+
+        if (enderecoHidden) {
+            enderecoHidden.value = enderecoCompleto;
+        }
+    }
+
+    enderecoCampos.forEach(id => {
+        const input = document.getElementById(id);
+
+        if (!input) return;
+
+        input.addEventListener('input', atualizarEnderecoCompleto);
+        input.addEventListener('change', atualizarEnderecoCompleto);
     });
 
     const email = document.getElementById('email');
 
-    email.addEventListener('blur', function() {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email) {
+        email.addEventListener('blur', function() {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (email.value !== '' && !regex.test(email.value)) {
-            email.setCustomValidity('Inválido');
-            email.classList.add('is-invalid');
-        } else {
-            email.setCustomValidity('');
-            email.classList.remove('is-invalid');
-        }
-    });
+            if (email.value !== '' && !regex.test(email.value)) {
+                email.setCustomValidity('Inválido');
+                email.classList.add('is-invalid');
+            } else {
+                email.setCustomValidity('');
+                email.classList.remove('is-invalid');
+            }
+        });
+    }
 
     const forms = document.querySelectorAll('.needs-validation');
 
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
+            atualizarEnderecoCompleto();
+
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();

@@ -3,9 +3,6 @@ $css = 'empresas.css';
 require_once dirname(__DIR__) . '/templates/header.php';
 ?>
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-
 <main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
     <div class="container-fluid px-2 px-lg-4 mb-4">
 
@@ -44,7 +41,8 @@ require_once dirname(__DIR__) . '/templates/header.php';
         <header class="page-header-empresas mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
-                    <span class="icon-container d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);">
+                    <span class="icon-container d-flex align-items-center justify-content-center"
+                        style="width: 38px; height: 38px; background: linear-gradient(135deg, #0d6efd, #084298); border-radius: 8px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);">
                         <i class="fas fa-building text-white" style="font-size: 1.10rem;"></i>
                     </span>
 
@@ -61,106 +59,20 @@ require_once dirname(__DIR__) . '/templates/header.php';
             </div>
 
             <div class="page-header-actions d-flex gap-2 flex-wrap">
-                <a href="<?= BASE_URL ?>/dashboard" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
-                    <i class="fas fa-arrow-left me-1"></i> Dashboard
+                <a href="<?= BASE_URL ?>/dashboard" class="btn btn-light border rounded-pill px-4 fw-semibold shadow-sm">
+                    <i class="fas fa-gauge-high me-1 text-primary"></i>
+                    Dashboard
                 </a>
 
-                <a href="<?= BASE_URL ?>/empresas/criar" class="btn btn-primary btn-sm rounded-pill px-3 fw-medium shadow-sm">
-                    <i class="fas fa-plus-circle me-1"></i> Nova Empresa
+                <a href="<?= BASE_URL ?>/empresas/criar" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                    <i class="fas fa-plus-circle me-1"></i>
+                    Nova Empresa
                 </a>
             </div>
         </header>
 
         <?php if (!empty($empresas)): ?>
 
-            <!-- DESKTOP -->
-            <div class="card border-0 shadow-sm rounded-3 empresas-desktop-view">
-                <div class="card-body p-4">
-                    <div class="table-responsive">
-                        <table id="tabelaEmpresas" class="table table-hover align-middle nowrap w-100">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px;" class="text-secondary small fw-bold">#</th>
-                                    <th class="text-secondary small fw-bold">Empresa / Razão Social</th>
-                                    <th class="text-secondary small fw-bold">CNPJ</th>
-                                    <th class="text-secondary small fw-bold">Responsável</th>
-                                    <th class="text-center text-secondary small fw-bold" style="width:120px;">Ações</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($empresas as $emp): ?>
-                                    <tr>
-                                        <td class="text-muted fw-semibold">#<?= $emp['id'] ?></td>
-
-                                        <td>
-                                            <div class="fw-semibold text-dark">
-                                                <?= htmlspecialchars($emp['nome_fantasia'] ?? $emp['nome'] ?? $emp['razao_social'] ?? 'Sem nome') ?>
-                                            </div>
-
-                                            <?php if (!empty($emp['razao_social']) && ($emp['nome_fantasia'] ?? '') !== $emp['razao_social']): ?>
-                                                <small class="text-muted">
-                                                    <?= htmlspecialchars($emp['razao_social']) ?>
-                                                </small>
-                                            <?php endif; ?>
-                                        </td>
-
-                                        <td class="font-monospace text-muted fw-bold">
-                                            <?= !empty($emp['cnpj']) ? htmlspecialchars($emp['cnpj']) : '-' ?>
-                                        </td>
-
-                                        <td class="text-muted">
-                                            <?= !empty($emp['responsavel']) ? htmlspecialchars($emp['responsavel']) : '-' ?>
-                                        </td>
-
-                                        <td class="text-center">
-                                            <div class="dropdown">
-                                                <button
-                                                    class="btn btn-sm btn-outline-secondary rounded-pill px-3"
-                                                    data-bs-toggle="dropdown"
-                                                    title="Abrir ações">
-                                                    <i class="fas fa-folder-open"></i>
-                                                </button>
-
-                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
-                                                    <li>
-                                                        <button class="dropdown-item"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modalEmpresa<?= $emp['id'] ?>">
-                                                            <i class="fas fa-circle-info me-2 text-secondary"></i>
-                                                            Visualizar
-                                                        </button>
-                                                    </li>
-
-                                                    <li>
-                                                        <a class="dropdown-item" href="<?= BASE_URL ?>/empresas/editar/<?= $emp['id'] ?>">
-                                                            <i class="fas fa-edit me-2 text-primary"></i>
-                                                            Editar
-                                                        </a>
-                                                    </li>
-
-                                                    <li><hr class="dropdown-divider"></li>
-
-                                                    <li>
-                                                        <a class="dropdown-item text-danger"
-                                                            href="<?= BASE_URL ?>/empresas/excluir/<?= $emp['id'] ?>"
-                                                            onclick="return confirm('Deseja realmente excluir esta empresa?')">
-                                                            <i class="fas fa-trash me-2"></i>
-                                                            Excluir
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MOBILE / TABLET / WEBVIEW -->
             <section class="empresas-app-view">
 
                 <div class="empresas-app-toolbar bg-white border rounded-4 shadow-sm p-3 mb-3">
@@ -173,7 +85,7 @@ require_once dirname(__DIR__) . '/templates/header.php';
                             type="text"
                             id="buscarEmpresaMobile"
                             class="form-control border-start-0"
-                            placeholder="Buscar empresa, CNPJ, cidade ou responsável...">
+                            placeholder="Buscar empresa, CNPJ, cidade, status ou responsável...">
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between mt-3 gap-2">
@@ -188,19 +100,22 @@ require_once dirname(__DIR__) . '/templates/header.php';
                     <?php foreach ($empresas as $emp): ?>
                         <?php
                         $nomeEmpresa = $emp['nome_fantasia'] ?? $emp['nome'] ?? $emp['razao_social'] ?? 'Sem nome';
+                        $empresaAtiva = (int)($emp['ativo'] ?? 1) === 1;
+
                         $textoBusca = strtolower(
+                            ($emp['codigo'] ?? '') . ' ' .
+                            ($emp['codigo_externo'] ?? '') . ' ' .
                             ($emp['nome_fantasia'] ?? '') . ' ' .
                             ($emp['razao_social'] ?? '') . ' ' .
                             ($emp['cnpj'] ?? '') . ' ' .
                             ($emp['responsavel'] ?? '') . ' ' .
                             ($emp['cidade'] ?? '') . ' ' .
-                            ($emp['estado'] ?? '')
+                            ($emp['estado'] ?? '') . ' ' .
+                            ($empresaAtiva ? 'ativa ativo' : 'inativa inativo')
                         );
                         ?>
 
-                        <article
-                            class="empresa-app-card"
-                            data-search="<?= htmlspecialchars($textoBusca) ?>">
+                        <article class="empresa-app-card" data-search="<?= htmlspecialchars($textoBusca) ?>">
 
                             <div class="empresa-app-card-main">
                                 <div class="empresa-app-icon">
@@ -218,6 +133,11 @@ require_once dirname(__DIR__) . '/templates/header.php';
 
                                     <div class="empresa-app-meta">
                                         <span>
+                                            <i class="fas fa-hashtag"></i>
+                                            <?= !empty($emp['codigo']) ? htmlspecialchars($emp['codigo']) : 'Código interno não informado' ?>
+                                        </span>
+
+                                        <span>
                                             <i class="fas fa-id-card"></i>
                                             <?= !empty($emp['cnpj']) ? htmlspecialchars($emp['cnpj']) : 'CNPJ não informado' ?>
                                         </span>
@@ -231,6 +151,11 @@ require_once dirname(__DIR__) . '/templates/header.php';
                                         <span>
                                             <i class="fas fa-user"></i>
                                             <?= !empty($emp['responsavel']) ? htmlspecialchars($emp['responsavel']) : 'Responsável não informado' ?>
+                                        </span>
+
+                                        <span>
+                                            <i class="<?= $empresaAtiva ? 'fas fa-circle-check text-success' : 'fas fa-circle-xmark text-danger' ?>"></i>
+                                            <?= $empresaAtiva ? 'Empresa Ativa' : 'Empresa Inativa' ?>
                                         </span>
                                     </div>
                                 </div>
@@ -251,8 +176,8 @@ require_once dirname(__DIR__) . '/templates/header.php';
                                 </a>
 
                                 <a href="<?= BASE_URL ?>/empresas/excluir/<?= $emp['id'] ?>"
-                                class="btn btn-outline-danger rounded-pill px-3"
-                                onclick="return confirm('Deseja realmente excluir esta empresa?')">
+                                   class="btn btn-outline-danger rounded-pill px-3"
+                                   onclick="return confirm('Deseja realmente excluir esta empresa?')">
                                     <i class="fas fa-trash me-1"></i>
                                     Excluir
                                 </a>
@@ -264,8 +189,29 @@ require_once dirname(__DIR__) . '/templates/header.php';
                 <div id="semResultadoEmpresasMobile" class="text-center py-5 text-muted d-none">
                     <i class="fas fa-magnifying-glass fa-2x mb-3 opacity-50"></i>
                     <h6 class="fw-bold text-dark">Nenhuma empresa encontrada</h6>
-                    <p class="small mb-0">Tente buscar por nome, CNPJ, cidade ou responsável.</p>
+                    <p class="small mb-0">Tente buscar por nome, CNPJ, cidade, status ou responsável.</p>
                 </div>
+
+                <div class="empresas-pagination bg-white border rounded-4 shadow-sm p-3 mt-3">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                        <small class="text-muted">
+                            Página <span id="paginaAtualEmpresas">1</span> de <span id="totalPaginasEmpresas">1</span>
+                        </small>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" id="btnAnteriorEmpresas" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-chevron-left me-1"></i>
+                                Anterior
+                            </button>
+
+                            <button type="button" id="btnProximaEmpresas" class="btn btn-primary rounded-pill px-4">
+                                Próxima
+                                <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
         <?php else: ?>
@@ -273,7 +219,7 @@ require_once dirname(__DIR__) . '/templates/header.php';
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body p-4">
                     <div class="text-center py-5 text-muted">
-                        <div class="icon-container d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3 bg-light text-muted opacity-70" style="width: 70px; height: 70px;">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3 bg-light text-muted opacity-70" style="width: 70px; height: 70px;">
                             <i class="fas fa-building fa-2x"></i>
                         </div>
 
@@ -294,7 +240,9 @@ require_once dirname(__DIR__) . '/templates/header.php';
         <?php endif; ?>
     </div>
 
-    <?php foreach ($empresas as $emp): ?>
+    <?php if (!empty($empresas)): foreach ($empresas as $emp): ?>
+        <?php $empresaAtiva = (int)($emp['ativo'] ?? 1) === 1; ?>
+
         <div class="modal fade" id="modalEmpresa<?= $emp['id'] ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                 <div class="modal-content border-0 shadow-lg rounded-3">
@@ -386,6 +334,15 @@ require_once dirname(__DIR__) . '/templates/header.php';
                         </div>
 
                         <div class="border-top mt-3 pt-3">
+                            <label class="text-secondary small fw-semibold d-block mb-1">Status da Empresa</label>
+
+                            <?= $empresaAtiva
+                                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Empresa Ativa</span>'
+                                : '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 fw-semibold">Empresa Inativa</span>'
+                            ?>
+                        </div>
+
+                        <div class="border-top mt-3 pt-3">
                             <label class="text-secondary small fw-semibold d-block">Data de Cadastro</label>
 
                             <span class="text-muted small">
@@ -408,77 +365,116 @@ require_once dirname(__DIR__) . '/templates/header.php';
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
+    <?php endforeach; endif; ?>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    ['toastSucesso', 'toastErro'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            new bootstrap.Toast(el, {
-                delay: id === 'toastSucesso' ? 4000 : 5000
-            }).show();
-        }
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        ['toastSucesso', 'toastErro'].forEach(id => {
+            const el = document.getElementById(id);
 
-    const inputMobile = document.getElementById('buscarEmpresaMobile');
-    const cardsMobile = document.querySelectorAll('.empresa-app-card');
-    const contadorMobile = document.getElementById('contadorEmpresasMobile');
-    const semResultado = document.getElementById('semResultadoEmpresasMobile');
+            if (el) {
+                new bootstrap.Toast(el, {
+                    delay: id === 'toastSucesso' ? 4000 : 5000
+                }).show();
+            }
+        });
 
-    if (inputMobile && cardsMobile.length) {
-        inputMobile.addEventListener('input', function () {
-            const termo = this.value.toLowerCase().trim();
-            let totalVisiveis = 0;
+        const input = document.getElementById('buscarEmpresaMobile');
+        const cards = Array.from(document.querySelectorAll('.empresa-app-card'));
+        const contador = document.getElementById('contadorEmpresasMobile');
+        const semResultado = document.getElementById('semResultadoEmpresasMobile');
 
-            cardsMobile.forEach(card => {
-                const texto = card.dataset.search || '';
-                const visivel = texto.includes(termo);
+        const btnAnterior = document.getElementById('btnAnteriorEmpresas');
+        const btnProxima = document.getElementById('btnProximaEmpresas');
+        const paginaAtualEl = document.getElementById('paginaAtualEmpresas');
+        const totalPaginasEl = document.getElementById('totalPaginasEmpresas');
 
-                card.classList.toggle('d-none', !visivel);
+        const itensPorPagina = 10;
+        let paginaAtual = 1;
+        let cardsFiltrados = [...cards];
 
-                if (visivel) {
-                    totalVisiveis++;
-                }
+        function renderizarEmpresas() {
+            const totalPaginas = Math.max(1, Math.ceil(cardsFiltrados.length / itensPorPagina));
+
+            if (paginaAtual > totalPaginas) {
+                paginaAtual = totalPaginas;
+            }
+
+            const inicio = (paginaAtual - 1) * itensPorPagina;
+            const fim = inicio + itensPorPagina;
+
+            cards.forEach(card => {
+                card.classList.add('d-none');
             });
 
-            if (contadorMobile) {
-                contadorMobile.textContent = totalVisiveis;
+            cardsFiltrados.slice(inicio, fim).forEach(card => {
+                card.classList.remove('d-none');
+            });
+
+            if (contador) {
+                contador.textContent = cardsFiltrados.length;
             }
 
             if (semResultado) {
-                semResultado.classList.toggle('d-none', totalVisiveis > 0);
+                semResultado.classList.toggle('d-none', cardsFiltrados.length > 0);
             }
-        });
-    }
-});
 
-$(document).ready(function () {
-    if ($('#tabelaEmpresas').length) {
-        $('#tabelaEmpresas').DataTable({
-            responsive: true,
-            autoWidth: false,
-            pageLength: 10,
-            lengthMenu: [5, 10, 25, 50, 100],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
-            },
-            columnDefs: [
-                { orderable: false, targets: 4 }
-            ],
-            drawCallback: function () {
-                $('.dataTables_paginate .paginate_button').addClass('shadow-sm');
+            if (paginaAtualEl) {
+                paginaAtualEl.textContent = paginaAtual;
             }
-        });
-    }
-});
+
+            if (totalPaginasEl) {
+                totalPaginasEl.textContent = totalPaginas;
+            }
+
+            if (btnAnterior) {
+                btnAnterior.disabled = paginaAtual <= 1;
+            }
+
+            if (btnProxima) {
+                btnProxima.disabled = paginaAtual >= totalPaginas;
+            }
+        }
+
+        function filtrarEmpresas() {
+            const termo = input.value.toLowerCase().trim();
+
+            cardsFiltrados = cards.filter(card => {
+                const texto = card.dataset.search || '';
+                return texto.includes(termo);
+            });
+
+            paginaAtual = 1;
+            renderizarEmpresas();
+        }
+
+        if (input && cards.length) {
+            input.addEventListener('input', filtrarEmpresas);
+        }
+
+        if (btnAnterior) {
+            btnAnterior.addEventListener('click', function () {
+                if (paginaAtual > 1) {
+                    paginaAtual--;
+                    renderizarEmpresas();
+                }
+            });
+        }
+
+        if (btnProxima) {
+            btnProxima.addEventListener('click', function () {
+                const totalPaginas = Math.max(1, Math.ceil(cardsFiltrados.length / itensPorPagina));
+
+                if (paginaAtual < totalPaginas) {
+                    paginaAtual++;
+                    renderizarEmpresas();
+                }
+            });
+        }
+
+        renderizarEmpresas();
+    });
 </script>
 
 <?php require_once dirname(__DIR__) . '/templates/footer.php'; ?>
