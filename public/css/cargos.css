@@ -33,7 +33,7 @@ main.content {
 
 .cargos-app-list {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
 
@@ -122,10 +122,12 @@ main.content {
 .cargo-app-actions .btn {
     width: 100%;
     min-height: 42px;
+
     display: flex;
     align-items: center;
     justify-content: center;
     gap: .45rem;
+
     font-size: .86rem;
     font-weight: 600;
     text-align: center;
@@ -136,6 +138,7 @@ main.content {
     cursor: not-allowed;
 }
 
+/* TABLET */
 @media (max-width: 1199px) {
     main.content {
         padding: .85rem !important;
@@ -161,13 +164,22 @@ main.content {
         width: 100%;
     }
 
+    .cargos-app-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .modal-body .col-6 {
         width: 100%;
     }
 }
 
+/* MOBILE */
 @media (max-width: 576px) {
     .page-header-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .cargos-app-list {
         grid-template-columns: 1fr;
     }
 

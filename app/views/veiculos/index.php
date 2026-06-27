@@ -59,12 +59,14 @@ require_once dirname(__DIR__) . '/templates/header.php';
             </div>
 
             <div class="page-header-actions d-flex gap-2 flex-wrap">
-                <a href="<?= BASE_URL ?>/dashboard" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium">
-                    <i class="fas fa-arrow-left me-1"></i> Dashboard
+                <a href="<?= BASE_URL ?>/dashboard" class="btn btn-light border rounded-pill px-4 fw-semibold shadow-sm">
+                    <i class="fas fa-gauge-high me-1 text-primary"></i>
+                    Dashboard
                 </a>
 
-                <a href="<?= BASE_URL ?>/veiculos/criar" class="btn btn-primary btn-sm rounded-pill px-3 fw-medium shadow-sm">
-                    <i class="fas fa-plus-circle me-1"></i> Novo Veículo
+                <a href="<?= BASE_URL ?>/veiculos/criar" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                    <i class="fas fa-plus-circle me-1"></i>
+                    Novo Veículo
                 </a>
             </div>
         </header>

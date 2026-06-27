@@ -33,7 +33,7 @@ main.content {
 
 .usuarios-app-list {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
 
@@ -68,6 +68,7 @@ main.content {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.15rem;
 }
 
 .usuario-app-content {
@@ -78,7 +79,7 @@ main.content {
 .usuario-app-content h5 {
     font-size: 1rem;
     font-weight: 800;
-    margin: 0 0 .25rem;
+    margin: 0;
     color: #212529;
     line-height: 1.25;
 }
@@ -122,10 +123,12 @@ main.content {
 .usuario-app-actions .btn {
     width: 100%;
     min-height: 42px;
+
     display: flex;
     align-items: center;
     justify-content: center;
     gap: .45rem;
+
     font-size: .86rem;
     font-weight: 600;
     text-align: center;
@@ -136,56 +139,77 @@ main.content {
     cursor: not-allowed;
 }
 
-@media (max-width: 1199px) {
-    main.content {
-        padding: .85rem !important;
+/* ===========================
+   TABLET
+=========================== */
+
+@media (max-width:1199px){
+
+    main.content{
+        padding:.85rem !important;
     }
 
-    .page-header-usuarios {
-        padding: 1rem !important;
+    .page-header-usuarios{
+        padding:1rem !important;
     }
 
-    .page-header-usuarios h3 {
-        font-size: 1.15rem !important;
-        line-height: 1.3;
+    .page-header-usuarios h3{
+        font-size:1.15rem !important;
+        line-height:1.3;
     }
 
-    .page-header-actions {
-        width: 100%;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: .5rem !important;
+    .page-header-actions{
+        width:100%;
+        display:grid !important;
+        grid-template-columns:1fr 1fr;
+        gap:.5rem !important;
     }
 
-    .page-header-actions .btn {
-        width: 100%;
+    .page-header-actions .btn{
+        width:100%;
+        justify-content:center;
     }
 
-    .modal-body .col-6 {
-        width: 100%;
+    .usuarios-app-list{
+        grid-template-columns:repeat(2,1fr);
     }
+
+    .modal-body .col-6{
+        width:100%;
+    }
+
 }
 
-@media (max-width: 576px) {
-    .page-header-actions {
-        grid-template-columns: 1fr;
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:576px){
+
+    .page-header-actions{
+        grid-template-columns:1fr;
     }
 
-    .usuario-app-card-main {
-        gap: .7rem;
+    .usuarios-app-list{
+        grid-template-columns:1fr;
     }
 
-    .usuario-app-actions {
-        grid-template-columns: 1fr;
+    .usuario-app-card-main{
+        gap:.7rem;
     }
 
-    .toast-container {
-        left: 0 !important;
-        right: 0 !important;
-        padding: .75rem !important;
+    .usuario-app-actions{
+        grid-template-columns:1fr;
     }
 
-    .toast {
-        width: 100%;
+    .toast-container{
+        left:0 !important;
+        right:0 !important;
+        padding:.75rem !important;
     }
+
+    .toast{
+        width:100%;
+    }
+
 }

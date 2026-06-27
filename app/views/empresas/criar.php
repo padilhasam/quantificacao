@@ -72,6 +72,26 @@
                                 </div>
                             </div><br>
 
+                            <div class="col-12 col-md-6">
+                                <label for="cnpj" class="form-label fw-semibold text-secondary small">CNPJ</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-id-card"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="cnpj" id="cnpj" placeholder="00.000.000/0000-00">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="inscricao_estadual" class="form-label fw-semibold text-secondary small">Inscrição Estadual</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                        <i class="fas fa-receipt"></i>
+                                    </span>
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="inscricao_estadual" id="inscricao_estadual" maxlength="50">
+                                </div>
+                            </div>
+
                             <div class="col-12 col-md-12">
                                 <label for="razao_social" class="form-label fw-semibold text-secondary small">Razão Social *</label>
                                 <div class="input-group">
@@ -93,25 +113,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
-                                <label for="cnpj" class="form-label fw-semibold text-secondary small">CNPJ</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-id-card"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="cnpj" id="cnpj" placeholder="00.000.000/0000-00">
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4">
-                                <label for="inscricao_estadual" class="form-label fw-semibold text-secondary small">Inscrição Estadual</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-receipt"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="inscricao_estadual" id="inscricao_estadual" maxlength="50">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -121,61 +122,86 @@
                         </h6>
 
                         <div class="row g-3">
-                            <div class="col-12 col-md-4">
-                                <label for="grupo_economico" class="form-label fw-semibold text-secondary small">Grupo Econômico</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-layer-group"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="grupo_economico" id="grupo_economico" placeholder="Ex: Grupo Santiago" maxlength="150">
+
+                            <div class="col-12 col-lg-8">
+                                <label for="cnae" class="form-label fw-semibold text-secondary small">
+                                    CNAE Principal
+                                </label>
+
+                                <div class="row g-2">
+
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-dark-subtle text-muted">
+                                                <i class="fas fa-barcode"></i>
+                                            </span>
+
+                                            <input
+                                                type="text"
+                                                class="form-control border-dark-subtle"
+                                                name="cnae"
+                                                id="cnae"
+                                                placeholder="00.00-0/00"
+                                                maxlength="30">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="form-control bg-light border-dark-subtle d-flex align-items-center"
+                                            style="min-height:46px;">
+
+                                            <input type="hidden" name="descricao_cnae" id="descricao_cnae"> <small class="text-muted d-block mt-1" id="descricaoCnaeTexto"> A descrição do CNAE será preenchida automaticamente pela consulta do CNPJ. </small>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4">
-                                <label for="segmento" class="form-label fw-semibold text-secondary small">Segmento / Ramo de Atividade</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-industry"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="segmento" id="segmento" placeholder="Ex: Indústria, Comércio, Serviços" maxlength="150">
-                                </div>
-                            </div>
+                            <div class="col-6 col-lg-2">
+                                <label for="grau_risco" class="form-label fw-semibold text-secondary small">
+                                    Grau de Risco
+                                </label>
 
-                            <div class="col-12 col-md-4">
-                                <label for="cnae" class="form-label fw-semibold text-secondary small">CNAE Principal</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-barcode"></i>
-                                    </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="cnae" id="cnae" placeholder="Ex: 86.30-5-03" maxlength="30">
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-4">
-                                <label for="grau_risco" class="form-label fw-semibold text-secondary small">Grau de Risco</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                    <span class="input-group-text bg-white border-dark-subtle text-muted">
                                         <i class="fas fa-triangle-exclamation"></i>
                                     </span>
-                                    <select class="form-select rounded-end-3 border-dark-subtle" name="grau_risco" id="grau_risco">
+
+                                    <select
+                                        class="form-select border-dark-subtle"
+                                        name="grau_risco"
+                                        id="grau_risco">
+
                                         <option value="">Selecione...</option>
                                         <option value="1">Grau 1</option>
                                         <option value="2">Grau 2</option>
                                         <option value="3">Grau 3</option>
                                         <option value="4">Grau 4</option>
+
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-4">
-                                <label for="quantidade_funcionarios" class="form-label fw-semibold text-secondary small">Quantidade de Funcionários</label>
+                            <div class="col-6 col-lg-2">
+                                <label for="quantidade_funcionarios" class="form-label fw-semibold text-secondary small">
+                                    Funcionários
+                                </label>
+
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
+                                    <span class="input-group-text bg-white border-dark-subtle text-muted">
                                         <i class="fas fa-users"></i>
                                     </span>
-                                    <input type="number" class="form-control rounded-end-3 border-dark-subtle" name="quantidade_funcionarios" id="quantidade_funcionarios" min="0" placeholder="Ex: 120">
+
+                                    <input
+                                        type="number"
+                                        class="form-control border-dark-subtle"
+                                        name="quantidade_funcionarios"
+                                        id="quantidade_funcionarios"
+                                        min="0"
+                                        placeholder="0">
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -328,7 +354,7 @@
                                 <label for="tecnico_responsavel" class="form-label fw-semibold text-secondary small">Técnico Responsável</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
-                                        <i class="fas fa-user-helmet-safety"></i>
+                                        <i class="fas fa-helmet-safety"></i>
                                     </span>
                                     <input type="text" class="form-control rounded-end-3 border-dark-subtle" name="tecnico_responsavel" id="tecnico_responsavel" maxlength="150">
                                 </div>
@@ -488,28 +514,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         cep.addEventListener('blur', function () {
-            const cepLimpo = this.value.replace(/\D/g, '');
-
-            if (cepLimpo.length !== 8) return;
-
-            fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert('CEP não encontrado.');
-                        return;
-                    }
-
-                    document.getElementById('logradouro').value = data.logradouro || '';
-                    document.getElementById('bairro').value = data.bairro || '';
-                    document.getElementById('cidade').value = data.localidade || '';
-                    document.getElementById('estado').value = data.uf || '';
-
-                    atualizarEnderecoCompleto();
-                })
-                .catch(() => {
-                    alert('Erro ao buscar o CEP. Tente novamente.');
-                });
+            buscarCep(this.value);
         });
     }
 
@@ -578,6 +583,112 @@ document.addEventListener('DOMContentLoaded', function () {
             form.classList.add('was-validated');
         }, false);
     });
+
+    const preencherCampo = (id, valor) => {
+        const campo = document.getElementById(id);
+
+        if (campo && valor !== null && valor !== undefined && valor !== '') {
+            campo.value = valor;
+            campo.dispatchEvent(new Event('input'));
+            campo.dispatchEvent(new Event('change'));
+        }
+    };
+
+    const formatarCnae = (codigo) => {
+    const cnae = String(codigo || '').replace(/\D/g, '');
+
+    if (cnae.length !== 7) {
+        return codigo;
+    }
+
+    return `${cnae.substring(0, 2)}.${cnae.substring(2, 4)}-${cnae.substring(4, 5)}/${cnae.substring(5, 7)}`;
+    };
+
+    const cnpjInput = document.getElementById('cnpj');
+
+    if (cnpjInput) {
+        cnpjInput.addEventListener('blur', async function () {
+            const cnpjLimpo = this.value.replace(/\D/g, '');
+
+            if (cnpjLimpo.length !== 14) {
+                return;
+            }
+
+            try {
+                cnpjInput.classList.add('is-validating');
+
+                const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpjLimpo}`);
+
+                if (!response.ok) {
+                    throw new Error('CNPJ não encontrado.');
+                }
+
+                const data = await response.json();
+
+                const telefoneApi = data.ddd_telefone_1 || data.ddd_telefone_2 || '';
+
+                preencherCampo('razao_social', data.razao_social || data.nome);
+                preencherCampo('nome_fantasia', data.nome_fantasia);
+                preencherCampo('telefone', telefoneApi);
+                preencherCampo('email', data.email);
+                preencherCampo('cep', data.cep);
+                preencherCampo('numero', data.numero);
+                preencherCampo('complemento', data.complemento);
+
+                await buscarCep(data.cep);
+
+                if (data.cnae_fiscal) {
+                    preencherCampo('cnae', formatarCnae(data.cnae_fiscal));
+                }
+
+                if (data.cnae_fiscal_descricao) {
+                    preencherCampo('descricao_cnae', data.cnae_fiscal_descricao);
+
+                    const descricaoCnaeTexto = document.getElementById('descricaoCnaeTexto');
+
+                    if (descricaoCnaeTexto) {
+                        descricaoCnaeTexto.innerHTML = `
+                            <i class="fas fa-circle-check text-success me-1"></i>
+                            ${data.cnae_fiscal_descricao}
+                        `;
+                    }
+                }
+
+                atualizarEnderecoCompleto();
+
+            } catch (error) {
+                alert('Não foi possível consultar o CNPJ informado. Preencha os dados manualmente.');
+            } finally {
+                cnpjInput.classList.remove('is-validating');
+            }
+        });
+    }
+
+    async function buscarCep(cep) {
+
+        const cepLimpo = cep.replace(/\D/g, '');
+
+        if (cepLimpo.length !== 8) return;
+
+        try {
+
+            const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+            const data = await response.json();
+
+            if (data.erro) return;
+
+            preencherCampo('logradouro', data.logradouro);
+            preencherCampo('bairro', data.bairro);
+            preencherCampo('cidade', data.localidade);
+            preencherCampo('estado', data.uf);
+
+            atualizarEnderecoCompleto();
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    
 });
 </script>
 
