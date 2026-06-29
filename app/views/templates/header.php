@@ -17,14 +17,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?= BASE_URL ?>/image/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="<?= BASE_URL ?>/image/favicon.ico" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= BASE_URL ?>/image/favicon.png?v=2">
+    <link rel="shortcut icon" href="<?= BASE_URL ?>/image/favicon.ico?v=3" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Tom-Select -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 
     <!-- CSS BASE / GLOBAL -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css">

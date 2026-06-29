@@ -4,11 +4,28 @@
     <div class="container-fluid px-2 px-lg-4 mb-4">
 
         <?php
+        $sucesso = $_SESSION['sucesso'] ?? null;
         $erro = $_SESSION['erro'] ?? null;
-        unset($_SESSION['erro']);
+        unset($_SESSION['sucesso'], $_SESSION['erro']);
+
+        $codigoInterno = 'EMP-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        $codigoExterno = 'EXT-EMP-' . date('YmdHis');
+
         ?>
 
         <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
+            <?php if ($sucesso): ?>
+                <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-circle-check me-2"></i>
+                            <?= htmlspecialchars($sucesso) ?>
+                        </div>
+                        <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <?php if ($erro): ?>
                 <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
                     <div class="d-flex">
@@ -58,7 +75,7 @@
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
                                         <i class="fas fa-hashtag"></i>
                                     </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase" name="codigo" id="codigo" placeholder="EMP-000001" maxlength="50">
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase bg-light" name="codigo" id="codigo" value="<?= htmlspecialchars($codigoInterno) ?>" readonly>
                                 </div>
                             </div>
 
@@ -68,7 +85,7 @@
                                     <span class="input-group-text bg-white border-dark-subtle rounded-start-3 text-muted">
                                         <i class="fas fa-link"></i>
                                     </span>
-                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase" name="codigo_externo" id="codigo_externo" placeholder="SOC / ERP / Cliente" maxlength="80">
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase bg-light" name="codigo_externo" id="codigo_externo" value="<?= htmlspecialchars($codigoExterno) ?>" readonly>
                                 </div>
                             </div><br>
 

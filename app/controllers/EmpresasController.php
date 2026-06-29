@@ -52,14 +52,6 @@ class EmpresasController extends AuthController
                 ? trim($_POST['inscricao_estadual'])
                 : null,
 
-            'grupo_economico' => !empty($_POST['grupo_economico'])
-                ? trim($_POST['grupo_economico'])
-                : null,
-
-            'segmento' => !empty($_POST['segmento'])
-                ? trim($_POST['segmento'])
-                : null,
-
             'cnae' => !empty($_POST['cnae'])
                 ? trim($_POST['cnae'])
                 : null,

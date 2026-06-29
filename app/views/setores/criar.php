@@ -2,7 +2,43 @@
 
 <main class="content flex-grow-1 pt-3 px-4 pb-4 bg-light-subtle">
     <div class="container-fluid px-2 px-lg-4 mb-4">
+
+        <?php
+        $sucesso = $_SESSION['sucesso'] ?? null;
+        $erro = $_SESSION['erro'] ?? null;
+        unset($_SESSION['sucesso'], $_SESSION['erro']);
+
+        $codigoInterno = 'SET-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        $codigoExterno = 'EXT-SET-' . date('YmdHis');
+
+        ?>
         
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
+            <?php if ($sucesso): ?>
+                <div id="toastSucesso" class="toast text-bg-success border-0 shadow-lg">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-circle-check me-2"></i>
+                            <?= htmlspecialchars($sucesso) ?>
+                        </div>
+                        <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($erro): ?>
+                <div id="toastErro" class="toast text-bg-danger border-0 shadow-lg">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-circle-exclamation me-2"></i>
+                            <?= htmlspecialchars($erro) ?>
+                        </div>
+                        <button class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <header class="mb-4 px-4 py-3 bg-white border rounded-3 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-3" style="font-size: 1.5rem;">
@@ -44,12 +80,8 @@
                                         <i class="fas fa-hashtag"></i>
                                     </span>
 
-                                    <input type="text"
-                                           class="form-control rounded-end-3 border-dark-subtle text-uppercase"
-                                           name="codigo"
-                                           id="codigo"
-                                           placeholder="Ex: SET-001"
-                                           maxlength="50">
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase bg-light" name="codigo" id="codigo" value="<?= htmlspecialchars($codigoInterno) ?>" readonly>
+
                                 </div>
                             </div>
 
@@ -63,12 +95,8 @@
                                         <i class="fas fa-barcode"></i>
                                     </span>
 
-                                    <input type="text"
-                                           class="form-control rounded-end-3 border-dark-subtle text-uppercase"
-                                           name="codigo_externo"
-                                           id="codigo_externo"
-                                           placeholder="Ex: Código SOC / Cliente"
-                                           maxlength="50">
+                                    <input type="text" class="form-control rounded-end-3 border-dark-subtle text-uppercase bg-light" name="codigo_externo" id="codigo_externo" value="<?= htmlspecialchars($codigoExterno) ?>" readonly>
+                                    
                                 </div>
                             </div>
 
@@ -176,6 +204,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const toastErro = document.getElementById('toastErro');
+
+    if(toastErro){
+        new bootstrap.Toast(toastErro,{
+            delay:5000
+        }).show();
+    }
+
     const switchInput = document.getElementById('ativo');
     const statusText = document.querySelector('.status-text');
 

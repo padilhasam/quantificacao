@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Login - Sistema de Relatórios</title>
 
     <!-- Bootstrap 5 -->
@@ -12,6 +13,10 @@
 
     <!-- CSS customizado -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/login.css">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= BASE_URL ?>/image/favicon.png?v=2">
+    <link rel="shortcut icon" href="<?= BASE_URL ?>/image/favicon.ico?v=2" type="image/x-icon">
+
 </head>
 <body class="login-page">
 

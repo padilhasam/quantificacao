@@ -108,7 +108,48 @@ main.content {
     font-weight: 600;
 }
 
+
+/* ==========================================
+   CORREÇÃO DOS INPUTS DO ENDEREÇO
+========================================== */
+
+.endereco-row > div {
+    min-width: 0;
+}
+
+.input-group {
+    width: 100%;
+    min-width: 0;
+}
+
+.input-group .form-control,
+.input-group .form-select {
+    min-width: 0;
+    width: 1%;
+}
+
+.form-control,
+.form-select {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#logradouro,
+#bairro,
+#cidade,
+#complemento {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
 @media (max-width: 1199px) {
+
     main.content {
         padding: .85rem !important;
     }
@@ -138,9 +179,19 @@ main.content {
     .unidades-app-list {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .endereco-row > div {
+        width: 100%;
+    }
 }
 
+
+/* ==========================================
+   MOBILE
+========================================== */
+
 @media (max-width: 576px) {
+
     .page-header-actions {
         grid-template-columns: 1fr;
     }
@@ -166,4 +217,5 @@ main.content {
     .toast {
         width: 100%;
     }
+
 }

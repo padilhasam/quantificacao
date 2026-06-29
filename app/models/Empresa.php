@@ -94,8 +94,6 @@ class Empresa
                 nome_fantasia,
                 cnpj,
                 inscricao_estadual,
-                grupo_economico,
-                segmento,
                 cnae,
                 descricao_cnae,
                 grau_risco,
@@ -125,8 +123,6 @@ class Empresa
                 :nome_fantasia,
                 :cnpj,
                 :inscricao_estadual,
-                :grupo_economico,
-                :segmento,
                 :cnae,
                 :descricao_cnae,
                 :grau_risco,
@@ -172,8 +168,6 @@ class Empresa
                 nome_fantasia = :nome_fantasia,
                 cnpj = :cnpj,
                 inscricao_estadual = :inscricao_estadual,
-                grupo_economico = :grupo_economico,
-                segmento = :segmento,
                 cnae = :cnae,
                 descricao_cnae = :descricao_cnae,
                 grau_risco = :grau_risco,
@@ -214,8 +208,6 @@ class Empresa
         $stmt->bindValue(':nome_fantasia', $dados['nome_fantasia'] ?? null);
         $stmt->bindValue(':cnpj', $dados['cnpj'] ?? null);
         $stmt->bindValue(':inscricao_estadual', $dados['inscricao_estadual'] ?? null);
-        $stmt->bindValue(':grupo_economico', $dados['grupo_economico'] ?? null);
-        $stmt->bindValue(':segmento', $dados['segmento'] ?? null);
         $stmt->bindValue(':cnae', $dados['cnae'] ?? null);
         $stmt->bindValue(':descricao_cnae', $dados['descricao_cnae'] ?? null);
         $stmt->bindValue(':grau_risco', $dados['grau_risco'] ?? null);
