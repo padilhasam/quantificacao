@@ -7,21 +7,37 @@ $erro = $_SESSION['erro'] ?? null;
 unset($_SESSION['sucesso'], $_SESSION['erro']);
 
 $eventos = [];
-if (isset($visitas) && is_array($visitas)) {
-    foreach ($visitas as $v) {
-        // Passamos dados brutos. As cores e o design serão tratados pelo JS.
-        $eventos[] = [
-            'id'    => $v['id'],
-            'title' => $v['empresa_nome'],
-            'start' => $v['data_visita'] . 'T' . ($v['hora_visita'] ?? '00:00:00'),
-            'url'   => BASE_URL . '/visitas/visualizar/' . $v['id'],
-            'extendedProps' => [
-                'status'  => $v['status'] ?? 'ABERTA',
-                'veiculo' => $v['veiculo_modelo'] ?? 'A pé'
-            ]
-        ];
+    if (isset($visitas) && is_array($visitas)) {
+
+        foreach ($visitas as $v) {
+
+            $horaInicio = !empty($v['hora_inicio']) ? $v['hora_inicio'] : '00:00:00';
+            $horaFim    = !empty($v['hora_fim']) ? $v['hora_fim'] : $horaInicio;
+
+            $eventos[] = [
+                'id'    => $v['id'],
+                'title' => $v['empresa_nome'],
+
+                // Início da visita
+                'start' => $v['data_visita'] . 'T' . $horaInicio,
+
+                // Fim da visita
+                'end'   => $v['data_visita'] . 'T' . $horaFim,
+
+                'url'   => BASE_URL . '/visitas/visualizar/' . $v['id'],
+
+                'extendedProps' => [
+                    'status'       => $v['status'] ?? 'ABERTA',
+                    'veiculo'      => $v['veiculo_modelo'] ?? 'A pé',
+                    'hora_inicio'  => $horaInicio,
+                    'hora_fim'     => $horaFim,
+                    'empresa'      => $v['empresa_nome'],
+                    'tecnico'      => $v['usuario_nome'] ?? '',
+                    'unidade'      => $v['unidade_nome'] ?? ''
+                ]
+            ];
+        }
     }
-}
 ?>
 
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />

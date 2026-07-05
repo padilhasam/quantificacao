@@ -80,7 +80,7 @@
                                      style="width: 42px; height: 42px; background: <?= $info['gradiente'] ?>; box-shadow: 0 3px 8px <?= $info['sombra'] ?>;">
                                     <i class="fas <?= $info['icone'] ?> fs-5"></i>
                                 </div>
-                                <a href="<?= BASE_URL ?>/riscos/<?= $info['rota'] ?>" class="stretched-link text-decoration-none">
+                                <a href="<?= BASE_URL ?>/riscos/listar/<?= $info['rota'] ?>" class="stretched-link text-decoration-none">
                                     <span class="text-secondary small fw-medium">
                                         Gerenciar <i class="fas fa-arrow-right ms-1"></i>
                                     </span>

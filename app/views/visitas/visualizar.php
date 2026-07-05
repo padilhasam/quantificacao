@@ -37,9 +37,14 @@ $v = $visita ?? null;
                     </div>
                     <div class="col-md-6">
                         <label class="text-muted small fw-bold text-uppercase">Data e Hora</label>
-                        <p class="fs-6 fw-medium">
-                            <i class="far fa-calendar-alt me-1"></i> <?= date('d/m/Y', strtotime($v['data_visita'] ?? 'now')) ?> 
-                            <i class="far fa-clock ms-3 me-1"></i> <?= substr($v['hora_visita'] ?? '', 0, 5) ?>
+                        <p class="fs-6 fw-medium mb-0">
+                            <i class="far fa-calendar-alt text-primary me-2"></i>
+                            <?= date('d/m/Y', strtotime($v['data_visita'])) ?>
+                            <span class="mx-3 text-muted">|</span>
+                            <i class="far fa-clock text-primary me-2"></i>
+                            <?= substr($v['hora_inicio'], 0, 5) ?>
+                            <i class="fas fa-arrow-right mx-2 text-secondary"></i>
+                            <?= substr($v['hora_fim'], 0, 5) ?>
                         </p>
                     </div>
                     <div class="col-md-6">

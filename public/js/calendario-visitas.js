@@ -1,11 +1,23 @@
-window.calendar = null; // Declarada globalmente
+window.calendar = null;
+
+function getPrioridadeColor(prioridade) {
+    switch (prioridade) {
+        case 'EMERGENCIA': return '#212529';
+        case 'URGENTE':    return '#dc3545';
+        case 'ALTA':       return '#fd7e14';
+        case 'NORMAL':     return '#198754';
+        case 'BAIXA':      return '#0d6efd';
+        default:           return '#6c757d';
+    }
+}
 
 function getStatusColor(status) {
     switch (status) {
-        case 'FINALIZADA': return '#198754'; // Verde
-        case 'CANCELADA':  return '#dc3545'; // Vermelho
-        case 'EM_ANDAMENTO': return '#0d6efd'; // Azul
-        default:           return '#ffc107'; // Amarelo
+        case 'FINALIZADA': return '#198754';
+        case 'CANCELADA':  return '#dc3545';
+        case 'CHECKLIST_INICIADO': return '#6610f2';
+        case 'EM_ANDAMENTO': return '#0d6efd';
+        default: return '#ffc107';
     }
 }
 
@@ -14,15 +26,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!calendarEl) return;
 
     const eventosFormatados = (window.eventosData || []).map(evento => {
+        const prioridade = evento.extendedProps?.prioridade || 'NORMAL';
         const status = evento.extendedProps?.status || 'ABERTA';
+
+        const cor = ['CANCELADA', 'FINALIZADA'].includes(status)
+            ? getStatusColor(status)
+            : getPrioridadeColor(prioridade);
+
         return {
             ...evento,
-            backgroundColor: getStatusColor(status),
-            borderColor: getStatusColor(status)
+            backgroundColor: cor,
+            borderColor: cor,
+            textColor: '#ffffff'
         };
     });
 
-    // CORREÇÃO: Atribuindo à variável global window.calendar
     window.calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'pt-br',
@@ -34,33 +52,27 @@ document.addEventListener('DOMContentLoaded', function() {
             right: 'dayGridMonth,timeGridWeek' 
         },
         events: eventosFormatados,
-        
         editable: true, 
         droppable: true,
         dayMaxEvents: true,
 
-        windowResize: function(arg) {
-            if (window.innerWidth < 768) {
-                window.calendar.changeView('dayGridMonth');
-            }
-        },
-
         eventDrop: function(info) {
             const dataFormatada = info.event.startStr.split('T')[0];
-            
+
             $.ajax({
                 url: window.baseUrl + '/visitas/atualizarData',
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     id: info.event.id,
                     nova_data: dataFormatada
                 },
                 success: function(response) {
-                    if (response.status === 'sucesso') {
-                        showToast(response.mensagem, 'success');
+                    if (response.status === 'success') {
+                        showToast(response.mensagem || 'Data atualizada com sucesso.', 'success');
                     } else {
-                        showToast(response.mensagem, 'danger');
-                        info.revert(); // Volta o evento para a data original se falhar
+                        showToast(response.mensagem || 'Erro ao atualizar data.', 'danger');
+                        info.revert();
                     }
                 },
                 error: function() {
@@ -69,13 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         },
-        
+
         dateClick: function(info) {
             if (window.baseUrl) {
                 window.location.href = `${window.baseUrl}/visitas/criar?data=${info.dateStr}`;
             }
         },
-        
+
         eventClick: function(info) {
             info.jsEvent.preventDefault();
             if (info.event.url) {

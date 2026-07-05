@@ -47,7 +47,7 @@
                         <div class="col-12 col-md-6">
                             <label for="veiculo_id" class="form-label fw-semibold text-secondary small">Veículo Coletivo / Frota</label>
                             <select name="veiculo_id" id="veiculo_id" class="form-select rounded-3 border-dark-subtle">
-                                <option value="">Nenhum veículo alocado (Meios próprios / Carona)</option>
+                                <option value="">Nenhum veículo alocado (Meios próprios / UBER)</option>
                                 <?php if (isset($veiculos) && is_array($veiculos)): ?>
                                     <?php foreach($veiculos as $carro): ?>
                                         <option value="<?= $carro['id'] ?>">
@@ -105,21 +105,33 @@
                             <div class="invalid-feedback">Defina uma data válida.</div>
                         </div>
 
-                        <div class="col-12 col-md-4">
-                            <label for="hora_visita" class="form-label fw-semibold text-secondary small">Horário Previsto</label>
+                        <div class="col-12 col-md-2">
+                            <label for="hora_inicio" class="form-label fw-semibold text-secondary small">Início *</label>
                             <input type="time" 
-                                   name="hora_visita" 
-                                   id="hora_visita" 
-                                   class="form-control rounded-3 border-dark-subtle">
+                                name="hora_inicio" 
+                                id="hora_inicio" 
+                                class="form-control rounded-3 border-dark-subtle"
+                                required>
+                            <div class="invalid-feedback">Informe o horário inicial.</div>
+                        </div>
+
+                        <div class="col-12 col-md-2">
+                            <label for="hora_fim" class="form-label fw-semibold text-secondary small">Fim *</label>
+                            <input type="time" 
+                                name="hora_fim" 
+                                id="hora_fim" 
+                                class="form-control rounded-3 border-dark-subtle"
+                                required>
+                            <div class="invalid-feedback">Informe o horário final.</div>
                         </div>
 
                         <div class="col-12 col-md-4">
                             <label for="responsavel_acompanhamento" class="form-label fw-semibold text-secondary small">Responsável no Local</label>
                             <input type="text" 
-                                   name="responsavel_acompanhamento" 
-                                   id="responsavel_acompanhamento" 
-                                   class="form-control rounded-3 border-dark-subtle" 
-                                   placeholder="Ex: Gerente de RH, Engenheiro">
+                                name="responsavel_acompanhamento" 
+                                id="responsavel_acompanhamento" 
+                                class="form-control rounded-3 border-dark-subtle" 
+                                placeholder="Ex: Gerente de RH, Engenheiro">
                         </div>
                     </div>
                 </div>

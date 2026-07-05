@@ -63,27 +63,63 @@ $visita = $data['visita'] ?? null;
 
                         <div class="border rounded-3 p-3 mb-4 bg-light-subtle">
                             <h6 class="text-primary fw-bold mb-3 d-flex align-items-center gap-2">
-                                <i class="fas fa-truck"></i> Logística e Horário
+                                <i class="fas fa-truck"></i> Logística, Prioridade e Horário
                             </h6>
+
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label fw-semibold text-secondary small">Veículo</label>
                                     <select name="veiculo_id" class="form-select rounded-3 border-dark-subtle">
-                                        <option value="">Selecione um veículo...</option>
+                                        <option value="">Sem veículo / A pé</option>
                                         <?php foreach ($veiculos as $v): ?>
                                             <option value="<?= $v['id'] ?>" <?= ($v['id'] == $visita['veiculo_id']) ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($v['modelo']) ?> (<?= $v['placa'] ?>)
+                                                <?= htmlspecialchars($v['modelo']) ?> (<?= htmlspecialchars($v['placa']) ?>)
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+
+                                <div class="col-md-3">
                                     <label class="form-label fw-semibold text-secondary small">Data *</label>
-                                    <input type="date" name="data_visita" class="form-control rounded-3 border-dark-subtle" value="<?= $visita['data_visita'] ?>" required>
+                                    <input 
+                                        type="date" 
+                                        name="data_visita" 
+                                        class="form-control rounded-3 border-dark-subtle" 
+                                        value="<?= htmlspecialchars($visita['data_visita']) ?>" 
+                                        required>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-secondary small">Horário</label>
-                                    <input type="time" name="hora_visita" class="form-control rounded-3 border-dark-subtle" value="<?= substr($visita['hora_visita'] ?? '', 0, 5) ?>">
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-secondary small">Início *</label>
+                                    <input 
+                                        type="time" 
+                                        name="hora_inicio" 
+                                        class="form-control rounded-3 border-dark-subtle" 
+                                        value="<?= substr($visita['hora_inicio'] ?? '', 0, 5) ?>" 
+                                        required>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-secondary small">Fim *</label>
+                                    <input 
+                                        type="time" 
+                                        name="hora_fim" 
+                                        class="form-control rounded-3 border-dark-subtle" 
+                                        value="<?= substr($visita['hora_fim'] ?? '', 0, 5) ?>" 
+                                        required>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-secondary small">Prioridade *</label>
+                                    <select name="prioridade" class="form-select rounded-3 border-dark-subtle" required>
+                                        <?php $prioridadeAtual = $visita['prioridade'] ?? 'NORMAL'; ?>
+
+                                        <option value="BAIXA" <?= $prioridadeAtual === 'BAIXA' ? 'selected' : '' ?>>Baixa</option>
+                                        <option value="NORMAL" <?= $prioridadeAtual === 'NORMAL' ? 'selected' : '' ?>>Normal</option>
+                                        <option value="ALTA" <?= $prioridadeAtual === 'ALTA' ? 'selected' : '' ?>>Alta</option>
+                                        <option value="URGENTE" <?= $prioridadeAtual === 'URGENTE' ? 'selected' : '' ?>>Urgente</option>
+                                        <option value="EMERGENCIA" <?= $prioridadeAtual === 'EMERGENCIA' ? 'selected' : '' ?>>Emergência</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

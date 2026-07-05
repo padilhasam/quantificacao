@@ -1,139 +1,171 @@
 <?php
 
-class Risco extends Database
+class Risco extends Model
 {
-    private PDO $db;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->db = $this->getConnection();
-    }
-
-    // LISTAR TODOS
     public function listarTodos(): array
     {
-        $sql = "SELECT r.id,
-                       r.nome,
-                       r.descricao,
-                       r.unidade_medida,
-                       r.exige_quantificacao,
-                       r.severidade_padrao,
-                       t.nome AS tipo_nome
-                  FROM riscos r
-                  INNER JOIN tipos_riscos t ON r.tipo_risco_id = t.id
-              ORDER BY t.nome, r.nome";
+        $stmt = $this->db->query("
+            SELECT *
+            FROM riscos
+            WHERE ativo = 1
+            ORDER BY categoria, nome
+        ");
 
-        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // LISTAR POR TIPO
-    public function listarPorCategoria(int $tipoRiscoId): array
+    public function listarPorCategoria(string $categoria): array
     {
-        $sql = "SELECT r.id,
-                       r.nome,
-                       r.descricao,
-                       r.unidade_medida,
-                       r.exige_quantificacao,
-                       r.severidade_padrao,
-                       t.nome AS tipo_nome
-                  FROM riscos r
-                  INNER JOIN tipos_riscos t ON r.tipo_risco_id = t.id
-                 WHERE r.tipo_risco_id = :tipo_risco_id
-              ORDER BY r.nome";
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM riscos
+            WHERE categoria = :categoria
+              AND ativo = 1
+            ORDER BY nome ASC
+        ");
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':tipo_risco_id', $tipoRiscoId, PDO::PARAM_INT);
+        $stmt->bindValue(':categoria', $categoria);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // BUSCAR POR ID
     public function buscarPorId(int $id): ?array
     {
-        $sql = "SELECT r.id,
-                       r.nome,
-                       r.descricao,
-                       r.unidade_medida,
-                       r.exige_quantificacao,
-                       r.severidade_padrao,
-                       r.tipo_risco_id,
-                       t.nome AS tipo_nome
-                  FROM riscos r
-                  INNER JOIN tipos_riscos t ON r.tipo_risco_id = t.id
-                 WHERE r.id = :id
-                 LIMIT 1";
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM riscos
+            WHERE id = :id
+            LIMIT 1
+        ");
 
-        $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    // INSERIR
-    public function inserir(
-        int $tipoRiscoId,
-        string $nome,
-        string $descricao = '',
-        string $unidade = '',
-        int $exigeQuantificacao = 0,
-        int $severidade = 1
-    ): bool {
-        $sql = "INSERT INTO riscos
-                (tipo_risco_id, nome, descricao, unidade_medida, exige_quantificacao, severidade_padrao)
-                VALUES
-                (:tipo_risco_id, :nome, :descricao, :unidade_medida, :exige_quantificacao, :severidade_padrao)";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':tipo_risco_id' => $tipoRiscoId,
-            ':nome' => $nome,
-            ':descricao' => $descricao,
-            ':unidade_medida' => $unidade,
-            ':exige_quantificacao' => $exigeQuantificacao,
-            ':severidade_padrao' => $severidade
-        ]);
-    }
-
-    // ATUALIZAR
-    public function atualizar(
-        int $id,
-        int $tipoRiscoId,
-        string $nome,
-        string $descricao = '',
-        string $unidade = '',
-        int $exigeQuantificacao = 0,
-        int $severidade = 1
-    ): bool {
-        $sql = "UPDATE riscos
-                   SET tipo_risco_id = :tipo_risco_id,
-                       nome = :nome,
-                       descricao = :descricao,
-                       unidade_medida = :unidade_medida,
-                       exige_quantificacao = :exige_quantificacao,
-                       severidade_padrao = :severidade_padrao
-                 WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ':id' => $id,
-            ':tipo_risco_id' => $tipoRiscoId,
-            ':nome' => $nome,
-            ':descricao' => $descricao,
-            ':unidade_medida' => $unidade,
-            ':exige_quantificacao' => $exigeQuantificacao,
-            ':severidade_padrao' => $severidade
-        ]);
-    }
-
-    // EXCLUIR
-    public function excluir(int $id): bool
+    public function buscarPorCodigo(string $codigo): ?array
     {
-        $stmt = $this->db->prepare("DELETE FROM riscos WHERE id = :id");
-        return $stmt->execute([':id' => $id]);
+        $stmt = $this->db->prepare("
+            SELECT *
+            FROM riscos
+            WHERE codigo = :codigo
+            LIMIT 1
+        ");
+
+        $stmt->bindValue(':codigo', $codigo);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+   public function salvar(array $dados)
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO riscos (
+                codigo,
+                codigo_externo,
+                categoria,
+                nome,
+                tipo_avaliacao,
+                descricao,
+                normas_aplicaveis,
+                metodologia,
+                unidade_medida,
+                limite_nr15,
+                limite_acgih,
+                nivel_acao,
+                exige_quantificacao,
+                severidade_padrao,
+                probabilidade_padrao,
+                ativo
+            ) VALUES (
+                :codigo,
+                :codigo_externo,
+                :categoria,
+                :nome,
+                :tipo_avaliacao,
+                :descricao,
+                :normas_aplicaveis,
+                :metodologia,
+                :unidade_medida,
+                :limite_nr15,
+                :limite_acgih,
+                :nivel_acao,
+                :exige_quantificacao,
+                :severidade_padrao,
+                :probabilidade_padrao,
+                :ativo
+            )
+        ");
+
+        return $stmt->execute($this->mapearParametros($dados))
+            ? (int)$this->db->lastInsertId()
+            : false;
+    }
+
+    public function atualizar(int $id, array $dados): bool
+    {
+        $params = $this->mapearParametros($dados);
+        $params[':id'] = $id;
+
+        $stmt = $this->db->prepare("
+            UPDATE riscos SET
+                codigo = :codigo,
+                codigo_externo = :codigo_externo,
+                categoria = :categoria,
+                nome = :nome,
+                tipo_avaliacao = :tipo_avaliacao,
+                descricao = :descricao,
+                normas_aplicaveis = :normas_aplicaveis,
+                metodologia = :metodologia,
+                unidade_medida = :unidade_medida,
+                limite_nr15 = :limite_nr15,
+                limite_acgih = :limite_acgih,
+                nivel_acao = :nivel_acao,
+                exige_quantificacao = :exige_quantificacao,
+                severidade_padrao = :severidade_padrao,
+                probabilidade_padrao = :probabilidade_padrao,
+                ativo = :ativo
+            WHERE id = :id
+        ");
+
+        return $stmt->execute($params);
+    }
+
+    public function desativar(int $id): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE riscos
+            SET ativo = 0
+            WHERE id = :id
+        ");
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
+    }
+
+    private function mapearParametros(array $dados): array
+    {
+        return [
+            ':codigo' => $dados['codigo'] ?? null,
+            ':codigo_externo' => $dados['codigo_externo'] ?? null,
+            ':categoria' => $dados['categoria'],
+            ':nome' => $dados['nome'],
+            ':tipo_avaliacao' => $dados['tipo_avaliacao'] ?? 'Qualitativo',
+            ':descricao' => $dados['descricao'] ?? null,
+            ':normas_aplicaveis' => $dados['normas_aplicaveis'] ?? null,
+            ':metodologia' => $dados['metodologia'] ?? null,
+            ':unidade_medida' => $dados['unidade_medida'] ?? null,
+            ':limite_nr15' => $dados['limite_nr15'] ?? null,
+            ':limite_acgih' => $dados['limite_acgih'] ?? null,
+            ':nivel_acao' => $dados['nivel_acao'] ?? null,
+            ':exige_quantificacao' => (int)($dados['exige_quantificacao'] ?? 0),
+            ':severidade_padrao' => (int)($dados['severidade_padrao'] ?? 1),
+            ':probabilidade_padrao' => (int)($dados['probabilidade_padrao'] ?? 1),
+            ':ativo' => (int)($dados['ativo'] ?? 1)
+        ];
     }
 }

@@ -34,7 +34,7 @@ CREATE TABLE `cargos` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_cargo_nome` (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,6 +43,7 @@ CREATE TABLE `cargos` (
 
 LOCK TABLES `cargos` WRITE;
 /*!40000 ALTER TABLE `cargos` DISABLE KEYS */;
+INSERT INTO `cargos` VALUES (1,NULL,NULL,'Assistente Administrativo','414010','Teste',1,'2026-06-26 20:23:49','2026-06-26 20:23:49');
 /*!40000 ALTER TABLE `cargos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,6 +130,48 @@ LOCK TABLES `checklist_respostas` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `checklists_visita`
+--
+
+DROP TABLE IF EXISTS `checklists_visita`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `checklists_visita` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `visita_id` int NOT NULL,
+  `empresa_id` int NOT NULL,
+  `unidade_id` int DEFAULT NULL,
+  `usuario_id` int NOT NULL,
+  `prioridade` enum('PADRAO','URGENTE','CRITICA') DEFAULT 'PADRAO',
+  `responsavel_acompanhamento` varchar(150) DEFAULT NULL,
+  `status` enum('ABERTO','EM_ANDAMENTO','CONCLUIDO','CANCELADO') DEFAULT 'ABERTO',
+  `data_inicio` datetime DEFAULT CURRENT_TIMESTAMP,
+  `data_fim` datetime DEFAULT NULL,
+  `assinatura_responsavel` text,
+  `assinatura_tecnico` text,
+  `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `visita_id` (`visita_id`),
+  KEY `empresa_id` (`empresa_id`),
+  KEY `unidade_id` (`unidade_id`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `checklists_visita_ibfk_1` FOREIGN KEY (`visita_id`) REFERENCES `visitas_tecnicas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `checklists_visita_ibfk_2` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`),
+  CONSTRAINT `checklists_visita_ibfk_3` FOREIGN KEY (`unidade_id`) REFERENCES `unidades` (`id`),
+  CONSTRAINT `checklists_visita_ibfk_4` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `checklists_visita`
+--
+
+LOCK TABLES `checklists_visita` WRITE;
+/*!40000 ALTER TABLE `checklists_visita` DISABLE KEYS */;
+/*!40000 ALTER TABLE `checklists_visita` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `empresas`
 --
 
@@ -143,21 +186,34 @@ CREATE TABLE `empresas` (
   `nome_fantasia` varchar(200) DEFAULT NULL,
   `cnpj` varchar(20) DEFAULT NULL,
   `inscricao_estadual` varchar(50) DEFAULT NULL,
+  `cnae` varchar(30) DEFAULT NULL,
+  `descricao_cnae` varchar(255) DEFAULT NULL,
+  `grau_risco` varchar(10) DEFAULT NULL,
+  `quantidade_funcionarios` int DEFAULT NULL,
   `telefone` varchar(30) DEFAULT NULL,
   `email` varchar(150) DEFAULT NULL,
   `responsavel` varchar(150) DEFAULT NULL,
+  `cargo_responsavel` varchar(150) DEFAULT NULL,
   `contato_responsavel` varchar(100) DEFAULT NULL,
   `endereco` text,
   `cidade` varchar(100) DEFAULT NULL,
   `estado` varchar(2) DEFAULT NULL,
   `cep` varchar(20) DEFAULT NULL,
+  `logradouro` varchar(200) DEFAULT NULL,
+  `numero` varchar(20) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
+  `bairro` varchar(100) DEFAULT NULL,
+  `tecnico_responsavel` varchar(150) DEFAULT NULL,
+  `supervisor_responsavel` varchar(150) DEFAULT NULL,
+  `periodicidade_visitas` varchar(50) DEFAULT NULL,
+  `observacoes` text,
   `ativo` tinyint(1) DEFAULT '1',
   `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `atualizado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_empresa_cnpj` (`cnpj`),
   UNIQUE KEY `uk_empresa_codigo` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,8 +222,56 @@ CREATE TABLE `empresas` (
 
 LOCK TABLES `empresas` WRITE;
 /*!40000 ALTER TABLE `empresas` DISABLE KEYS */;
-INSERT INTO `empresas` VALUES (9,NULL,NULL,'CyberTech Technology Ltda','CyberTech Technology Ltda','78.136.198/0001-22',NULL,'(41) 98899-9090','tecnologia@sst.com.br','Jorge','(41) 99898-9796','Rua Marechal Floriano Peixoto, 150 - Centro','Curitiba','PR','83642-150',1,'2026-06-17 19:31:07','2026-06-23 14:28:07'),(10,NULL,NULL,'Santiago Saúde e Segurança Ocupacional Ltda','Santiago Saúde e Segurança Ocupacional Ltda','11.492.975/0001-09',NULL,'(41) 3027-2727','santiago@sstsantiago.com.br','Deize','(41) 99596-9779','Rua Barcelos Rastros, 250 - Centro','Curitiba','PR','83120-300',1,'2026-06-17 19:36:46','2026-06-23 14:28:07'),(11,'EMP6A3AE38A63713',NULL,'Artemis Consultoria Ltda','Artemis Consultoria Ltda','56.802.725/0001-58',NULL,'(41) 99991-1111','comercial@artemis.com.br','Jeferson','(41) 99898-9796','Rua das Raparigas, 580',NULL,NULL,'83708-500',1,'2026-06-23 19:50:34','2026-06-23 19:50:34');
+INSERT INTO `empresas` VALUES (9,'EMP6A3FE0632AB0D',NULL,'CyberTech Technology Ltda','CyberTech Technology Ltda','78.136.198/0001-22',NULL,NULL,NULL,NULL,NULL,'(41) 98899-9090','tecnologia@sst.com.br','Jorge',NULL,'(41) 99898-9796','Rua Governador Ernany Sátiro, 300, Acácio Figueiredo, Campina Grande, PB','Campina Grande','PB','58421-090','Rua Governador Ernany Sátiro','300',NULL,'Acácio Figueiredo','Jeferson','Marcos','Anual',NULL,0,'2026-06-17 19:31:07','2026-06-27 14:43:04'),(10,NULL,NULL,'Santiago Saúde e Segurança Ocupacional Ltda','Santiago Saúde e Segurança Ocupacional Ltda','11.492.975/0001-09',NULL,NULL,NULL,NULL,NULL,'(41) 3027-2727','santiago@sstsantiago.com.br','Deize',NULL,'(41) 99596-9779','Rua Barcelos Rastros, 250 - Centro','Curitiba','PR','83120-300',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2026-06-17 19:36:46','2026-06-23 14:28:07'),(11,'EMP6A3AE38A63713',NULL,'Artemis Consultoria Ltda','Artemis Consultoria Ltda','56.802.725/0001-58',NULL,NULL,NULL,NULL,NULL,'(41) 99991-1111','comercial@artemis.com.br','Jeferson',NULL,'(41) 99898-9796','Rua das Raparigas, 580',NULL,NULL,'83708-500',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2026-06-23 19:50:34','2026-06-23 19:50:34'),(12,'EMP6A3AF1A3D7DA0',NULL,'Soluções Nexu Ltda','Soluções Nexu Ltda','71.455.718/0001-10',NULL,NULL,NULL,NULL,NULL,'(41) 99795-9893','comercial@nexus.com','Jeferson',NULL,'(41) 99890-9696','Rua do Rock, 200',NULL,NULL,'83654-700',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2026-06-23 20:50:43','2026-06-23 20:50:43'),(13,'EMP6A3FEDC7A1EAA',NULL,'MATHEUS REFFI AFFONSECA 41400520827','MATHEUS REFFI','22.917.461/0001-66',NULL,'95.29-1/99','Reparação e manutenção de outros objetos e equipamentos pessoais e domésticos não especificados anteriormente','2',200,'(41) 3032-2025','diretoria@reffi.com.br','Paula','Diretora','(41) 99645-2021','Rua Júlio Conceição, 120, Vila Mathias, Santos, SP','Santos','SP','11015-540','Rua Júlio Conceição','120',NULL,'Vila Mathias','Juliana','Marcos','Anual','Teste',1,'2026-06-27 15:35:35','2026-06-27 15:35:35'),(14,'EMP-89BFC316','EXT-EMP-20260629032507','54.017.841 ALCILEIDE PEREIRA DE ARAUJO SANTOS','54.017.841 ALCILEIDE PEREIRA DE ARAUJO SANTOS','54.017.841/0001-30',NULL,'97.00-5/00','Serviços domésticos','1',2,'(41) 3040-5659','alcileide@hotmail.com','Alcileide','Proprietário','(41) 99190-2356','Rua Maria Tavares da Silva, 330, Rincão, Mossoró, RN','Mossoró','RN','59630-505','Rua Maria Tavares da Silva','330',NULL,'Rincão','Dayane','Marcos','Anual',NULL,1,'2026-06-29 10:46:48','2026-06-29 10:46:48');
 /*!40000 ALTER TABLE `empresas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `epi_detalhes`
+--
+
+DROP TABLE IF EXISTS `epi_detalhes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `epi_detalhes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `medida_controle_id` int NOT NULL,
+  `ca` varchar(30) DEFAULT NULL,
+  `fabricante` varchar(180) DEFAULT NULL,
+  `modelo` varchar(180) DEFAULT NULL,
+  `aprovado_para` text,
+  `protege_poeiras` tinyint(1) DEFAULT '0',
+  `protege_gases` tinyint(1) DEFAULT '0',
+  `protege_vapores` tinyint(1) DEFAULT '0',
+  `protege_nevoas` tinyint(1) DEFAULT '0',
+  `protege_fumos` tinyint(1) DEFAULT '0',
+  `protege_ruido` tinyint(1) DEFAULT '0',
+  `protege_quimicos` tinyint(1) DEFAULT '0',
+  `protege_biologicos` tinyint(1) DEFAULT '0',
+  `nivel_atenuacao` varchar(80) DEFAULT NULL,
+  `tipo_protecao` varchar(120) DEFAULT NULL,
+  `classe` varchar(80) DEFAULT NULL,
+  `data_validade_ca` date DEFAULT NULL,
+  `situacao_ca` varchar(80) DEFAULT NULL,
+  `fonte_consulta` varchar(255) DEFAULT NULL,
+  `data_ultima_consulta` datetime DEFAULT NULL,
+  `observacoes_tecnicas` text,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_epi_medida` (`medida_controle_id`),
+  KEY `idx_epi_ca` (`ca`),
+  CONSTRAINT `fk_epi_medida` FOREIGN KEY (`medida_controle_id`) REFERENCES `medidas_controle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `epi_detalhes`
+--
+
+LOCK TABLES `epi_detalhes` WRITE;
+/*!40000 ALTER TABLE `epi_detalhes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `epi_detalhes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -197,36 +301,6 @@ CREATE TABLE `evidencias` (
 LOCK TABLES `evidencias` WRITE;
 /*!40000 ALTER TABLE `evidencias` DISABLE KEYS */;
 /*!40000 ALTER TABLE `evidencias` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `fispq`
---
-
-DROP TABLE IF EXISTS `fispq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `fispq` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `empresa_id` int NOT NULL,
-  `produto` varchar(200) NOT NULL,
-  `fabricante` varchar(150) DEFAULT NULL,
-  `arquivo_pdf` varchar(255) DEFAULT NULL,
-  `validade` date DEFAULT NULL,
-  `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `empresa_id` (`empresa_id`),
-  CONSTRAINT `fispq_ibfk_1` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `fispq`
---
-
-LOCK TABLES `fispq` WRITE;
-/*!40000 ALTER TABLE `fispq` DISABLE KEYS */;
-/*!40000 ALTER TABLE `fispq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -356,6 +430,42 @@ CREATE TABLE `logs_sistema` (
 LOCK TABLES `logs_sistema` WRITE;
 /*!40000 ALTER TABLE `logs_sistema` DISABLE KEYS */;
 /*!40000 ALTER TABLE `logs_sistema` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `medidas_controle`
+--
+
+DROP TABLE IF EXISTS `medidas_controle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `medidas_controle` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tipo_medida_id` int NOT NULL,
+  `codigo` varchar(50) DEFAULT NULL,
+  `codigo_externo` varchar(80) DEFAULT NULL,
+  `nome` varchar(180) NOT NULL,
+  `descricao` text,
+  `observacoes` text,
+  `ativo` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_medidas_codigo` (`codigo`),
+  KEY `idx_medidas_tipo` (`tipo_medida_id`),
+  KEY `idx_medidas_nome` (`nome`),
+  KEY `idx_medidas_ativo` (`ativo`),
+  CONSTRAINT `fk_medidas_tipo` FOREIGN KEY (`tipo_medida_id`) REFERENCES `tipos_medidas_controle` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `medidas_controle`
+--
+
+LOCK TABLES `medidas_controle` WRITE;
+/*!40000 ALTER TABLE `medidas_controle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `medidas_controle` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -545,18 +655,30 @@ DROP TABLE IF EXISTS `riscos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `riscos` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tipo_risco_id` int NOT NULL,
+  `codigo` varchar(50) DEFAULT NULL,
+  `codigo_externo` varchar(80) DEFAULT NULL,
+  `categoria` enum('fisico','quimico','biologico','ergonomico','acidente','psicossocial') NOT NULL,
   `nome` varchar(150) NOT NULL,
+  `tipo_avaliacao` enum('Qualitativo','Quantitativo','Qualitativo/Quantitativo') DEFAULT 'Qualitativo',
   `descricao` text,
+  `normas_aplicaveis` text,
+  `metodologia` text,
   `limite_nr15` varchar(100) DEFAULT NULL,
   `limite_acgih` varchar(100) DEFAULT NULL,
+  `nivel_acao` varchar(100) DEFAULT NULL,
   `unidade_medida` varchar(50) DEFAULT NULL,
   `exige_quantificacao` tinyint(1) DEFAULT '0',
   `severidade_padrao` int DEFAULT '1',
+  `probabilidade_padrao` int DEFAULT '1',
+  `ativo` tinyint(1) DEFAULT '1',
+  `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `atualizado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `tipo_risco_id` (`tipo_risco_id`),
-  CONSTRAINT `riscos_ibfk_1` FOREIGN KEY (`tipo_risco_id`) REFERENCES `tipos_riscos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `uk_riscos_codigo` (`codigo`),
+  KEY `idx_riscos_categoria` (`categoria`),
+  KEY `idx_riscos_nome` (`nome`),
+  KEY `idx_riscos_ativo` (`ativo`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -565,6 +687,7 @@ CREATE TABLE `riscos` (
 
 LOCK TABLES `riscos` WRITE;
 /*!40000 ALTER TABLE `riscos` DISABLE KEYS */;
+INSERT INTO `riscos` VALUES (1,'TESTE','TESTE','fisico','Teste','Qualitativo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,1,0,'2026-06-30 19:38:45','2026-06-30 20:22:02'),(2,'RIS-AE591643','EXT-RIS-20260630213308','fisico','Ruído','Qualitativo','Teste','Teste','Teste','85dB(A)',NULL,'80dB(A)','dB(A)',1,1,1,1,'2026-06-30 19:52:16','2026-06-30 19:52:16'),(3,'RIS-D30D8FD2','EXT-RIS-20260630215440','fisico','Calor','Quantitativo','Teste','Teste','teste','31.5',NULL,'17.0','ºC',1,1,1,1,'2026-06-30 19:55:39','2026-06-30 19:55:39'),(4,'RIS-FDAB4F77','EXT-RIS-20260630215805','fisico','Frio','Qualitativo','Teste','Teste','Teste',NULL,NULL,NULL,'ºC',0,1,1,1,'2026-06-30 19:58:38','2026-06-30 19:58:38'),(5,'RIS-A12FF94D','EXT-RIS-20260630221842','quimico','Hidróxido de Cálcio','Quantitativo','Teste','Teste','Teste','0,20',NULL,'0,10','ppm',1,1,1,1,'2026-06-30 20:19:24','2026-06-30 20:19:24');
 /*!40000 ALTER TABLE `riscos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -587,7 +710,7 @@ CREATE TABLE `setores` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_setor_nome` (`nome`),
   UNIQUE KEY `uk_setor_codigo` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -596,31 +719,38 @@ CREATE TABLE `setores` (
 
 LOCK TABLES `setores` WRITE;
 /*!40000 ALTER TABLE `setores` DISABLE KEYS */;
-INSERT INTO `setores` VALUES (1,NULL,NULL,'Administrativo',NULL,1,'2026-06-23 14:34:36','2026-06-23 14:34:36');
+INSERT INTO `setores` VALUES (1,NULL,NULL,'Administrativo',NULL,1,'2026-06-23 14:34:36','2026-06-23 14:34:36'),(2,'SET-6BD95E49','EXT-SET-20260629031709','Almoxarifado','Teste',1,'2026-06-29 01:17:23','2026-06-29 01:17:23');
 /*!40000 ALTER TABLE `setores` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tipos_riscos`
+-- Table structure for table `tipos_medidas_controle`
 --
 
-DROP TABLE IF EXISTS `tipos_riscos`;
+DROP TABLE IF EXISTS `tipos_medidas_controle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tipos_riscos` (
+CREATE TABLE `tipos_medidas_controle` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  `slug` varchar(100) NOT NULL,
+  `icone` varchar(80) DEFAULT NULL,
+  `cor` varchar(30) DEFAULT NULL,
+  `ativo` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tipos_medidas_slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tipos_riscos`
+-- Dumping data for table `tipos_medidas_controle`
 --
 
-LOCK TABLES `tipos_riscos` WRITE;
-/*!40000 ALTER TABLE `tipos_riscos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipos_riscos` ENABLE KEYS */;
+LOCK TABLES `tipos_medidas_controle` WRITE;
+/*!40000 ALTER TABLE `tipos_medidas_controle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipos_medidas_controle` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -632,24 +762,41 @@ DROP TABLE IF EXISTS `unidades`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unidades` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(30) DEFAULT NULL,
-  `codigo_externo` varchar(50) DEFAULT NULL,
+  `empresa_id` int DEFAULT NULL,
+  `codigo` varchar(50) DEFAULT NULL,
+  `codigo_externo` varchar(80) DEFAULT NULL,
   `nome` varchar(150) NOT NULL,
+  `razao_social` varchar(200) DEFAULT NULL,
+  `nome_fantasia` varchar(200) DEFAULT NULL,
   `cnpj` varchar(20) DEFAULT NULL,
+  `inscricao_estadual` varchar(50) DEFAULT NULL,
+  `cnae` varchar(30) DEFAULT NULL,
+  `descricao_cnae` varchar(255) DEFAULT NULL,
+  `grau_risco` varchar(10) DEFAULT NULL,
+  `quantidade_funcionarios` int DEFAULT NULL,
   `endereco` text,
   `numero` varchar(20) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
   `bairro` varchar(100) DEFAULT NULL,
   `cidade` varchar(100) DEFAULT NULL,
   `estado` varchar(2) DEFAULT NULL,
   `cep` varchar(20) DEFAULT NULL,
   `telefone` varchar(30) DEFAULT NULL,
+  `contato_responsavel` varchar(30) DEFAULT NULL,
   `email` varchar(150) DEFAULT NULL,
   `responsavel` varchar(150) DEFAULT NULL,
+  `tecnico_responsavel` varchar(150) DEFAULT NULL,
+  `supervisor_responsavel` varchar(150) DEFAULT NULL,
+  `periodicidade_visitas` varchar(50) DEFAULT NULL,
+  `observacoes` text,
+  `cargo_responsavel` varchar(150) DEFAULT NULL,
   `ativo` tinyint(1) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_unidade_codigo` (`codigo`)
+  UNIQUE KEY `uk_unidade_codigo` (`codigo`),
+  KEY `fk_unidades_empresas` (`empresa_id`),
+  CONSTRAINT `fk_unidades_empresas` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -659,7 +806,7 @@ CREATE TABLE `unidades` (
 
 LOCK TABLES `unidades` WRITE;
 /*!40000 ALTER TABLE `unidades` DISABLE KEYS */;
-INSERT INTO `unidades` VALUES (1,NULL,NULL,'Santiago Saúde e Segurança Ocupacional Ltda','66.863.625/0001-95','Av. das Nações, 2500 - Distrito Industrial',NULL,NULL,'Araucária','PR',NULL,'(41) 99795-9893',NULL,NULL,1,'2026-06-23 14:38:58','2026-06-23 14:38:58');
+INSERT INTO `unidades` VALUES (1,NULL,NULL,NULL,'Santiago Saúde e Segurança Ocupacional Ltda',NULL,NULL,'66.863.625/0001-95',NULL,NULL,NULL,NULL,NULL,'Av. das Nações, 2500 - Distrito Industrial',NULL,NULL,NULL,'Araucária','PR',NULL,'(41) 99795-9893',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2026-06-23 14:38:58','2026-06-23 14:38:58');
 /*!40000 ALTER TABLE `unidades` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -696,7 +843,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (13,'Administrador','admin@seudominio.com','$2y$10$D.E3MbeG.DRI2bgc2X2sdewXTr32gDnAE9hCDMIqbk9gnoY7ocaL.',NULL,'ADMIN',NULL,NULL,NULL,NULL,1,NULL,'2026-06-14 17:24:31','2026-06-19 09:10:01'),(17,'Marcos Guilherme Rutz','tecnico1@ssosantiago.com.br','$2y$10$BycBeSMajVIaTKGWnkItq.eVRNx/dnsK6eSEjWjKzf9CjDYaJEsMO',NULL,'TECNICO',NULL,NULL,NULL,NULL,1,NULL,'2026-06-17 17:07:09',NULL);
+INSERT INTO `usuarios` VALUES (13,'Administrador','admin@seudominio.com','$2y$10$D.E3MbeG.DRI2bgc2X2sdewXTr32gDnAE9hCDMIqbk9gnoY7ocaL.',NULL,'ADMIN',NULL,NULL,NULL,NULL,1,NULL,'2026-06-14 17:24:31','2026-06-28 21:57:07'),(17,'Marcos Guilherme Rutz','tecnico1@ssosantiago.com.br','$2y$10$BycBeSMajVIaTKGWnkItq.eVRNx/dnsK6eSEjWjKzf9CjDYaJEsMO',NULL,'TECNICO',NULL,NULL,NULL,NULL,1,NULL,'2026-06-17 17:07:09',NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -716,7 +863,7 @@ CREATE TABLE `veiculos` (
   `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `placa` (`placa`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -725,8 +872,41 @@ CREATE TABLE `veiculos` (
 
 LOCK TABLES `veiculos` WRITE;
 /*!40000 ALTER TABLE `veiculos` DISABLE KEYS */;
-INSERT INTO `veiculos` VALUES (2,'Fiat Uno Mille','ABC3242','Vermelho',1,'2026-06-17 19:32:43'),(3,'Wolksvagen Gol','ABC3A42','Branco',1,'2026-06-22 17:11:09');
+INSERT INTO `veiculos` VALUES (2,'Fiat Uno Mille','ABC3242','Vermelho',1,'2026-06-17 19:32:43'),(3,'Wolksvagen Gol','ABC3A42','Branco',1,'2026-06-22 17:11:09'),(4,'Renault Clio','BBC4520','Preto',1,'2026-06-29 01:18:31');
 /*!40000 ALTER TABLE `veiculos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `visita_historico`
+--
+
+DROP TABLE IF EXISTS `visita_historico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `visita_historico` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `visita_id` int NOT NULL,
+  `usuario_id` int DEFAULT NULL,
+  `acao` varchar(100) NOT NULL,
+  `status_anterior` varchar(50) DEFAULT NULL,
+  `status_novo` varchar(50) DEFAULT NULL,
+  `motivo` text,
+  `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `visita_id` (`visita_id`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `visita_historico_ibfk_1` FOREIGN KEY (`visita_id`) REFERENCES `visitas_tecnicas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `visita_historico_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `visita_historico`
+--
+
+LOCK TABLES `visita_historico` WRITE;
+/*!40000 ALTER TABLE `visita_historico` DISABLE KEYS */;
+/*!40000 ALTER TABLE `visita_historico` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -751,7 +931,7 @@ CREATE TABLE `visitas_tecnicas` (
   `longitude` varchar(50) DEFAULT NULL,
   `assinatura_cliente` text,
   `assinatura_tecnico` text,
-  `status` enum('ABERTA','FINALIZADA','CANCELADA') DEFAULT 'ABERTA',
+  `status` enum('ABERTA','AGENDADA','CONFIRMADA','EM_ANDAMENTO','CHECKLIST_INICIADO','FINALIZADA','CANCELADA','EXCLUIDA') DEFAULT 'ABERTA',
   `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `empresa_id` (`empresa_id`),
@@ -784,4 +964,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-23 17:16:16
+-- Dump completed on 2026-07-02 21:26:35

@@ -89,10 +89,14 @@
 ============================ */
 .sidebar {
     width: 240px;
-    background-color: #ffffff;
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+
     display: flex;
     flex-direction: column;
+
     height: 100%;
+    overflow: hidden;
 }
 
 /* MENU ocupa espaço */

@@ -31,6 +31,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 
     <!-- CSS BASE / GLOBAL -->
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/nexus-theme.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/header.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/footer.css">
@@ -38,6 +39,11 @@
     <!-- CSS COMPONENTES / RESPONSIVO -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/components.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/responsive.css">
+
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/sidebar.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/css/calendario-visitas.css" rel="stylesheet">
 
     <!-- CSS POR PÁGINA -->
     <?php if (!empty($css)) : ?>
@@ -50,23 +56,21 @@
 <div class="app-wrapper">
 
     <!-- HEADER -->
-    <header>
+    <header class="nexus-topbar">
         <nav class="navbar navbar-expand-lg px-3">
-            
-            <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
 
-                <!-- ESQUERDA (LOGO + MENU) -->
-                <div class="d-flex align-items-center gap-4 flex-shrink-0">
+            <div class="container-fluid d-flex align-items-center gap-3 flex-nowrap">
 
-                    <!-- Botão mobile/tablet -->
-                    <button class="btn btn-outline-primary d-lg-none flex-shrink-0" id="btnToggleSidebar">
+                <!-- ESQUERDA -->
+                <div class="d-flex align-items-center gap-3 flex-shrink-0">
+
+                    <button class="btn btn-outline-primary d-lg-none nexus-icon-btn" id="btnToggleSidebar">
                         <i class="fas fa-bars"></i>
                     </button>
 
-                    <!-- Logo -->
                     <a class="logo d-flex align-items-center" href="<?= BASE_URL ?>/dashboard">
-                        <img 
-                            src="<?= BASE_URL ?>/image/logo.png" 
+                        <img
+                            src="<?= BASE_URL ?>/image/logo.png"
                             alt="Logo NEXUS SST"
                             class="img-fluid logo-img"
                         >
@@ -74,41 +78,137 @@
 
                 </div>
 
-                <!-- DIREITA (USUÁRIO) -->
-                <div class="dropdown ms-auto">
-
-                    <button class="btn btn-link text-decoration-none dropdown-toggle d-flex align-items-center gap-2"
-                            data-bs-toggle="dropdown">
-
-                        <div class="user-avatar">
-                            <?= strtoupper(substr($usuario, 0, 2)) ?>
-                            <span class="status-badge online"></span>
-                        </div>
-
-                        <span class="d-none d-sm-inline fw-semibold">
-                            <?= htmlspecialchars($usuario) ?>
+                <!-- PESQUISA GLOBAL -->
+                <div class="nexus-global-search d-none d-lg-flex flex-grow-1 mx-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
                         </span>
-                    </button>
 
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li class="dropdown-header text-center small text-muted">
-                            Conta do usuário
-                        </li>
+                        <input
+                            type="text"
+                            class="form-control border-start-0"
+                            placeholder="Pesquisar empresa, unidade, cargo, risco..."
+                        >
+                    </div>
+                </div>
 
-                        <li>
-                            <a class="dropdown-item" href="<?= BASE_URL ?>/perfil">
-                                <i class="fas fa-user-cog me-2"></i> Configurações
-                            </a>
-                        </li>
+                <!-- DIREITA -->
+                <div class="d-flex align-items-center gap-2 ms-auto">
 
-                        <li><hr class="dropdown-divider"></li>
+                    <!-- AGENDA -->
+                    <a href="<?= BASE_URL ?>/visitas"
+                    class="btn btn-light nexus-topbar-btn position-relative"
+                    title="Agenda">
+                        <i class="fas fa-calendar-days"></i>
+                    </a>
 
-                        <li>
-                            <a class="dropdown-item text-danger" href="<?= BASE_URL ?>/logout">
-                                <i class="fas fa-sign-out-alt me-2"></i> Sair
-                            </a>
-                        </li>
-                    </ul>
+                    <!-- MENSAGENS -->
+                    <a href="<?= BASE_URL ?>/mensagens"
+                    class="btn btn-light nexus-topbar-btn position-relative"
+                    title="Mensagens">
+                        <i class="fas fa-comments"></i>
+                        <span class="nexus-notification-badge bg-info">3</span>
+                    </a>
+
+                    <!-- NOTIFICAÇÕES -->
+                    <div class="dropdown">
+                        <button class="btn btn-light nexus-topbar-btn position-relative"
+                                data-bs-toggle="dropdown"
+                                title="Notificações">
+                            <i class="fas fa-bell"></i>
+                            <span class="nexus-notification-badge bg-danger">8</span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow nexus-dropdown-lg">
+                            <li class="dropdown-header fw-bold text-dark">
+                                Notificações
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item small" href="#">
+                                    <i class="fas fa-calendar-check text-primary me-2"></i>
+                                    Nova visita agendada
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item small" href="#">
+                                    <i class="fas fa-vials text-warning me-2"></i>
+                                    Quantificação pendente
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item small" href="#">
+                                    <i class="fas fa-triangle-exclamation text-danger me-2"></i>
+                                    Não conformidade registrada
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item text-center small text-primary fw-semibold"
+                                href="<?= BASE_URL ?>/notificacoes">
+                                    Ver todas
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- USUÁRIO -->
+                    <div class="dropdown">
+
+                        <button class="btn btn-link text-decoration-none dropdown-toggle d-flex align-items-center gap-2 nexus-user-btn"
+                                data-bs-toggle="dropdown">
+
+                            <div class="user-avatar">
+                                <?= strtoupper(substr($usuario, 0, 2)) ?>
+                                <span class="status-badge online"></span>
+                            </div>
+
+                            <div class="d-none d-sm-block text-start lh-sm">
+                                <span class="fw-semibold d-block text-dark">
+                                    <?= htmlspecialchars($usuario) ?>
+                                </span>
+                                <small class="text-muted">Online</small>
+                            </div>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li class="dropdown-header text-center small text-muted">
+                                Conta do usuário
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="<?= BASE_URL ?>/perfil">
+                                    <i class="fas fa-user-cog me-2"></i> Meu Perfil
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="<?= BASE_URL ?>/visitas">
+                                    <i class="fas fa-calendar-days me-2"></i> Minha Agenda
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="<?= BASE_URL ?>/mensagens">
+                                    <i class="fas fa-comments me-2"></i> Mensagens
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="<?= BASE_URL ?>/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Sair
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
 
                 </div>
 
@@ -134,226 +234,236 @@
                     </a>
                 </li>
 
-                <!-- ===================== -->
-                <!-- CADASTROS -->
-                <!-- ===================== -->
+                <!-- CAMPO -->
                 <?php
-                $rotasCadastros = [
-                    'usuarios','tecnicos','riscos',
-                    'empresas','unidades','setores','cargos'
-                ];
-                $menuCadastrosAberto = in_array($rotaAtual, $rotasCadastros);
+                $rotasCampo = ['visitas', 'levantamentos', 'checklists'];
+                $menuCampoAberto = in_array($rotaAtual, $rotasCampo);
                 ?>
 
                 <li class="nav-item">
-
-                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuCadastrosAberto ? '' : 'collapsed' ?>"
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuCampoAberto ? '' : 'collapsed' ?>"
                     data-bs-toggle="collapse"
-                    href="#menuCadastros"
+                    href="#menuCampo"
                     role="button">
-
                         <span>
-                            <i class="fas fa-database me-2"></i>
-                            Cadastros
+                            <i class="fas fa-tablet-screen-button me-2"></i>
+                            Campo
                         </span>
-
                         <i class="fas fa-chevron-down small"></i>
                     </a>
 
-                    <div class="collapse <?= $menuCadastrosAberto ? 'show' : '' ?>"
-                        id="menuCadastros"
+                    <div class="collapse <?= $menuCampoAberto ? 'show' : '' ?>"
+                        id="menuCampo"
                         data-bs-parent="#sidebarMenu">
 
                         <ul class="nav flex-column ms-3">
-
-                            <!-- USUÁRIOS -->
-                            <li>
-                                <a href="<?= BASE_URL ?>/usuarios"
-                                class="nav-link <?= $rotaAtual === 'usuarios' ? 'active' : '' ?>">
-                                    <i class="fas fa-users me-2"></i>
-                                    Usuários
-                                </a>
-                            </li>
-
-                            <!-- TÉCNICOS -->
-                            <li>
-                                <a href="<?= BASE_URL ?>/veiculos"
-                                class="nav-link <?= $rotaAtual === 'veiculos' ? 'active' : '' ?>">
-                                    <i class="fas fa-car me-2"></i>
-                                    Veículos
-                                </a>
-                            </li>
-
-                            <!-- RISCOS -->
-                            <li>
-                                <a href="<?= BASE_URL ?>/riscos"
-                                class="nav-link <?= $rotaAtual === 'riscos' ? 'active' : '' ?>">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    Riscos
-                                </a>
-                            </li>
-
-                            <!-- ===================== -->
-                            <!-- ESTRUTURA ORGANIZACIONAL -->
-                            <!-- ===================== -->
-                            <?php
-                            $rotasEstrutura = ['empresas','unidades','setores','cargos'];
-                            $menuEstruturaAberto = in_array($rotaAtual, $rotasEstrutura);
-                            ?>
-
-                            <li>
-
-                                <a class="nav-link d-flex justify-content-between align-items-center <?= $menuEstruturaAberto ? '' : 'collapsed' ?>"
-                                data-bs-toggle="collapse"
-                                href="#menuEstrutura"
-                                role="button">
-
-                                    <span>
-                                        <i class="fas fa-sitemap me-2"></i>
-                                        Estrutura Organizacional
-                                    </span>
-
-                                    <i class="fas fa-chevron-down small"></i>
-                                </a>
-
-                                <div class="collapse <?= $menuEstruturaAberto ? 'show' : '' ?>"
-                                    id="menuEstrutura">
-
-                                    <ul class="nav flex-column ms-3">
-
-                                        <li>
-                                            <a href="<?= BASE_URL ?>/empresas"
-                                            class="nav-link <?= $rotaAtual === 'empresas' ? 'active' : '' ?>">
-                                                <i class="fas fa-building me-2"></i>
-                                                Empresas
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="<?= BASE_URL ?>/unidades"
-                                            class="nav-link <?= $rotaAtual === 'unidades' ? 'active' : '' ?>">
-                                                <i class="fas fa-industry me-2"></i>
-                                                Unidades
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="<?= BASE_URL ?>/setores"
-                                            class="nav-link <?= $rotaAtual === 'setores' ? 'active' : '' ?>">
-                                                <i class="fas fa-layer-group me-2"></i>
-                                                Setores
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="<?= BASE_URL ?>/cargos"
-                                            class="nav-link <?= $rotaAtual === 'cargos' ? 'active' : '' ?>">
-                                                <i class="fas fa-briefcase me-2"></i>
-                                                Cargos
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="<?= BASE_URL ?>/hierarquias"
-                                            class="nav-link <?= $rotaAtual === 'hierarquias' ? 'active' : '' ?>">
-                                                
-                                                <i class="fas fa-file-csv me-2"></i>
-                                                Hierarquia
-                                            </a>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
-                            </li>
-
-                        </ul>
-
-                    </div>
-                </li>
-
-                <!-- ===================== -->
-                <!-- GESTÃO TÉCNICA -->
-                <!-- ===================== -->
-                <?php
-                $rotasTecnicas = ['visitas','checklist','quantificacao','nao-conformidades'];
-                $menuTecnicoAberto = in_array($rotaAtual, $rotasTecnicas);
-                ?>
-
-                <li class="nav-item">
-
-                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuTecnicoAberto ? '' : 'collapsed' ?>"
-                    data-bs-toggle="collapse"
-                    href="#menuTecnico"
-                    role="button">
-
-                        <span>
-                            <i class="fas fa-flask me-2"></i>
-                            Gestão Técnica
-                        </span>
-
-                        <i class="fas fa-chevron-down small"></i>
-                    </a>
-
-                    <div class="collapse <?= $menuTecnicoAberto ? 'show' : '' ?>"
-                        id="menuTecnico"
-                        data-bs-parent="#sidebarMenu">
-
-                        <ul class="nav flex-column ms-3">
-
                             <li>
                                 <a href="<?= BASE_URL ?>/visitas"
                                 class="nav-link <?= $rotaAtual === 'visitas' ? 'active' : '' ?>">
                                     <i class="fas fa-calendar-check me-2"></i>
-                                    Visitas
+                                    Agenda
                                 </a>
                             </li>
 
                             <li>
-                                <a href="<?= BASE_URL ?>/checklist"
-                                class="nav-link <?= $rotaAtual === 'checklist' ? 'active' : '' ?>">
+                                <a href="<?= BASE_URL ?>/levantamentos"
+                                class="nav-link <?= $rotaAtual === 'levantamentos' ? 'active' : '' ?>">
                                     <i class="fas fa-clipboard-check me-2"></i>
-                                    Levantamentos
+                                    Visitas Técnicas
                                 </a>
                             </li>
 
                             <li>
-                                <a href="<?= BASE_URL ?>/quantificacao"
-                                class="nav-link <?= $rotaAtual === 'quantificacao' ? 'active' : '' ?>">
-                                    <i class="fas fa-vials me-2"></i>
-                                    Quantificação
+                                <a href="<?= BASE_URL ?>/checklists"
+                                class="nav-link <?= $rotaAtual === 'checklists' ? 'active' : '' ?>">
+                                    <i class="fas fa-list-check me-2"></i>
+                                    Check-lists
                                 </a>
                             </li>
-
-                            <li>
-                                <a href="<?= BASE_URL ?>/nao-conformidades"
-                                class="nav-link <?= $rotaAtual === 'nao-conformidades' ? 'active' : '' ?>">
-                                    <i class="fas fa-times-circle me-2"></i>
-                                    Não Conformidades
-                                </a>
-                            </li>
-
                         </ul>
-
                     </div>
                 </li>
 
-                <!-- RELATÓRIOS -->
+                <!-- EMPRESAS / HIERARQUIA -->
+                <?php
+                $rotasEmpresas = ['empresas', 'unidades', 'setores', 'cargos', 'funcionarios', 'hierarquias'];
+                $menuEmpresasAberto = in_array($rotaAtual, $rotasEmpresas);
+                ?>
+
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/relatorios"
-                    class="nav-link <?= $rotaAtual === 'relatorios' ? 'active' : '' ?>">
-                        <i class="fas fa-file-pdf me-2"></i>
-                        Relatórios
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuEmpresasAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuEmpresas"
+                    role="button">
+                        <span>
+                            <i class="fas fa-building me-2"></i>
+                            Empresas
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
                     </a>
+
+                    <div class="collapse <?= $menuEmpresasAberto ? 'show' : '' ?>"
+                        id="menuEmpresas"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/empresas" class="nav-link <?= $rotaAtual === 'empresas' ? 'active' : '' ?>"><i class="fas fa-building me-2"></i>Empresas</a></li>
+                            <li><a href="<?= BASE_URL ?>/unidades" class="nav-link <?= $rotaAtual === 'unidades' ? 'active' : '' ?>"><i class="fas fa-industry me-2"></i>Unidades</a></li>
+                            <li><a href="<?= BASE_URL ?>/setores" class="nav-link <?= $rotaAtual === 'setores' ? 'active' : '' ?>"><i class="fas fa-layer-group me-2"></i>Setores</a></li>
+                            <li><a href="<?= BASE_URL ?>/cargos" class="nav-link <?= $rotaAtual === 'cargos' ? 'active' : '' ?>"><i class="fas fa-briefcase me-2"></i>Cargos</a></li>
+                            <li><a href="<?= BASE_URL ?>/funcionarios" class="nav-link <?= $rotaAtual === 'funcionarios' ? 'active' : '' ?>"><i class="fas fa-id-badge me-2"></i>Funcionários</a></li>
+                            <li><a href="<?= BASE_URL ?>/hierarquias" class="nav-link <?= $rotaAtual === 'hierarquias' ? 'active' : '' ?>"><i class="fas fa-sitemap me-2"></i>Hierarquia / Importação SOC</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- BIBLIOTECA TÉCNICA -->
+                <?php
+                $rotasBiblioteca = ['riscos', 'treinamentos', 'itens-fiscalizacao', 'fontes-geradoras', 'medidas-controle'];
+                $menuBibliotecaAberto = in_array($rotaAtual, $rotasBiblioteca);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuBibliotecaAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuBiblioteca"
+                    role="button">
+                        <span>
+                            <i class="fas fa-book-open me-2"></i>
+                            Biblioteca Técnica
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuBibliotecaAberto ? 'show' : '' ?>"
+                        id="menuBiblioteca"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/riscos" class="nav-link <?= $rotaAtual === 'riscos' ? 'active' : '' ?>"><i class="fas fa-triangle-exclamation me-2"></i>Riscos</a></li>
+                            <li><a href="<?= BASE_URL ?>/treinamentos" class="nav-link <?= $rotaAtual === 'treinamentos' ? 'active' : '' ?>"><i class="fas fa-chalkboard-user me-2"></i>Treinamentos</a></li>
+                            <li><a href="<?= BASE_URL ?>/itens-fiscalizacao" class="nav-link <?= $rotaAtual === 'itens-fiscalizacao' ? 'active' : '' ?>"><i class="fas fa-clipboard-list me-2"></i>Itens de Fiscalização</a></li>
+                            <li><a href="<?= BASE_URL ?>/fontes-geradoras" class="nav-link <?= $rotaAtual === 'fontes-geradoras' ? 'active' : '' ?>"><i class="fas fa-industry me-2"></i>Fontes Geradoras</a></li>
+                            <li><a href="<?= BASE_URL ?>/medidas-controle" class="nav-link <?= $rotaAtual === 'medidas-controle' ? 'active' : '' ?>"><i class="fas fa-shield-heart me-2"></i>Medidas de Controle</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- RESULTADOS DA VISITA -->
+                <?php
+                $rotasResultados = ['quantificacoes', 'nao_conformidades', 'relatorios'];
+                $menuResultadosAberto = in_array($rotaAtual, $rotasResultados);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuResultadosAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuResultados"
+                    role="button">
+                        <span>
+                            <i class="fas fa-chart-simple me-2"></i>
+                            Resultados da Visita
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuResultadosAberto ? 'show' : '' ?>"
+                        id="menuResultados"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/quantificacoes" class="nav-link <?= $rotaAtual === 'quantificacoes' ? 'active' : '' ?>"><i class="fas fa-vials me-2"></i>Quantificações</a></li>
+                            <li><a href="<?= BASE_URL ?>/nao_conformidades" class="nav-link <?= $rotaAtual === 'nao_conformidades' ? 'active' : '' ?>"><i class="fas fa-circle-exclamation me-2"></i>Não Conformidades</a></li>
+                            <li><a href="<?= BASE_URL ?>/relatorios" class="nav-link <?= $rotaAtual === 'relatorios' ? 'active' : '' ?>"><i class="fas fa-file-pdf me-2"></i>Relatórios Técnicos</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- COMUNICAÇÃO -->
+                <?php
+                $rotasComunicacao = ['mensagens', 'notificacoes'];
+                $menuComunicacaoAberto = in_array($rotaAtual, $rotasComunicacao);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuComunicacaoAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuComunicacao"
+                    role="button">
+                        <span>
+                            <i class="fas fa-comments me-2"></i>
+                            Comunicação
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuComunicacaoAberto ? 'show' : '' ?>"
+                        id="menuComunicacao"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/mensagens" class="nav-link <?= $rotaAtual === 'mensagens' ? 'active' : '' ?>"><i class="fas fa-envelope me-2"></i>Mensagens</a></li>
+                            <li><a href="<?= BASE_URL ?>/notificacoes" class="nav-link <?= $rotaAtual === 'notificacoes' ? 'active' : '' ?>"><i class="fas fa-bell me-2"></i>Notificações</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- RECURSOS -->
+                <?php
+                $rotasRecursos = ['veiculos', 'equipamentos'];
+                $menuRecursosAberto = in_array($rotaAtual, $rotasRecursos);
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuRecursosAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuRecursos"
+                    role="button">
+                        <span>
+                            <i class="fas fa-toolbox me-2"></i>
+                            Recursos
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse <?= $menuRecursosAberto ? 'show' : '' ?>"
+                        id="menuRecursos"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/veiculos" class="nav-link <?= $rotaAtual === 'veiculos' ? 'active' : '' ?>"><i class="fas fa-car me-2"></i>Veículos</a></li>
+                            <li><a href="<?= BASE_URL ?>/equipamentos" class="nav-link <?= $rotaAtual === 'equipamentos' ? 'active' : '' ?>"><i class="fas fa-screwdriver-wrench me-2"></i>Equipamentos</a></li>
+                        </ul>
+                    </div>
                 </li>
 
                 <!-- CONFIGURAÇÕES -->
+                <?php
+                $rotasConfiguracoes = ['usuarios', 'configuracoes'];
+                $menuConfiguracoesAberto = in_array($rotaAtual, $rotasConfiguracoes);
+                ?>
+
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/configuracoes"
-                    class="nav-link <?= $rotaAtual === 'configuracoes' ? 'active' : '' ?>">
-                        <i class="fas fa-gear me-2"></i>
-                        Configurações
+                    <a class="nav-link d-flex justify-content-between align-items-center <?= $menuConfiguracoesAberto ? '' : 'collapsed' ?>"
+                    data-bs-toggle="collapse"
+                    href="#menuConfiguracoes"
+                    role="button">
+                        <span>
+                            <i class="fas fa-gear me-2"></i>
+                            Configurações
+                        </span>
+                        <i class="fas fa-chevron-down small"></i>
                     </a>
+
+                    <div class="collapse <?= $menuConfiguracoesAberto ? 'show' : '' ?>"
+                        id="menuConfiguracoes"
+                        data-bs-parent="#sidebarMenu">
+
+                        <ul class="nav flex-column ms-3">
+                            <li><a href="<?= BASE_URL ?>/usuarios" class="nav-link <?= $rotaAtual === 'usuarios' ? 'active' : '' ?>"><i class="fas fa-users-gear me-2"></i>Usuários</a></li>
+                            <li><a href="<?= BASE_URL ?>/configuracoes" class="nav-link <?= $rotaAtual === 'configuracoes' ? 'active' : '' ?>"><i class="fas fa-sliders me-2"></i>Parâmetros do Sistema</a></li>
+                        </ul>
+                    </div>
                 </li>
 
             </ul>

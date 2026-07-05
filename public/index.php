@@ -45,14 +45,15 @@ $routes = [
     // =========================
     // RISCOS
     // =========================
-    '/riscos' => ['controller' => 'RiscosController', 'method' => 'index'],
+    '/riscos'                    => ['controller' => 'RiscosController', 'method' => 'index'],
 
-    '/riscos/fisicos' => ['controller' => 'RiscosController', 'method' => 'fisicos'],
-    '/riscos/quimicos' => ['controller' => 'RiscosController', 'method' => 'quimicos'],
-    '/riscos/biologicos' => ['controller' => 'RiscosController', 'method' => 'biologicos'],
-    '/riscos/ergonomicos' => ['controller' => 'RiscosController', 'method' => 'ergonomicos'],
-    '/riscos/acidentes' => ['controller' => 'RiscosController', 'method' => 'acidentes'],
-    '/riscos/psicossociais' => ['controller' => 'RiscosController', 'method' => 'psicossociais'],
+    '/riscos/listar/{categoria}' => ['controller' => 'RiscosController', 'method' => 'listar'],
+    '/riscos/criar/{categoria}'  => ['controller' => 'RiscosController', 'method' => 'criar'],
+    '/riscos/salvar'             => ['controller' => 'RiscosController', 'method' => 'salvar'],
+
+    '/riscos/editar/{id}'        => ['controller' => 'RiscosController', 'method' => 'editar'],
+    '/riscos/atualizar/{id}'     => ['controller' => 'RiscosController', 'method' => 'atualizar'],
+    '/riscos/excluir/{id}'       => ['controller' => 'RiscosController', 'method' => 'excluir'],
 
     // =========================
     // EMPRESAS

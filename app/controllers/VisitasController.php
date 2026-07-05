@@ -45,11 +45,38 @@ class VisitasController extends Controller {
             'empresa_id'               => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
             'unidade_id'               => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
             'data_visita'              => trim($_POST['data_visita'] ?? ''),
-            'hora_visita'              => trim($_POST['hora_visita'] ?? ''),
+            'hora_inicio' => trim($_POST['hora_inicio'] ?? ''),
+            'hora_fim'    => trim($_POST['hora_fim'] ?? ''),
             'responsavel_acompanhamento' => trim($_POST['responsavel_acompanhamento'] ?? ''),
             'objetivo'                 => trim($_POST['objetivo'] ?? ''),
             'observacoes'              => trim($_POST['observacoes'] ?? '')
         ];
+
+        if (empty($dados['hora_inicio']) || empty($dados['hora_fim'])) {
+            $_SESSION['erro'] = "Informe horário de início e fim da visita.";
+            header('Location: ' . BASE_URL . '/visitas/criar');
+            exit;
+        }
+
+        if ($dados['hora_inicio'] >= $dados['hora_fim']) {
+            $_SESSION['erro'] = "O horário final deve ser maior que o horário inicial.";
+            header('Location: ' . BASE_URL . '/visitas/criar');
+            exit;
+        }
+
+        $conflito = $this->visitaModel->existeConflitoIntervalo(
+            $dados['usuario_id'],
+            $dados['veiculo_id'],
+            $dados['data_visita'],
+            $dados['hora_inicio'],
+            $dados['hora_fim']
+        );
+
+        if ($conflito) {
+            $_SESSION['erro'] = "Conflito de agenda: já existe uma visita para este técnico ou veículo neste intervalo.";
+            header('Location: ' . BASE_URL . '/visitas/criar');
+            exit;
+        }
 
         // Validação idêntica ao padrão adotado em UsuariosController
         if (empty($dados['usuario_id']) || empty($dados['empresa_id']) || empty($dados['data_visita'])) {
@@ -57,6 +84,14 @@ class VisitasController extends Controller {
             header('Location: ' . BASE_URL . '/visitas/criar');
             exit;
         }
+
+        $conflito = $this->visitaModel->existeConflitoIntervalo(
+            $dados['usuario_id'],
+            $dados['veiculo_id'],
+            $dados['data_visita'],
+            $dados['hora_inicio'],
+            $dados['hora_fim']
+        );
 
         if ($this->visitaModel->salvar($dados)) {
             $_SESSION['sucesso'] = "Visita agendada com sucesso!";
@@ -102,38 +137,67 @@ class VisitasController extends Controller {
     }
 
     public function atualizar($id = null) {
-        // 1. Captura o ID caso não tenha sido passado pelo roteador
         if ($id === null) {
             $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         }
 
-        // 2. Garante que é uma requisição POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
 
-        // 3. Valida se o ID existe
         if (!$id || !$this->visitaModel->buscarPorId((int)$id)) {
             $_SESSION['erro'] = "Agendamento não encontrado.";
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
 
-        // 4. Captura e filtra os dados do formulário
         $dados = [
-            'usuario_id'               => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
-            'veiculo_id'               => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
-            'empresa_id'               => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
-            'unidade_id'               => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
-            'data_visita'              => trim($_POST['data_visita'] ?? ''),
-            'hora_visita'              => trim($_POST['hora_visita'] ?? ''),
+            'usuario_id'                 => filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT),
+            'veiculo_id'                 => filter_input(INPUT_POST, 'veiculo_id', FILTER_VALIDATE_INT),
+            'empresa_id'                 => filter_input(INPUT_POST, 'empresa_id', FILTER_VALIDATE_INT),
+            'unidade_id'                 => filter_input(INPUT_POST, 'unidade_id', FILTER_VALIDATE_INT),
+            'data_visita'                => trim($_POST['data_visita'] ?? ''),
+            'hora_inicio'                => trim($_POST['hora_inicio'] ?? ''),
+            'hora_fim'                   => trim($_POST['hora_fim'] ?? ''),
             'responsavel_acompanhamento' => trim($_POST['responsavel_acompanhamento'] ?? ''),
-            'objetivo'                 => trim($_POST['objetivo'] ?? ''),
-            'observacoes'              => trim($_POST['observacoes'] ?? '')
+            'objetivo'                   => trim($_POST['objetivo'] ?? ''),
+            'observacoes'                => trim($_POST['observacoes'] ?? '')
         ];
 
-        // 5. Executa a atualização
+        if (
+            empty($dados['usuario_id']) ||
+            empty($dados['empresa_id']) ||
+            empty($dados['data_visita']) ||
+            empty($dados['hora_inicio']) ||
+            empty($dados['hora_fim'])
+        ) {
+            $_SESSION['erro'] = "Preencha todos os campos obrigatórios.";
+            header('Location: ' . BASE_URL . '/visitas/editar?id=' . (int)$id);
+            exit;
+        }
+
+        if ($dados['hora_inicio'] >= $dados['hora_fim']) {
+            $_SESSION['erro'] = "O horário final deve ser maior que o horário inicial.";
+            header('Location: ' . BASE_URL . '/visitas/editar?id=' . (int)$id);
+            exit;
+        }
+
+        $conflito = $this->visitaModel->existeConflitoIntervalo(
+            $dados['usuario_id'],
+            $dados['veiculo_id'],
+            $dados['data_visita'],
+            $dados['hora_inicio'],
+            $dados['hora_fim'],
+            (int)$id
+        );
+
+        if ($conflito) {
+            $_SESSION['erro'] = "Conflito de agenda: já existe uma visita para este técnico ou veículo neste intervalo.";
+            header('Location: ' . BASE_URL . '/visitas/editar?id=' . (int)$id);
+            exit;
+        }
+
         if ($this->visitaModel->atualizar((int)$id, $dados)) {
             $_SESSION['sucesso'] = "Agendamento atualizado com sucesso!";
         } else {
@@ -167,41 +231,68 @@ class VisitasController extends Controller {
         }
     }
 
-    public function excluir($id) {
-        if (!$this->visitaModel->buscarPorId((int)$id)) {
+    public function excluir($id)
+    {
+        $visita = $this->visitaModel->buscarPorId((int)$id);
+
+        if (!$visita) {
             $_SESSION['erro'] = "Agendamento não encontrado.";
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
 
+        $usuarioId = $_SESSION['usuario_id'] ?? null;
+        $motivo = trim($_POST['motivo'] ?? 'Exclusão realizada pelo usuário.');
+
         if ($this->visitaModel->deletar((int)$id)) {
+            $this->visitaModel->registrarHistorico(
+                (int)$id,
+                $usuarioId,
+                'EXCLUSAO',
+                $visita['status'],
+                'EXCLUIDA',
+                $motivo
+            );
+
             $_SESSION['sucesso'] = "Visita excluída com sucesso!";
         } else {
             $_SESSION['erro'] = "Erro ao excluir agendamento.";
         }
+
         header('Location: ' . BASE_URL . '/visitas');
         exit;
     }
 
-    public function cancelar() {
+    public function cancelar()
+    {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        
-        // Verifica se a visita existe
+        $motivo = trim($_POST['motivo'] ?? 'Cancelamento realizado pelo usuário.');
+
         $visita = $this->visitaModel->buscarPorId((int)$id);
-        
+
         if (!$id || !$visita) {
             $_SESSION['erro'] = "Agendamento não encontrado.";
             header('Location: ' . BASE_URL . '/visitas');
             exit;
         }
 
-        // Chama um método no seu model que faz: UPDATE visitas SET status = 'CANCELADA' WHERE id = ...
+        $usuarioId = $_SESSION['usuario_id'] ?? null;
+
         if ($this->visitaModel->atualizarStatus((int)$id, 'CANCELADA')) {
+            $this->visitaModel->registrarHistorico(
+                (int)$id,
+                $usuarioId,
+                'CANCELAMENTO',
+                $visita['status'],
+                'CANCELADA',
+                $motivo
+            );
+
             $_SESSION['sucesso'] = "Visita cancelada com sucesso!";
         } else {
             $_SESSION['erro'] = "Erro ao cancelar agendamento.";
         }
-        
+
         header('Location: ' . BASE_URL . '/visitas');
         exit;
     }
